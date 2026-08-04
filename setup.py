@@ -25,13 +25,19 @@ setup(
 		"PEFT",	
 	],
 	extras_require={
-		"notebook":[
+		"nbcuda":[
 			"ipython",
 			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
 			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
 			"torchao>=0.16.0",
 		],
-		"gui":[
+		"nbcpu":[
+			"ipython",
+			"torch==2.11.0",
+			"torchvision==0.26.0",
+			"torchao>=0.16.0",
+		],
+		"guicpu":[
 			"FreeSimpleGUI",
 			"pyperclip",
 			"torch==2.11.0",

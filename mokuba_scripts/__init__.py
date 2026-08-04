@@ -52,6 +52,11 @@ except:
 try:
 	from .gui.animagui import animagui
 	from .gui.sdxlgui import sdxlgui
+	from .tool import (
+		get_vae,
+		accuracy,
+		plus_metadata
+	)
 except:
 	pass
 
@@ -87,6 +92,11 @@ except:
 try:
 	from .gui.animagui import animagui
 	from .gui.sdxlgui import sdxlgui
+	from .tool import (
+		get_vae,
+		accuracy,
+		plus_metadata
+	)
 except:
 	pass
 

@@ -66,20 +66,20 @@ class diff2anima:
 				mappings[k]=key
 				continue
 
-			m=re.search(r"llm_adapter_blocks",key)
+			m=re.search(r"llm_adapter_blocks(.+)$",key)
 			if m!=None:
 				key="lora_unet_"+m.group()
 				mappings[k]=key
 				continue
 
-			m=re.search(r"blocks_[0-9]+_",key)
+			m=re.search(r"blocks_[0-9]+_(.+)$",key)
 			if m!=None:
 				key=m.group()
 				for k2 in anima.block_maps:
 					mk2=k2.removesuffix(".weight").replace(".","_")
 					mk2_value=anima.block_maps[k2].removesuffix(".weight").replace(".","_")
 					key=key.replace(mk2_value,mk2)
-				mappings[k]=key
+				mappings[k]="lora_unet_"+key
 				continue
 
 			for k2 in anima.root_map:
@@ -88,12 +88,12 @@ class diff2anima:
 				m=re.search(mk2,key)
 				if m!=None:
 					key=mk2
-					mappings[k]=key
+					mappings[k]="lora_unet_"+key
 					continue
 				m=re.search(mk2_value,key)
 				if m!=None:
 					key=mk2
-					mappings[k]=key
+					mappings[k]="lora_unet_"+key
 					continue
 
 		sd_out={}
@@ -330,7 +330,7 @@ class diff2sdxl:
 		out_sd={}
 		f=open(path+".txt","w")
 		for key,p in sd.items():
-			if not(k.endswith((".lora_A.weight",".lora_down.weight"))):
+			if not(key.endswith((".lora_A.weight",".lora_down.weight"))):
 				continue
 			k=key.replace(".","_")
 			if k.startswith("lora_unet"):
@@ -359,14 +359,55 @@ class diff2sdxl:
 					k2= key.replace(".lora_A.weight",".alpha")
 					if k2 in sd:
 						out_sd[k]=sd[k2]
+				continue
 			elif k.startswith("lora_te1"):
 				if k.startswith("lora_te1_encoder"):
 					k=k.replace("lora_te1_encoder","lora_te1_text_model_encoder")
-				out_sd[k]=p
+				if k.endswith("_lora_down_weight"):
+					k=k.replace("_lora_down_weight",".lora_down.weight")
+					out_sd[k]=p
+					k=k.replace(".lora_down.weight",".lora_up.weight")
+					k2= key.replace(".lora_down.weight",".lora_up.weight")
+					out_sd[k]=sd[k2]
+					k=k.replace(".lora_up.weight",".alpha")
+					k2= key.replace(".lora_down.weight",".alpha")
+					if k2 in sd:
+						out_sd[k]=sd[k2]
+				else:
+					k=k.replace("_lora_A_weight",".lora_down.weight")
+					out_sd[k]=p
+					k=k.replace(".lora_down.weight",".lora_up.weight")
+					k2= key.replace(".lora_A.weight",".lora_B.weight")
+					out_sd[k]=sd[k2]
+					k=k.replace(".lora_up.weight",".alpha")
+					k2= key.replace(".lora_A.weight",".alpha")
+					if k2 in sd:
+						out_sd[k]=sd[k2]
+				continue
 			elif k.startswith("lora_te2"):
 				if k.startswith("lora_te2_encoder"):
 					k=k.replace("lora_te2_encoder","lora_te2_text_model_encoder")
-				out_sd[k]=p
+				if k.endswith("_lora_down_weight"):
+					k=k.replace("_lora_down_weight",".lora_down.weight")
+					out_sd[k]=p
+					k=k.replace(".lora_down.weight",".lora_up.weight")
+					k2= key.replace(".lora_down.weight",".lora_up.weight")
+					out_sd[k]=sd[k2]
+					k=k.replace(".lora_up.weight",".alpha")
+					k2= key.replace(".lora_down.weight",".alpha")
+					if k2 in sd:
+						out_sd[k]=sd[k2]
+				else:
+					k=k.replace("_lora_A_weight",".lora_down.weight")
+					out_sd[k]=p
+					k=k.replace(".lora_down.weight",".lora_up.weight")
+					k2= key.replace(".lora_A.weight",".lora_B.weight")
+					out_sd[k]=sd[k2]
+					k=k.replace(".lora_up.weight",".alpha")
+					k2= key.replace(".lora_A.weight",".alpha")
+					if k2 in sd:
+						out_sd[k]=sd[k2]
+				continue
 			f.write(key+"\n")
 		f.close()
 		return out_sd

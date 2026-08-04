@@ -3,6 +3,7 @@ from PIL import PngImagePlugin
 import piexif
 import piexif.helper
 import os
+import ast
 
 def plus_meta(vs,img):
 	if "pr" in vs:
@@ -58,7 +59,7 @@ def plus_meta(vs,img):
 			metadata=metadata+'{"type":"checkpoint","modelVersionId":'+vs["ckpt"]+"}"
 
 	if "lora" in vs:
-		if vs["lora"]!="[]":
+		if vs["lora"]!=[]:
 			for i in range(len(vs["lora"])):
 				metadata=metadata+',{"type":"lora","weight":'+str(vs["w"][i])+',"modelVersionId":'+str(vs["lora"][i])+"}"
 
@@ -169,3 +170,85 @@ def get_id(path,w=None):
 			meta_weight2.append(meta_weight[i])
 
 	return meta_id2,meta_weight2
+	
+def read_meta(path):
+	out_sd={}
+	if path.format=="JPEG":
+		exif_data=path._getexif()
+		exif_data=exif_data[37510].decode()
+	else:
+		exif_data = path.info['parameters']
+
+	exif_data=exif_data.split("\n")
+	exif_data2=str(exif_data.pop(-1).encode())
+	k=None
+	for i in range(len(exif_data)):
+		if "\x00" in exif_data[i]:
+			exif_data[i]=exif_data[i].replace("\x00","")
+		if exif_data[i].startswith("Negative prompt: "):
+			k=i
+	if k==None:
+		pro="".join(exif_data)
+		neg=""
+	else:
+		pro="".join(exif_data[:k])
+		neg="".join(exif_data[k:])
+		neg=neg.replace("Negative prompt: ","")
+	pro=pro.removeprefix("UNICODE")
+	out_sd["pr"]=pro
+	out_sd["ne"]=neg
+	inds={
+		"Steps:":"st",
+		"CFG scale:":"cf",
+		"Seed:":"se",
+		"Clip skip:":"cl",
+		"Denoising strength:":"ds",
+		"Hires upscale:":"hu",
+		"Hires steps:":"hs",
+		"Hires upscaler:":"hum",
+		"Tile upscale:":"tu",
+		"Tile upscaler:":"tum",
+		"controlnet_conditioning_scale:":"ccs"
+	}
+	ss=["karras","beta","exponential","sgm_uniform","simple","uniform","normal"]
+	exif_data=exif_data2.replace(r"\x00","").removesuffix("'").removeprefix("b'").split(", ")
+	for line in exif_data:
+		for ind in inds:
+			if line.startswith(ind):
+				line2=line.split(": ")
+				out_sd[inds[ind]]=line2[1]
+		if line.startswith("Sampler:"):
+			line2=line.split(": ")
+			out_sd["sa1"]=line2[1]
+			out_sd["sa2"]=""
+			for ind in ss:
+				if ind in line2[1].lower():
+					out_sd["sa2"]=ind
+					e=line2[1].split(" ")[-1]
+					out_sd["sa1"]=line2[1].replace(" "+e,"")
+		if line.startswith("Civitai resources:"):
+			line2=line.replace("Civitai resources: ","")
+			line2 = ast.literal_eval(line2)
+			k1=1
+			k2=1
+			for sd in line2:
+				if sd["type"]=="checkpoint":
+					out_sd["ckpt"]=str(sd["modelVersionId"])
+				elif sd["type"]=="lora":
+					out_sd["lora"+str(k1)]=str(sd["modelVersionId"])
+					out_sd["w"+str(k1)]=str(sd["weight"])
+					if k1>4:
+						del out_sd["lora"+str(k1)],out_sd["w"+str(k1)]
+					k1=k1+1
+				elif sd["type"]=="embed":
+					out_sd["embed"+str(k2)]=str(sd["modelVersionId"])
+					if k2>4:
+						del out_sd["embed"+str(k2)]
+					k2=k2+1
+				elif sd["type"]=="controlnet":
+					out_sd["cont"]=str(sd["modelVersionId"])
+				elif sd["type"]=="upscaler":
+					out_sd["up"]=str(sd["modelVersionId"])
+				else:
+					out_sd["vae"]=str(sd["modelVersionId"])
+	return out_sd

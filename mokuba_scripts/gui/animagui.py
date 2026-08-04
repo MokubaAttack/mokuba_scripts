@@ -212,7 +212,7 @@ class animagui:
 			"input","pr","ne","st","cf","se","n","x","y","lora1","lora2","lora3","lora4","w1","w2","w3","w4","hu","hs","hum","ds","sa","sc","out"
 		]
 	
-		sa_list=["flowmatch_euler","euler","euler_a_rf","euler_ancestral_rf"]
+		sa_list=["FlowMatch_Euler","FlowMatch_LCM"]
 		sc_list=["karras","beta","exponential","normal"]
 		hum_list=["NEAREST","BOX","BILINEAR","HAMMING","BICUBIC","LANCZOS","select file"]
 	
