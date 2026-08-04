@@ -1,0 +1,2 @@
+include mokuba_scripts/common/*.txt
+include LICENSE.txt

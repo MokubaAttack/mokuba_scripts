@@ -1,0 +1,48 @@
+from setuptools import setup, find_packages
+
+setup(
+	name='mokuba_scripts',
+	version='1.0.0',
+	packages=find_packages(),
+	include_package_data=True,
+	author='mokuba_attack',
+	description='This is a script that I use when I create images by diffusers.',
+	url='https://github.com/MokubaAttack/mokuba_scripts',
+	license='BSD-3-Clause',
+	classifiers=[
+		'License :: OSI Approved :: BSD License',
+		'Programming Language :: Python :: 3.12',
+	],
+	install_requires=[
+		"compel>=2.4.0",
+		"diffusers==0.39.0",
+		"realesrgan",
+		"lycoris-lora",
+		"piexif",
+		"transformers==5.11.0",
+		"optimum-quanto",
+		"accelerate",
+		"PEFT",	
+	],
+	extras_require={
+		"notebook":[
+			"ipython",
+			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
+			"torchao>=0.16.0",
+		],
+		"gui":[
+			"FreeSimpleGUI",
+			"pyperclip",
+			"torch==2.11.0",
+			"torchvision==0.26.0",
+		],
+		"guixpu":[
+			"FreeSimpleGUI",
+			"pyperclip",
+			"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp312-cp312-win_amd64.whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp312-cp312-win_amd64.whl",
+			"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp312-cp312-win_amd64.whl",
+		],
+	},
+)
