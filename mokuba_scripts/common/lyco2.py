@@ -81,7 +81,7 @@ def lyco2anima(path):
 	text_conditioner_sd={}
 
 	for k in key_dict:
-		m=re.search(r"layers_([0-9+])_(.+)$",key_dict[k])
+		m=re.search(r"layers_([0-9]+)_(.+)$",key_dict[k])
 		if m is not None:
 			key_dict[k]=m.group()
 			for k2 in MODULE_type.weight_list:
