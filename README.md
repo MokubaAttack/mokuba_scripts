@@ -1,3 +1,29 @@
+# mokuba_scripts
+## How to install
+- notebook by cuda
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[nbcuda]
+```
+- notebook by cpu
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[nbcpu]
+```
+- gui by cpu
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[guicpu]
+```
+- gui by xpu
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[guixpu]
+```
 ## Credits
 - [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts)
 - [huggingface/diffusers](https://github.com/huggingface/diffusers/tree/main)
