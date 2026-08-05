@@ -1,0 +1,3 @@
+from mokuba_scripts import make_safetensors_anima
+
+make_safetensors_anima.gui()
