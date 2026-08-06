@@ -29,7 +29,14 @@ pip install .[guixpu]
 ### common
 - merge_ckpt_anima
   ```
-  merge_ckpt_anima.mergeckpt()
+  merge_ckpt_anima.mergeckpt(
+		ckpts,
+		ws,
+		out_path,
+		mode = "normal",
+		ff = True,
+		v = 0,
+  )
   ```
   ```
   merge_ckpt_anima.gui()
@@ -37,7 +44,15 @@ pip install .[guixpu]
   gui is opened.
 - merge_ckpt_sdxl  
   ```
-  merge_ckpt_sdxl.mergeckpt()
+  merge_ckpt_sdxl.mergeckpt(
+		ckpts,
+		weights,
+		v,
+		out_path,
+		mode = "normal",
+		dp = 0,
+		seed = 0,
+  )
   ```
   ```
   merge_ckpt_sdxl.gui()
@@ -45,7 +60,13 @@ pip install .[guixpu]
   gui is opened.
 - make_safetensors_anima
   ```
-  make_safetensors_anima.makesafe()
+  make_safetensors_anima.makesafe(
+		base_path,
+		loras,
+		ws,
+		out_path,
+		ff,
+  )
   ```
   ```
   make_safetensors_anima.gui()
@@ -53,7 +74,13 @@ pip install .[guixpu]
   gui is opened.
 - make_safetensors_sdxl  
   ```
-  make_safetensors_sdxl.makesafe()
+  make_safetensors_sdxl.makesafe(
+		base_path,
+		loras,
+		ws,
+		out_path,
+		vae,
+  )
   ```
   ```
   make_safetensors_sdxl.gui()
@@ -61,7 +88,18 @@ pip install .[guixpu]
   gui is opened.
 - merge_lora_anima
   ```
-  merge_lora_anima.mergelora()
+  merge_lora_anima.mergelora(
+		loras=[],
+		weights=[],
+		precision="float",
+		save_precision="fp16",
+		new_rank=16,
+		new_conv_rank=None,
+		device=None,
+		save_to=None,
+		meta_dict=None,
+		dof=False,
+  )
   ```
   ```
   merge_lora_anima.gui()
@@ -69,7 +107,18 @@ pip install .[guixpu]
   gui is opened.
 - merge_lora_sdxl
   ```
-  merge_lora_sdxl.mergelora()
+  merge_lora_sdxl.mergelora(
+		loras=[],
+		weights=[],
+		precision="float",
+		save_precision="fp16",
+		new_rank=16,
+		new_conv_rank=None,
+		device=None,
+		save_to=None,
+		meta_dict=None,
+		dof=False,
+  )
   ```
   ```
   merge_lora_sdxl.gui()
@@ -77,7 +126,14 @@ pip install .[guixpu]
   gui is opened. 
 - subtract_ckpt_anima
   ```
-  subtract_ckpt_anima.subtractckpt()
+  subtract_ckpt_anima.subtractckpt(
+		ckpts,
+		dim,
+		trans,
+		teco,
+		teen,
+		out_path,
+  )
   ```
   ```
   subtract_ckpt_anima.gui()
@@ -85,7 +141,14 @@ pip install .[guixpu]
   gui is opened.
 - subtract_ckpt_sdxl
   ```
-  subtract_ckpt_sdxl.subtractckpt()
+  subtract_ckpt_sdxl.subtractckpt(
+		ckpts,
+		dim,
+		trans,
+		teen1,
+		teen2,
+		out_path,
+  )
   ```
   ```
   subtract_ckpt_sdxl.gui()
@@ -126,85 +189,85 @@ pip install .[guixpu]
 - mokusdxl
   ```
   mokusdxl(
-		loras=[],
-		lora_weights=[],
+		loras = [],
+		lora_weights = [],
 		prompt = "",
 		n_prompt = "",
-		pic_number=10,
-		gs=7,
-		step=30,
-		sample="",
-		sgm="",
-		seed=0,
-		out_folder="data",
-		base_safe="base.safetensors",
-		url="",
-		dtype="f32",
-		dev="cuda",
-		x=1024,
-		y=1024,
-		mode=0,
-		up=1.5,
-		Interpolation="BILINEAR",
-		step2=15,
-		ss=0.5,
-		p=None,
-		ser="colab",
-		del_pipe=True,
-		si=True,
-		pos_emb=[],
-		neg_emb=[],
-		vae_safe="",
-		step3=20,
-		up2=1.5,
-		ccs=0,
-		gpulowmem=False,
-		freezeunet=False,
-		cs=2,
-		qprompt="masterpiece, best quality, ultra detailed",
-		qn_prompt="worst quality, low quality, normal quality",
+		pic_number = 10,
+		gs = 7,
+		step = 30,
+		sample = "",
+		sgm = "",
+		seed = 0,
+		out_folder = "data",
+		base_safe = "base.safetensors",
+		url = "",
+		dtype = "f32",
+		dev = "cuda",
+		x = 1024,
+		y = 1024,
+		mode = 0,
+		up = 1.5,
+		Interpolation = "BILINEAR",
+		step2 = 15,
+		ss = 0.5,
+		p = None,
+		ser = "colab",
+		del_pipe = True,
+		si = True,
+		pos_emb = [],
+		neg_emb = [],
+		vae_safe = "",
+		step3 = 20,
+		up2 = 1.5,
+		ccs = 0,
+		gpulowmem = False,
+		freezeunet = False,
+		cs = 2,
+		qprompt = "masterpiece, best quality, ultra detailed",
+		qn_prompt = "worst quality, low quality, normal quality",
   )
   ```
 - mokusd
   ```
   mokusd(
-		loras=[],
-		lora_weights=[],
+		loras = [],
+		lora_weights = [],
 		prompt = "",
 		n_prompt = "",
-		pic_number=10,
-		gs=7,
-		step=30,
-		sample="",
-		sgm="",
-		seed=0,
-		out_folder="data",
-		base_safe="base.safetensors",
-		url="",
-		dtype="f32",
-		dev="cuda",
-		x=1024,
-		y=1024,
-		mode=0,
-		up=1.5,
-		Interpolation="BILINEAR",
-		step2=15,
-		ss=0.5,
-		p=None,
-		ser="colab",
-		del_pipe=True,
-		si=True,
-		pos_emb=[],
-		neg_emb=[],
-		vae_safe="",
-		step3=20,
-		up2=1.5,
-		ccs=0,
-		gpulowmem=False,
-		freezeunet=False,
-		cs=2,
-		qprompt="masterpiece, best quality, ultra detailed",
-		qn_prompt="worst quality, low quality, normal quality",
+		pic_number = 10,
+		gs = 7,
+		step = 30,
+		sample = "",
+		sgm = "",
+		seed = 0,
+		out_folder = "data",
+		base_safe = "base.safetensors",
+		url = "",
+		dtype = "f32",
+		dev = "cuda",
+		x = 1024,
+		y = 1024,
+		mode = 0,
+		up = 1.5,
+		Interpolation = "BILINEAR",
+		step2 = 15,
+		ss = 0.5,
+		p = None,
+		ser = "colab",
+		del_pipe = True,
+		si = True,
+		pos_emb = [],
+		neg_emb = [],
+		vae_safe = "",
+		step3 = 20,
+		up2 = 1.5,
+		ccs = 0,
+		gpulowmem = False,
+		freezeunet = False,
+		cs = 2,
+		qprompt = "masterpiece, best quality, ultra detailed",
+		qn_prompt = "worst quality, low quality, normal quality",
   )
   ```
 ### gui only
