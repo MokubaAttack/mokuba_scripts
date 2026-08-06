@@ -23,9 +23,9 @@ def mergelora(
 	new_conv_rank=None,
 	device=None,
 	save_to=None,
-	win=None,
 	meta_dict=None,
-	dof=False
+	dof=False,
+	win=None
 ):
 	if win!=None:
 		win['RUN'].Update(disabled=True)
