@@ -11,7 +11,7 @@ from ..common.diff2 import diff2anima
 from ..common.flush import flush
 from ..common.save_safe import save_safe
 
-def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,win=None,v=0):
+def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None):
 	if win!=None:
 		win["RUN"].Update(disabled=True)
 
