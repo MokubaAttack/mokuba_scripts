@@ -31,11 +31,19 @@ pip install .[guixpu]
   ```
   merge_ckpt_anima.mergeckpt(
 		ckpts,
+		#checkpoint files list 
 		ws,
+		#weights list of ckpts[1]
+		#[BASE,BLOCK00,BLOCK01,BLOCK02,BLOCK03,...,BLOCK26,BLOCK27,LLM]
 		out_path,
+		#output file path
 		mode = "normal",
+		#merge mode
+		#normal, tensor1, tensor2
 		ff = True,
+		#When you choose True, this program merges text_encoder and vae too.
 		v = 0,
+		#When v = 1, this program adopts vae of ckpts[0]. When v = 2, it adopts vae of ckpts[1]. When v = 0, it merge vae.
   )
   ```
   ```
@@ -46,12 +54,21 @@ pip install .[guixpu]
   ```
   merge_ckpt_sdxl.mergeckpt(
 		ckpts,
+		#checkpoint files list 
 		weights,
+		#weights list of ckpts[1]
+		#[BASE,IN00,IN01,...,IN08,MID,OUT00,OUT01,...,OUT08]
 		v,
+		#When v = 1, this program adopts vae of ckpts[0]. When v = 2, it adopts vae of ckpts[1]. When v = 0, it merge vae.
 		out_path,
+		#output file path
 		mode = "normal",
+		#merge mode
+		#normal, tensor1, tensor2, dare, mokuba
 		dp = 0,
+		#Dropout probability ( dare mode only )
 		seed = 0,
+		#seed ( dare mode only )
   )
   ```
   ```
