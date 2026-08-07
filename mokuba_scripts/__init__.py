@@ -55,7 +55,9 @@ try:
 	from .tool import (
 		get_vae,
 		accuracy,
-		plus_metadata
+		plus_metadata,
+		civitai_dl,
+		kaggle_dl
 	)
 except:
 	pass
@@ -95,7 +97,9 @@ try:
 	from .tool import (
 		get_vae,
 		accuracy,
-		plus_metadata
+		plus_metadata,
+		civitai_dl,
+		kaggle_dl
 	)
 except:
 	pass
