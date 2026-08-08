@@ -63,6 +63,10 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None):
 			shutil.rmtree(os.getcwd()+"/safe_temp")
 			return
 
+	if win!=None:
+		win["info"].update("loading "+os.path.basename(ckpts[1]))
+	else:
+		print("loading "+os.path.basename(ckpts[1]))
 	if ckpts[1].endswith(".safetensors"):
 		try:
 			sd20,sd21,sd22,sd23=safe2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
