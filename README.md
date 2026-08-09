@@ -154,9 +154,9 @@ pip install .[guixpu]
 		save_precision="fp16",
 		#output accuracy
 		new_rank=16,
-		#Specify rank of output LoRA
+		#rank of output LoRA
 		new_conv_rank=None,
-		#Specify rank of output LoRA for Conv2d 3x3
+		#rank of output LoRA for Conv2d 3x3
 		device=None,
 		#calculation device
 		save_to=None,
@@ -175,11 +175,17 @@ pip install .[guixpu]
   ```
   subtract_ckpt_anima.subtractckpt(
 		ckpts,
+		#checkpoint files list
 		dim,
+		#rank of output LoRA
 		trans,
+		#When you choose True, transfomer parts are output
 		teco,
+		#When you choose True, text_conditioner parts are output
 		teen,
+		#When you choose True, text_encoder parts are output
 		out_path,
+		#output file path
   )
   ```
   ```
@@ -190,11 +196,17 @@ pip install .[guixpu]
   ```
   subtract_ckpt_sdxl.subtractckpt(
 		ckpts,
+		#checkpoint files list
 		dim,
+		#rank of output LoRA
 		trans,
+		#When you choose True, unet parts are output
 		teen1,
+		#When you choose True, text_encoder parts are output
 		teen2,
+		#When you choose True, text_encoder_2 parts are output
 		out_path,
+		#output file path
   )
   ```
   ```
