@@ -330,42 +330,42 @@ It is a script that make difference of checkpoints into lora. This script is bas
   )
   ```
 ### gui only
-- animagui
+- animagui  
   It is gui version of mokuani.
   ```
   animagui.gui()
   ```
-- sdxlgui
+- sdxlgui  
   It is gui version of mokusdxl.
   ```
   sdxlgui.gui()
   ```
-- get_vae
+- get_vae  
   It is a script that extracts a vae safetensors from a checkpoint safetensors.
   ```
   get_vae.gui()
   ```
-- accuracy
+- accuracy  
   It is a script that change accuracy of safetensors file.
   ```
   accuracy.gui()
   ```
-- plus_metadata
+- plus_metadata  
   It is a script that write metadata to PNG file and JPG file. That metadata is recognized in CivitAi.
   ```
   plus_metadata.gui()
   ```
-- civitai_dl
+- civitai_dl  
   It is a script that downloads data from CivitAi.
   ```
   civitai_dl.gui()
   ```
-- kaggle_dl
+- kaggle_dl  
   It is a script that downloads data from Kaggle Dataset.
   ```
   kaggle_dl.gui()
   ```
-- imgup
+- imgup  
   It is a script that makes jpg file and png file larger.
   ```
   imgup.gui()
