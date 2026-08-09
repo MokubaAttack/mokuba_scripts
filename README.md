@@ -214,7 +214,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
   subtract_ckpt_sdxl.gui()
   ```
 ### notebook only
-- mokuani
+- mokuani  
   It is a scripts that make images by anima model.
   ```
   mokuani(
@@ -279,7 +279,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		#If you choice True, output images are shown in the output window.
   ) = mokuanipipe object
   ```
-- mokusdxl
+- mokusdxl  
   It is a scripts that make images by sdxl1.0 model.
   ```
   mokusdxl(
