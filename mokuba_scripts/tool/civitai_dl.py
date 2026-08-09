@@ -90,6 +90,7 @@ def check():
 
 def run(i,path,win):
 	win["RUN"].Update(disabled=True)
+	win["info"].update("downloading")
 	try:
 		with open(os.getcwd()+"/token.json","r") as f:
 			d = json.load(f)
