@@ -126,7 +126,7 @@ def gui():
 	sc_list=[
 		"","Karras","beta","exponential","sgm_uniform","simple","uniform","normal"
 	]
-	hum_list=["NEAREST","BOX","BILINEAR","HAMMING","BICUBIC","LANCZOS"]
+	hum_list=["NEAREST","BOX","BILINEAR","HAMMING","BICUBIC","LANCZOS","select file"]
 	
 	grp_rclick_menu={}
 	for key in keys:
@@ -157,9 +157,9 @@ def gui():
 		[sg.Text("Denoising strength"), sg.Input(ivs["ds"],key="ds",right_click_menu=grp_rclick_menu["ds"], size=(10, 1))],
 		[sg.Text("Hires upscale"), sg.Input(ivs["hu"],key="hu",right_click_menu=grp_rclick_menu["hu"], size=(10, 1))],
 		[sg.Text("Hires steps"), sg.Input(ivs["hs"],key="hs",right_click_menu=grp_rclick_menu["hs"], size=(10, 1))],
-		[sg.Text("Hires upscaler"), sg.Combo(default_value=ivs["hum"],key="hum",values=hum_list)],
+		[sg.Text("Hires upscaler"), sg.Combo(default_value=ivs["hum"],key="hum",values=hum_list,enable_events=True)],
 		[sg.Text("Tile upscale"), sg.Input(ivs["tu"],key="tu",right_click_menu=grp_rclick_menu["tu"], size=(10, 1))],
-		[sg.Text("Tile upscaler"), sg.Combo(default_value=ivs["tum"],key="tum",values=hum_list)],
+		[sg.Text("Tile upscaler"), sg.Combo(default_value=ivs["tum"],key="tum",values=hum_list,enable_events=True)],
 		[sg.Text("controlnet_conditioning_scale"), sg.Input(ivs["ccs"],key="ccs",right_click_menu=grp_rclick_menu["ccs"], size=(10, 1))],
 	]
 		
@@ -179,12 +179,12 @@ def gui():
 		[sg.Text("embed1 modelVersionId"), sg.Input(ivs["embed1"],key="embed1",right_click_menu=grp_rclick_menu["embed1"], size=(20, 1)),sg.Text("embed2 modelVersionId"), sg.Input(ivs["embed2"],key="embed2",right_click_menu=grp_rclick_menu["embed2"], size=(20, 1))],
 		[sg.Text("embed3 modelVersionId"), sg.Input(ivs["embed3"],key="embed3",right_click_menu=grp_rclick_menu["embed3"], size=(20, 1)),sg.Text("embed4 modelVersionId"), sg.Input(ivs["embed4"],key="embed4",right_click_menu=grp_rclick_menu["embed4"], size=(20, 1))],
 		[sg.Text("controlnet modelVersionId"), sg.Input(ivs["cont"],key="cont",right_click_menu=grp_rclick_menu["cont"], size=(20, 1)),sg.Text("upscaler modelVersionId"), sg.Input(ivs["up"],key="up",right_click_menu=grp_rclick_menu["up"], size=(20, 1))],
-		[sg.Text("infomation\n",key="info")],
+		[sg.Text("infomation",key="info")],
 		[sg.Button("Save Params",key="save"),sg.Button("Load Params",key="load",disabled=e),sg.Button("Save Params to",key="save2"),sg.Button("Load Params from",key="load2")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Plus Metadata', layout,keep_on_top=True)
+	window = sg.Window('Plus Metadata', layout)
 
 	while True:
 		event, values = window.read()
@@ -278,4 +278,14 @@ def gui():
 					window["info"].update("read : "+os.path.basename(values["input"]))
 				except:
 					window["info"].update("error")
+		elif "hum" in event:
+			if values["hum"]=="select file":
+				value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),))
+				if value!=None:
+					window["hum"].update(os.path.basename(value))
+		elif "tum" in event:
+			if values["tum"]=="select file":
+				value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),))
+				if value!=None:
+					window["tum"].update(os.path.basename(value))
 	window.close()
