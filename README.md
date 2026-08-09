@@ -270,14 +270,14 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		ss = 0.5,
 		#denoising_strength ( a parameter of hires.fix )
 		p = None,
-		#If you input mokuani.pipe object, you can use same pipeline without making the pipeline.
+		#If you input mokuanipipe.pipe object, you can use same pipeline without making the pipeline.
 		ser = "colab",
 		#In google colab, please input "colab". In kaggle, please input "kaggle".
 		del_pipe = True,
-		#If you choice True, mokuani.pipe object is deleted and None is returned.
+		#If you choice True, mokuanipipe.pipe object is deleted and None is returned.
 		si = True,
 		#If you choice True, output images are shown in the output window.
-  ) = mokuani.pipe object
+  ) = mokuanipipe.pipe object
   ```
 - mokusdxl
   It is a scripts that make images by sdxl1.0 model.
@@ -320,7 +320,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		cs = 2,
 		qprompt = "masterpiece, best quality, ultra detailed",
 		qn_prompt = "worst quality, low quality, normal quality",
-  ) = mokusdxl.pipe object
+  ) = mokusdxlpipe.pipe object
   ```
 - mokusd  
   It is a scripts that make images by sd1.5 model.
@@ -363,7 +363,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		cs = 2,
 		qprompt = "masterpiece, best quality, ultra detailed",
 		qn_prompt = "worst quality, low quality, normal quality",
-  ) = mokusd.pipe object
+  ) = mokusdpipe.pipe object
   ```
 ### gui only
 - animagui  
