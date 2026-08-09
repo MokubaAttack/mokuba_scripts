@@ -270,100 +270,190 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		ss = 0.5,
 		#denoising_strength ( a parameter of hires.fix )
 		p = None,
-		#If you input mokuanipipe.pipe object, you can use same pipeline without making the pipeline.
+		#If you input mokuanipipe object, you can use same pipeline without making the pipeline.
 		ser = "colab",
 		#In google colab, please input "colab". In kaggle, please input "kaggle".
 		del_pipe = True,
-		#If you choice True, mokuanipipe.pipe object is deleted and None is returned.
+		#If you choice True, mokuanipipe object is deleted and None is returned.
 		si = True,
 		#If you choice True, output images are shown in the output window.
-  ) = mokuanipipe.pipe object
+  ) = mokuanipipe object
   ```
 - mokusdxl
   It is a scripts that make images by sdxl1.0 model.
   ```
   mokusdxl(
 		loras = [],
+		#list of lora file path
 		lora_weights = [],
+		#list of lora weight
 		prompt = "",
+		#prompt
 		n_prompt = "",
+		#negative prompt
 		pic_number = 10,
+		#number of output images
 		gs = 7,
+		#guidance_scale ( a parameter of StableDiffusion )
 		step = 30,
+		#num_inference_steps ( a parameter of StableDiffusion )
 		sample = "",
+		#scheduler type
+		#Euler a, Euler, LMS, Heun, DPM2, DPM2 a, DPM++, DPM++ 2M, DPM++ SDE, DPM++ 2M SDE, DPM++ 3M SDE, DDIM, PLMS, UniPC, LCM
 		sgm = "",
+		#noise schedule
+		#Karras, sgm_uniform, simple, exponential, beta
 		seed = 0,
+		#seed
 		out_folder = "data",
+		#output folder path
 		base_safe = "base.safetensors",
+		#checkpoint file path
 		url = "",
+		#If you input the webhook url of discord, images are sent to discord.
 		dtype = "f32",
+		#calculation accuracy
+		#f32, f16, bf16
 		dev = "cuda",
+		#calculation device
+		#cuda, mps, xpu, cpu
 		x = 1024,
+		#width of output image
 		y = 1024,
+		#height of output image
 		mode = 0,
+		#working mode
+		#0 : normal, 1 : hires.fix, 2 : hires.fix to tile upscaler
 		up = 1.5,
+		#Hires upscale ( a parameter of hires.fix )
 		Interpolation = "BILINEAR",
+		#interpolation method of the upscaling
+		#NEAREST, BOX, BILINEAR, HAMMING, BICUBIC, LANCZOS
+		#If you input pth file of ESRGAN, images are upscaled by ESRGAN.
 		step2 = 15,
+		#Tile scale ( a parameter of Tile Upscaler)
 		ss = 0.5,
+		#denoising_strength ( a parameter of hires.fix and Tile Upscaler )
 		p = None,
+		#If you input mokusdxlpipe object, you can use same pipeline without making the pipeline.
 		ser = "colab",
+		#In google colab, please input "colab". In kaggle, please input "kaggle".
 		del_pipe = True,
+		#If you choice True, mokusdxlpipe object is deleted and None is returned.
 		si = True,
+		#If you choice True, output images are shown in the output window.
 		pos_emb = [],
+		#list of positive embedding files
 		neg_emb = [],
+		#list of negative embedding files
 		vae_safe = "",
+		#vae file path
 		step3 = 20,
+		#num_inference_steps for tile upscaler
 		up2 = 1.5,
+		#tile upscale ( a parameter of Tile Upscaler )
 		ccs = 0,
+		#controlnet_conditioning_scale ( a parameter of Tile Upscaler )
+		#If ccs = 0, controlnet tile are not used.
 		gpulowmem = False,
+		#If you choose True, gpu memory isn't used much.
 		freezeunet = False,
+		#If you choose True, unet freeze to qfloat8.
 		cs = 2,
+		#clip_skip ( a parameter of StableDiffusion )
 		qprompt = "masterpiece, best quality, ultra detailed",
+		#prompt for tile upscaler
 		qn_prompt = "worst quality, low quality, normal quality",
-  ) = mokusdxlpipe.pipe object
+		#negative prompt for tile upscaler
+  ) = mokusdxlpipe object
   ```
 - mokusd  
   It is a scripts that make images by sd1.5 model.
   ```
   mokusd(
 		loras = [],
+		#list of lora file path
 		lora_weights = [],
+		#list of lora weight
 		prompt = "",
+		#prompt
 		n_prompt = "",
+		#negative prompt
 		pic_number = 10,
+		#number of output images
 		gs = 7,
+		#guidance_scale ( a parameter of StableDiffusion )
 		step = 30,
+		#num_inference_steps ( a parameter of StableDiffusion )
 		sample = "",
+		#scheduler type
+		#Euler a, Euler, LMS, Heun, DPM2, DPM2 a, DPM++, DPM++ 2M, DPM++ SDE, DPM++ 2M SDE, DPM++ 3M SDE, DDIM, PLMS, UniPC, LCM
 		sgm = "",
+		#noise schedule
+		#Karras, sgm_uniform, simple, exponential, beta
 		seed = 0,
+		#seed
 		out_folder = "data",
+		#output folder path
 		base_safe = "base.safetensors",
+		#checkpoint file path
 		url = "",
+		#If you input the webhook url of discord, images are sent to discord.
 		dtype = "f32",
+		#calculation accuracy
+		#f32, f16, bf16
 		dev = "cuda",
+		#calculation device
+		#cuda, mps, xpu, cpu
 		x = 1024,
+		#width of output image
 		y = 1024,
+		#height of output image
 		mode = 0,
+		#working mode
+		#0 : normal, 1 : hires.fix, 2 : hires.fix to tile upscaler
 		up = 1.5,
+		#Hires upscale ( a parameter of hires.fix )
 		Interpolation = "BILINEAR",
+		#interpolation method of the upscaling
+		#NEAREST, BOX, BILINEAR, HAMMING, BICUBIC, LANCZOS
+		#If you input pth file of ESRGAN, images are upscaled by ESRGAN.
 		step2 = 15,
+		#Tile scale ( a parameter of Tile Upscaler)
 		ss = 0.5,
+		#denoising_strength ( a parameter of hires.fix and Tile Upscaler )
 		p = None,
+		#If you input mokusdpipe object, you can use same pipeline without making the pipeline.
 		ser = "colab",
+		#In google colab, please input "colab". In kaggle, please input "kaggle".
 		del_pipe = True,
+		#If you choice True, mokusdpipe object is deleted and None is returned.
 		si = True,
+		#If you choice True, output images are shown in the output window.
 		pos_emb = [],
+		#list of positive embedding files
 		neg_emb = [],
+		#list of negative embedding files
 		vae_safe = "",
+		#vae file path
 		step3 = 20,
+		#num_inference_steps for tile upscaler
 		up2 = 1.5,
+		#tile upscale ( a parameter of Tile Upscaler )
 		ccs = 0,
+		#controlnet_conditioning_scale ( a parameter of Tile Upscaler )
+		#If ccs = 0, controlnet tile are not used.
 		gpulowmem = False,
+		#If you choose True, gpu memory isn't used much.
 		freezeunet = False,
+		#If you choose True, unet freeze to qfloat8.
 		cs = 2,
+		#clip_skip ( a parameter of StableDiffusion )
 		qprompt = "masterpiece, best quality, ultra detailed",
+		#prompt for tile upscaler
 		qn_prompt = "worst quality, low quality, normal quality",
-  ) = mokusdpipe.pipe object
+		#negative prompt for tile upscaler
+  ) = mokusdpipe object
   ```
 ### gui only
 - animagui  
