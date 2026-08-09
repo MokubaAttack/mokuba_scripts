@@ -27,6 +27,8 @@ pip install .[guixpu]
 ```
 ## Scripts
 ### common
+### merge_ckpt
+It is a script that merge checkpoints. This script supports block merge and tensor merge.
 - merge_ckpt_anima
   ```
   merge_ckpt_anima.mergeckpt(
@@ -49,7 +51,6 @@ pip install .[guixpu]
   ```
   merge_ckpt_anima.gui()
   ```
-  gui is opened.
 - merge_ckpt_sdxl  
   ```
   merge_ckpt_sdxl.mergeckpt(
@@ -74,7 +75,8 @@ pip install .[guixpu]
   ```
   merge_ckpt_sdxl.gui()
   ```
-  gui is opened.
+### make_safetensors
+It is a script that burns a vae and loras in a checkpoint. This script is based on [convert_diffusers_to_original_sdxl.py](https://github.com/huggingface/diffusers/blob/main/scripts/convert_diffusers_to_original_sdxl.py) of huggingface/diffusers.
 - make_safetensors_anima
   ```
   make_safetensors_anima.makesafe(
@@ -93,7 +95,6 @@ pip install .[guixpu]
   ```
   make_safetensors_anima.gui()
   ```
-  gui is opened.
 - make_safetensors_sdxl  
   ```
   make_safetensors_sdxl.makesafe(
@@ -112,7 +113,8 @@ pip install .[guixpu]
   ```
   make_safetensors_sdxl.gui()
   ```
-  gui is opened.
+### merge_lora
+It is a script that merge lora by SVD. This script is based on [svd_merge_lora.py](https://github.com/kohya-ss/sd-scripts/blob/main/networks/svd_merge_lora.py) of kohya-ss/sd-scripts.
 - merge_lora_anima
   ```
   merge_lora_anima.mergelora(
@@ -125,9 +127,9 @@ pip install .[guixpu]
 		save_precision="fp16",
 		#output accuracy
 		new_rank=16,
-		#Specify rank of output LoRA
+		#rank of output LoRA
 		new_conv_rank=None,
-		#Specify rank of output LoRA for Conv2d 3x3
+		#rank of output LoRA for Conv2d 3x3
 		device=None,
 		#calculation device
 		save_to=None,
@@ -141,7 +143,6 @@ pip install .[guixpu]
   ```
   merge_lora_anima.gui()
   ```
-  gui is opened.
 - merge_lora_sdxl
   ```
   merge_lora_sdxl.mergelora(
@@ -170,7 +171,8 @@ pip install .[guixpu]
   ```
   merge_lora_sdxl.gui()
   ```
-  gui is opened. 
+### subtract_ckpt
+It is a script that make difference of checkpoints into lora. This script is based on [extract_lora_from_models.py](https://github.com/kohya-ss/sd-scripts/blob/main/networks/extract_lora_from_models.py) of kohya-ss/sd-scripts.
 - subtract_ckpt_anima
   ```
   subtract_ckpt_anima.subtractckpt(
@@ -191,7 +193,6 @@ pip install .[guixpu]
   ```
   subtract_ckpt_anima.gui()
   ```
-  gui is opened.
 - subtract_ckpt_sdxl
   ```
   subtract_ckpt_sdxl.subtractckpt(
@@ -212,7 +213,6 @@ pip install .[guixpu]
   ```
   subtract_ckpt_sdxl.gui()
   ```
-  gui is opened.
 ### notebook only
 - mokuani
   ```
@@ -331,45 +331,45 @@ pip install .[guixpu]
   ```
 ### gui only
 - animagui
+  It is gui version of mokuani.
   ```
   animagui.gui()
   ```
-  gui is opened.
 - sdxlgui
+  It is gui version of mokusdxl.
   ```
   sdxlgui.gui()
   ```
-  gui is opened.
 - get_vae
+  It is a script that extracts a vae safetensors from a checkpoint safetensors.
   ```
   get_vae.gui()
   ```
-  gui is opened.
 - accuracy
+  It is a script that change accuracy of safetensors file.
   ```
   accuracy.gui()
   ```
-  gui is opened.
 - plus_metadata
+  It is a script that write metadata to PNG file and JPG file. That metadata is recognized in CivitAi.
   ```
   plus_metadata.gui()
   ```
-  gui is opened.
 - civitai_dl
+  It is a script that downloads data from CivitAi.
   ```
   civitai_dl.gui()
   ```
-  gui is opened.
 - kaggle_dl
+  It is a script that downloads data from Kaggle Dataset.
   ```
   kaggle_dl.gui()
   ```
-  gui is opened.
 - imgup
+  It is a script that makes jpg file and png file larger.
   ```
   imgup.gui()
   ```
-  gui is opened.
 ## Credits
 - [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts)
 - [huggingface/diffusers](https://github.com/huggingface/diffusers/tree/main)
