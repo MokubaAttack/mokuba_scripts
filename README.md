@@ -31,11 +31,19 @@ pip install .[guixpu]
   ```
   merge_ckpt_anima.mergeckpt(
 		ckpts,
+		#checkpoint files list 
 		ws,
+		#weights list of ckpts[1]
+		#[BASE,BLOCK00,BLOCK01,BLOCK02,BLOCK03,...,BLOCK26,BLOCK27,LLM]
 		out_path,
+		#output file path
 		mode = "normal",
+		#merge mode
+		#normal, tensor1, tensor2
 		ff = True,
+		#When you choose True, this program merges text_encoder and vae too.
 		v = 0,
+		#When v = 1, this program adopts vae of ckpts[0]. When v = 2, it adopts vae of ckpts[1]. When v = 0, it merge vae.
   )
   ```
   ```
@@ -46,12 +54,21 @@ pip install .[guixpu]
   ```
   merge_ckpt_sdxl.mergeckpt(
 		ckpts,
+		#checkpoint files list 
 		weights,
+		#weights list of ckpts[1]
+		#[BASE,IN00,IN01,...,IN08,MID,OUT00,OUT01,...,OUT08]
 		v,
+		#When v = 1, this program adopts vae of ckpts[0]. When v = 2, it adopts vae of ckpts[1]. When v = 0, it merge vae.
 		out_path,
+		#output file path
 		mode = "normal",
+		#merge mode
+		#normal, tensor1, tensor2, dare, mokuba
 		dp = 0,
+		#Dropout probability ( dare mode only )
 		seed = 0,
+		#seed ( dare mode only )
   )
   ```
   ```
@@ -62,10 +79,15 @@ pip install .[guixpu]
   ```
   make_safetensors_anima.makesafe(
 		base_path,
+		#checkpoint file path
 		loras,
+		#list of lora file path
 		ws,
+		#list of lora weight
 		out_path,
+		#output file path
 		ff,
+		#When you choose True, the output file contains text_encoder and vae too.
   )
   ```
   ```
@@ -76,10 +98,15 @@ pip install .[guixpu]
   ```
   make_safetensors_sdxl.makesafe(
 		base_path,
+		#checkpoint file path
 		loras,
+		#list of lora file path
 		ws,
+		#list of lora weight
 		out_path,
+		#output file path
 		vae,
+		#vae file path
   )
   ```
   ```
@@ -90,15 +117,25 @@ pip install .[guixpu]
   ```
   merge_lora_anima.mergelora(
 		loras=[],
+		#list of lora file path
 		weights=[],
+		#list of lora weight
 		precision="float",
+		#calculation accuracy
 		save_precision="fp16",
+		#output accuracy
 		new_rank=16,
+		#Specify rank of output LoRA
 		new_conv_rank=None,
+		#Specify rank of output LoRA for Conv2d 3x3
 		device=None,
+		#calculation device
 		save_to=None,
+		#output file path
 		meta_dict=None,
+		#metadata dictionary
 		dof=False,
+		#When you choose True, input lora files are deleted.
   )
   ```
   ```
@@ -109,15 +146,25 @@ pip install .[guixpu]
   ```
   merge_lora_sdxl.mergelora(
 		loras=[],
+		#list of lora file path
 		weights=[],
+		#list of lora weight
 		precision="float",
+		#calculation accuracy
 		save_precision="fp16",
+		#output accuracy
 		new_rank=16,
+		#Specify rank of output LoRA
 		new_conv_rank=None,
+		#Specify rank of output LoRA for Conv2d 3x3
 		device=None,
+		#calculation device
 		save_to=None,
+		#output file path
 		meta_dict=None,
+		#metadata dictionary
 		dof=False,
+		#When you choose True, input lora files are deleted.
   )
   ```
   ```
@@ -294,6 +341,21 @@ pip install .[guixpu]
 - plus_metadata
   ```
   plus_metadata.gui()
+  ```
+  gui is opened.
+- civitai_dl
+  ```
+  civitai_dl.gui()
+  ```
+  gui is opened.
+- kaggle_dl
+  ```
+  kaggle_dl.gui()
+  ```
+  gui is opened.
+- imgup
+  ```
+  imgup.gui()
   ```
   gui is opened.
 ## Credits
