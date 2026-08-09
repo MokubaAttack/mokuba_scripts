@@ -9,6 +9,7 @@ from realesrgan import RealESRGANer
 
 class mokuup:
 	def __init__(self,path,dev):
+		self.scale=2
 		if path=="NEAREST":
 			self.model=Image.NEAREST
 			self.path="NEAREST"
@@ -102,6 +103,7 @@ class mokuup:
 				device=dev
 			)
 			self.path=os.path.basename(path)
+			self.scale=scale
 
 	def get_method(self):
 		return self.path,self.id
@@ -120,3 +122,6 @@ class mokuup:
 		else:
 			image0=img.resize((x,y), resample=self.model)
 		return image0
+		
+	def get_scale(self):
+		return self.scale

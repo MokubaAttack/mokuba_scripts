@@ -11,7 +11,7 @@ from ..common.diff2 import diff2anima
 from ..common.flush import flush
 from ..common.save_safe import save_safe
 
-def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,win=None,v=0):
+def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None):
 	if win!=None:
 		win["RUN"].Update(disabled=True)
 
@@ -63,6 +63,10 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,win=None,v=0):
 			shutil.rmtree(os.getcwd()+"/safe_temp")
 			return
 
+	if win!=None:
+		win["info"].update("loading "+os.path.basename(ckpts[1]))
+	else:
+		print("loading "+os.path.basename(ckpts[1]))
 	if ckpts[1].endswith(".safetensors"):
 		try:
 			sd20,sd21,sd22,sd23=safe2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])

@@ -60,7 +60,7 @@ class diff2anima:
 			else:
 				k=k.removesuffix(".lora_down.weight")
 			key=k.replace(".","_")
-			m=re.search(r"layers_([0-9+])_(.+)$",key)
+			m=re.search(r"layers_([0-9]+)_(.+)$",key)
 			if m!=None:
 				key="lora_te_"+m.group()
 				mappings[k]=key
