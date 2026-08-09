@@ -283,9 +283,13 @@ def gui():
 				value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),))
 				if value!=None:
 					window["hum"].update(os.path.basename(value))
+				else:
+					window["hum"].update("NEAREST")
 		elif "tum" in event:
 			if values["tum"]=="select file":
 				value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),))
 				if value!=None:
 					window["tum"].update(os.path.basename(value))
+				else:
+					window["tum"].update("NEAREST")
 	window.close()
