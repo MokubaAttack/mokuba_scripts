@@ -27,7 +27,7 @@ pip install .[guixpu]
 ```
 ## Scripts
 ### common
-### merge_ckpt
+#### merge_ckpt
 It is a script that merge checkpoints. This script supports block merge and tensor merge.
 - merge_ckpt_anima
   ```
@@ -75,7 +75,7 @@ It is a script that merge checkpoints. This script supports block merge and tens
   ```
   merge_ckpt_sdxl.gui()
   ```
-### make_safetensors
+#### make_safetensors
 It is a script that burns a vae and loras in a checkpoint. This script is based on [convert_diffusers_to_original_sdxl.py](https://github.com/huggingface/diffusers/blob/main/scripts/convert_diffusers_to_original_sdxl.py) of huggingface/diffusers.
 - make_safetensors_anima
   ```
@@ -113,7 +113,7 @@ It is a script that burns a vae and loras in a checkpoint. This script is based 
   ```
   make_safetensors_sdxl.gui()
   ```
-### merge_lora
+#### merge_lora
 It is a script that merge lora by SVD. This script is based on [svd_merge_lora.py](https://github.com/kohya-ss/sd-scripts/blob/main/networks/svd_merge_lora.py) of kohya-ss/sd-scripts.
 - merge_lora_anima
   ```
@@ -171,7 +171,7 @@ It is a script that merge lora by SVD. This script is based on [svd_merge_lora.p
   ```
   merge_lora_sdxl.gui()
   ```
-### subtract_ckpt
+#### subtract_ckpt
 It is a script that make difference of checkpoints into lora. This script is based on [extract_lora_from_models.py](https://github.com/kohya-ss/sd-scripts/blob/main/networks/extract_lora_from_models.py) of kohya-ss/sd-scripts.
 - subtract_ckpt_anima
   ```
@@ -214,7 +214,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
   subtract_ckpt_sdxl.gui()
   ```
 ### notebook only
-- ### mokuani  
+- #### mokuani  
   It is a scripts that make images by anima model.
   ```
   mokuani(
@@ -279,7 +279,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		#If you choice True, output images are shown in the output window.
   ) = mokuanipipe object
   ```
-- ### mokusdxl  
+- #### mokusdxl  
   It is a scripts that make images by sdxl1.0 model.
   ```
   mokusdxl(
@@ -367,7 +367,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		#negative prompt for tile upscaler
   ) = mokusdxlpipe object
   ```
-- ### mokusd  
+- #### mokusd  
   It is a scripts that make images by sd1.5 model.
   ```
   mokusd(
@@ -456,42 +456,42 @@ It is a script that make difference of checkpoints into lora. This script is bas
   ) = mokusdpipe object
   ```
 ### gui only
-- ### animagui  
+- #### animagui  
   It is gui version of mokuani.
   ```
   animagui.gui()
   ```
-- ### sdxlgui  
+- #### sdxlgui  
   It is gui version of mokusdxl.
   ```
   sdxlgui.gui()
   ```
-- ### get_vae  
+- #### get_vae  
   It is a script that extracts a vae safetensors from a checkpoint safetensors.
   ```
   get_vae.gui()
   ```
-- ### accuracy  
+- #### accuracy  
   It is a script that change accuracy of safetensors file.
   ```
   accuracy.gui()
   ```
-- ### plus_metadata  
+- #### plus_metadata  
   It is a script that write metadata to PNG file and JPG file. That metadata is recognized in CivitAi.
   ```
   plus_metadata.gui()
   ```
-- ### civitai_dl  
+- #### civitai_dl  
   It is a script that downloads data from CivitAi.
   ```
   civitai_dl.gui()
   ```
-- ### kaggle_dl  
+- #### kaggle_dl  
   It is a script that downloads data from Kaggle Dataset.
   ```
   kaggle_dl.gui()
   ```
-- ### imgup  
+- #### imgup  
   It is a script that makes jpg file and png file larger.
   ```
   imgup.gui()
