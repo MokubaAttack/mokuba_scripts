@@ -215,37 +215,72 @@ It is a script that make difference of checkpoints into lora. This script is bas
   ```
 ### notebook only
 - mokuani
+  It is a scripts that make images by anima model.
   ```
   mokuani(
 		loras = [],
+		#list of lora file path
 		lora_weights = [],
+		#list of lora weight
 		prompt = "",
+		#prompt
 		n_prompt = "",
+		#negative prompt
 		pic_number = 10,
+		#number of output images
 		gs = 7,
+		#guidance_scale ( a parameter of StableDiffusion )
 		step = 30,
+		#num_inference_steps ( a parameter of StableDiffusion )
 		sample = "",
+		#scheduler type
+		#FlowMatch_Euler, FlowMatch_LCM
 		sgm = "",
+		#noise schedule
+		#karras, beta, exponential, normal
 		seed = 0,
+		#seed
 		out_folder = "data",
+		#output folder path
 		base_safe = "base.safetensors",
+		#checkpoint file path
 		url = "",
+		#If you input the webhook url of discord, images are sent to discord.
 		dtype = "f32",
+		#calculation accuracy
+		#f32, f16, bf16
 		dev = "cuda",
+		#calculation device
+		#cuda, mps, xpu, cpu
 		x = 1024,
+		#width of output image
 		y = 1024,
+		#height of output image
 		mode = 0,
+		#working mode
+		#0 : normal, 1 : hires.fix
 		up = 1.5,
+		#Hires upscale ( a parameter of hires.fix )
 		Interpolation = "BILINEAR",
+		#interpolation method of the upscaling
+		#NEAREST, BOX, BILINEAR, HAMMING, BICUBIC, LANCZOS
+		#If you input pth file of ESRGAN, images are upscaled by ESRGAN.
 		step2 = 15,
+		#Hires steps ( a parameter of hires.fix )
 		ss = 0.5,
+		#denoising_strength ( a parameter of hires.fix )
 		p = None,
+		#If you input mokuani.pipe object, you can use same pipeline without making the pipeline.
 		ser = "colab",
+		#In google colab, please input "colab". In kaggle, please input "kaggle".
 		del_pipe = True,
+		#If you choice True, mokuani.pipe object is deleted and None is returned.
 		si = True,
-  )
+		#If you choice True, output images are shown in the output window.
+  ) = mokuani.pipe object
   ```
 - mokusdxl
+  It is a scripts that make images by sdxl1.0 model.
   ```
   mokusdxl(
 		loras = [],
@@ -285,9 +320,10 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		cs = 2,
 		qprompt = "masterpiece, best quality, ultra detailed",
 		qn_prompt = "worst quality, low quality, normal quality",
-  )
+  ) = mokusdxl.pipe object
   ```
-- mokusd
+- mokusd  
+  It is a scripts that make images by sd1.5 model.
   ```
   mokusd(
 		loras = [],
@@ -327,7 +363,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		cs = 2,
 		qprompt = "masterpiece, best quality, ultra detailed",
 		qn_prompt = "worst quality, low quality, normal quality",
-  )
+  ) = mokusd.pipe object
   ```
 ### gui only
 - animagui  
