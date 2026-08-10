@@ -5,9 +5,9 @@ setup(
 	version='1.0.0',
 	packages=find_packages(),
 	include_package_data=True,
-	author='mokuba_attack',
 	description='This is a script that I use when I create images by diffusers.',
-	url='https://github.com/MokubaAttack/mokuba_scripts',
+	long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
 	license='BSD-3-Clause',
 	classifiers=[
 		'License :: OSI Approved :: BSD License',
