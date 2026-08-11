@@ -6,13 +6,13 @@ import json
 import os
 import time
 
-from ..sd.mokusdxlpipe import mokusdxlpipe
+from ..sd.mokusdpipe import mokusdpipe
 from ..common.discord import to_discord
 from ..common.flush import flush
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
 
-class sdxlgui:
+class sdgui:
 	default_values={
 		"pr":"",
 		"ne":"",
@@ -44,9 +44,9 @@ class sdxlgui:
 		"ccs":"1.0",
 		"lowmem":True,
 	}
-	default_json=os.getcwd()+"/sdxl_default.json"
+	default_json=os.getcwd()+"/sd_default.json"
 
-	def mokusdxl(
+	def mokusd(
 		self,
 		loras=[],
 		lora_weights=[],
@@ -93,7 +93,7 @@ class sdxlgui:
 			else:
 				dtype=torch.float32
 
-			pipe=mokusdxlpipe()
+			pipe=mokusdpipe()
 			if base_safe.endswith(".safetensors"):
 				pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
 			else:
@@ -421,7 +421,7 @@ class sdxlgui:
 			]
 		]
 
-		window = sg.Window('sdxl gui', layout)
+		window = sg.Window('sd gui', layout)
 
 		while True:
 			event, values = window.read()
@@ -576,7 +576,7 @@ class sdxlgui:
 				if values["tu"]!="" and values["ts"]!="" and values["ccs"]!="":
 					mode=2
 			
-			result=self.mokusdxl(
+			result=self.mokusd(
 				loras=loras,
 				lora_weights=lora_weights,
 				prompt = values["pr"],
@@ -614,5 +614,4 @@ class sdxlgui:
 			time_min=int(time_sec/60)
 			time_sec=time_sec-60*time_min
 			result=str(result)+"\n"+str(time_min)+"min"+str(time_sec)+"sec"
-			sg.popup(result,title='sdxl gui')
-
+			sg.popup(result,title='sd gui')
