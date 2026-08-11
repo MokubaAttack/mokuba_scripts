@@ -213,6 +213,28 @@ It is a script that make difference of checkpoints into lora. This script is bas
   ```
   subtract_ckpt_sdxl.gui()
   ```
+#### merge_lora
+It is a script that changes dim of lora by svd.
+- change_dim
+  ```
+  change_dim.changedim(
+		path="",
+		#lora file path
+		precision="float",
+		#calculation accuracy
+		save_precision="fp16",
+		#output accuracy
+		new_rank=16,
+		#rank of output LoRA
+		new_conv_rank=None,
+		#rank of output LoRA for Conv2d 3x3
+		device=None,
+		#calculation device
+  )
+  ```
+  ```
+  change_dim.gui()
+  ```
 ### notebook only
 - #### mokuani  
   It is a scripts that make images by anima model.
@@ -465,6 +487,11 @@ It is a script that make difference of checkpoints into lora. This script is bas
   It is gui version of mokusdxl.
   ```
   sdxlgui.gui()
+  ```
+- #### sdgui  
+  It is gui version of mokusd.
+  ```
+  sdgui.gui()
   ```
 - #### get_vae  
   It is a script that extracts a vae safetensors from a checkpoint safetensors.
