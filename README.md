@@ -466,6 +466,11 @@ It is a script that make difference of checkpoints into lora. This script is bas
   ```
   sdxlgui.gui()
   ```
+- #### sdgui  
+  It is gui version of mokusd.
+  ```
+  sdgui.gui()
+  ```
 - #### get_vae  
   It is a script that extracts a vae safetensors from a checkpoint safetensors.
   ```
