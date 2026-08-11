@@ -428,7 +428,7 @@ class mokusdpipe:
 			self.moku_meta["cont"]=""
 		else:
 			controlnet = ControlNetModel.from_pretrained('lllyasviel/control_v11f1e_sd15_tile',torch_dtype=self.dtype)
-			self.pipe=StableDiffusionControlNetImg2ImgPipeline.from_pipe(self.pipe,torch_dtype=dtype,controlnet=controlnet)
+			self.pipe=StableDiffusionControlNetImg2ImgPipeline.from_pipe(self.pipe,torch_dtype=self.dtype,controlnet=controlnet)
 			self.moku_meta["ccs"]=str(ccs)
 			self.moku_meta["cont"]=str(67566)
 		self.pipe.to(self.dev)
