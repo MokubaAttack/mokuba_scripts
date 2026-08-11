@@ -213,7 +213,7 @@ It is a script that make difference of checkpoints into lora. This script is bas
   ```
   subtract_ckpt_sdxl.gui()
   ```
-#### merge_lora
+#### change_dim
 It is a script that changes dim of lora by svd.
 - change_dim
   ```
