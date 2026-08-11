@@ -603,7 +603,8 @@ class sdgui:
 				pos_emb=pos_emb,
 				neg_emb=neg_emb,
 				ccs=ccs,
-				up=up2,
+				up=up,
+				up2=up2,
 				x=x,
 				y=y,
 				mode=mode
@@ -614,6 +615,3 @@ class sdgui:
 			time_sec=time_sec-60*time_min
 			result=str(result)+"\n"+str(time_min)+"min"+str(time_sec)+"sec"
 			sg.popup(result,title='sd gui')
-
-box=sdgui()
-box.gui()

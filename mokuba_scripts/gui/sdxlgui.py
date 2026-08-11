@@ -603,7 +603,8 @@ class sdxlgui:
 				pos_emb=pos_emb,
 				neg_emb=neg_emb,
 				ccs=ccs,
-				up=up2,
+				up=up,
+				up2=up2,
 				x=x,
 				y=y,
 				mode=mode
