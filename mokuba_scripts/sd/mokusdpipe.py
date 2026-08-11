@@ -244,6 +244,7 @@ class mokusdpipe:
 		self.moku_meta["lora"] += i
 		self.moku_meta["w"] += w
 		
+		unet_sd,text_encoder_sd=lyco2sd(path)
 
 		if unet_sd=={} and text_encoder_sd=={}:
 			raise RuntimeWarning(path+" isn't supported.")
