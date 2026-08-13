@@ -9,14 +9,15 @@ def to_discord(path,url):
 		app_key=url[0],
 		app_secret=url[1]
 		)
+	ut=round(time.time())
 	if os.path.isdir(path):
 		shutil.make_archive('archive_shutil', format='zip', root_dir=path)
-		ut=round(time.time())
 		f=open('archive_shutil.zip',"rb")
 		dbx.files_upload(f.read(), "/"+str(ut)+".zip")
 		f.close()
 		os.remove('archive_shutil.zip')
 	else:
 		f=open(path, "rb")
-		dbx.files_upload(f.read(), "/"+os.path.basename(path))
+		path=os.path.splitext(os.path.basename(path))
+		dbx.files_upload(f.read(), "/"+path[0]+"_"+str(ut)+path[1])
 		f.close()
