@@ -63,7 +63,10 @@ class animagui:
 		dev="cuda",
 		mode=0
 	):
-		
+		if not(isinstance(url, list)):
+			url=[]
+		if len(url)!=3:
+			url=[]
 		seed,pic_number=make_seed(seed,pic_number)
 	
 		try:
@@ -110,14 +113,14 @@ class animagui:
 		
 				meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
 				plus_meta(meta,img)
-				if url!="":
+				if url!=[]:
 					to_discord(meta["input"],url)
 				flush()
 			except Exception as e:
 				return e
 			
 		if mode==0:
-			if url!="":
+			if url!=[]:
 				try:
 					to_discord(out_folder,url)
 				except Exception as e:
@@ -153,13 +156,13 @@ class animagui:
 		
 				meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
 				plus_meta(meta,img)
-				if url!="":
+				if url!=[]:
 					to_discord(meta["input"],url)
 				flush()
 			except Exception as e:
 				return e
 			
-		if url!="":
+		if url!=[]:
 			try:
 				to_discord(out_folder,url)
 			except Exception as e:
@@ -442,7 +445,7 @@ class animagui:
 				seed=values["se"],
 				out_folder=values["out"],
 				base_safe=values["input"],
-				url="",
+				url=[],
 				dtype=values["dtype"],
 				dev=values["dev"],
 				x=x,

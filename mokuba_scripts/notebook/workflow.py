@@ -57,7 +57,10 @@ def mokuani(
 	del_pipe=True,
 	si=True,
 ):
-	
+	if not(isinstance(url, list)):
+		url=[]
+	if len(url)!=3:
+		url=[]
 	seed,pic_number=make_seed(seed,pic_number)
 
 	if p==None:
@@ -107,7 +110,7 @@ def mokuani(
 
 		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
-		if url!="":
+		if url!=[]:
 			to_discord(meta["input"],url)
 		flush()
 		
@@ -116,7 +119,7 @@ def mokuani(
 		imgshow(imgs)
 
 	if mode==0:
-		if url!="":
+		if url!=[]:
 			to_discord(out_folder,url)
 		if del_pipe:
 			reset_func(pipe,ser)
@@ -152,14 +155,14 @@ def mokuani(
 
 		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
-		if url!="":
+		if url!=[]:
 			to_discord(meta["input"],url)
 		flush()
 		
 	clear_output(True)
 	if si and len(imgs)>0:
 		imgshow(imgs)
-	if url!="":
+	if url!=[]:
 		to_discord(out_folder,url)
 	if del_pipe:
 		reset_func(pipe,ser)
@@ -205,7 +208,10 @@ def mokusdxl(
 	qprompt="masterpiece, best quality, ultra detailed",
 	qn_prompt="worst quality, low quality, normal quality"
 ):
-
+	if not(isinstance(url, list)):
+		url=[]
+	if len(url)!=3:
+		url=[]
 	seed,pic_number=make_seed(seed,pic_number)
 
 	if p==None:
@@ -271,7 +277,7 @@ def mokusdxl(
 
 		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
-		if url!="":
+		if url!=[]:
 			to_discord(meta["input"],url)
 		flush()
 
@@ -279,7 +285,7 @@ def mokusdxl(
 	if si and len(imgs)>0:
 		imgshow(imgs)
 	if mode==0:
-		if url!="":
+		if url!=[]:
 			to_discord(out_folder,url)
 		if del_pipe:
 			reset_func(pipe,ser)
@@ -316,7 +322,7 @@ def mokusdxl(
 
 		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
-		if url!="":
+		if url!=[]:
 			to_discord(meta["input"],url)
 		flush()
 
@@ -324,7 +330,7 @@ def mokusdxl(
 	if si and len(imgs)>0:
 		imgshow(imgs)
 	if mode==1:
-		if url!="":
+		if url!=[]:
 			to_discord(out_folder,url)
 		if del_pipe:
 			reset_func(pipe,ser)
@@ -365,13 +371,13 @@ def mokusdxl(
 
 		meta["input"]=out_folder+"/2/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
-		if url!="":
+		if url!=[]:
 			to_discord(meta["input"],url)
 		flush()
 	clear_output(True)
 	if si and len(imgs)>0:
 		imgshow(imgs)
-	if url!="":
+	if url!=[]:
 		to_discord(out_folder,url)
 	if del_pipe:
 		reset_func(pipe,ser)
@@ -417,7 +423,10 @@ def mokusd(
 	qprompt="masterpiece, best quality, ultra detailed",
 	qn_prompt="worst quality, low quality, normal quality"
 ):
-
+	if not(isinstance(url, list)):
+		url=[]
+	if len(url)!=3:
+		url=[]
 	seed,pic_number=make_seed(seed,pic_number)
 
 	if p==None:
@@ -483,7 +492,7 @@ def mokusd(
 
 		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
-		if url!="":
+		if url!=[]:
 			to_discord(meta["input"],url)
 		flush()
 
@@ -491,7 +500,7 @@ def mokusd(
 	if si and len(imgs)>0:
 		imgshow(imgs)
 	if mode==0:
-		if url!="":
+		if url!=[]:
 			to_discord(out_folder,url)
 		if del_pipe:
 			reset_func(pipe,ser)
@@ -528,7 +537,7 @@ def mokusd(
 
 		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
-		if url!="":
+		if url!=[]:
 			to_discord(meta["input"],url)
 		flush()
 
@@ -536,7 +545,7 @@ def mokusd(
 	if si and len(imgs)>0:
 		imgshow(imgs)
 	if mode==1:
-		if url!="":
+		if url!=[]:
 			to_discord(out_folder,url)
 		if del_pipe:
 			reset_func(pipe,ser)
@@ -577,13 +586,13 @@ def mokusd(
 
 		meta["input"]=out_folder+"/2/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
-		if url!="":
+		if url!=[]:
 			to_discord(meta["input"],url)
 		flush()
 	clear_output(True)
 	if si and len(imgs)>0:
 		imgshow(imgs)
-	if url!="":
+	if url!=[]:
 		to_discord(out_folder,url)
 	if del_pipe:
 		reset_func(pipe,ser)

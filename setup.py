@@ -22,7 +22,8 @@ setup(
 		"transformers==5.11.0",
 		"optimum-quanto",
 		"accelerate",
-		"PEFT",	
+		"PEFT",
+		"dropbox",
 	],
 	extras_require={
 		"nbcuda":[

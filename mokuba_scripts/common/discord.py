@@ -1,28 +1,22 @@
 import os
 import shutil
-import requests
-import json
+import dropbox
+import time
 
 def to_discord(path,url):
+	dbx=dropbox.Dropbox(
+		oauth2_refresh_token=url[2],
+		app_key=url[0],
+		app_secret=url[1]
+		)
 	if os.path.isdir(path):
 		shutil.make_archive('archive_shutil', format='zip', root_dir=path)
+		ut=round(time.time())
 		f=open('archive_shutil.zip',"rb")
-		file_bin=f.read()
+		dbx.files_upload(f.read(), "/"+str(ut)+".zip")
 		f.close()
-		file = {
-			"favicon" : ( 'archive_shutil.zip', file_bin),
-		}
-		response = requests.post(url, files=file)
 		os.remove('archive_shutil.zip')
-		del file_bin,file,response
 	else:
-		payload = {}
-		payload["content"]=os.path.basename(path)
 		f=open(path, "rb")
-		list_path=path.split(".")
-		file=[
-			("files[0]", (os.path.basename(path), f, "image/"+list_path[-1]))
-		]
-		response = requests.post(url, data={"payload_json": json.dumps(payload)}, files=file)
+		dbx.files_upload(f.read(), "/"+os.path.basename(path))
 		f.close()
-		del file,payload,list_path,response
