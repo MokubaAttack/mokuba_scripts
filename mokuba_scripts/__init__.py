@@ -40,6 +40,10 @@ try:
 		dlc,
 		dlk
 	)
+	from .common.discord import (
+		up_drop,
+		down_drop
+	)
 	from .notebook.workflow import (
 		mokusdxl,
 		mokuani,
@@ -72,7 +76,8 @@ from .tool import (
 	merge_lora_anima,
 	merge_lora_sdxl,
 	subtract_ckpt_anima,
-	subtract_ckpt_sdxl
+	subtract_ckpt_sdxl,
+	change_dim
 )
 
 data="""\
@@ -84,6 +89,10 @@ try:
 		dlc,
 		dlk
 	)
+	from .common.discord import (
+		up_drop,
+		down_drop
+	)
 	from .notebook.workflow import (
 		mokusdxl,
 		mokuani,
@@ -116,7 +125,8 @@ from .tool import (
 	merge_lora_anima,
 	merge_lora_sdxl,
 	subtract_ckpt_anima,
-	subtract_ckpt_sdxl
+	subtract_ckpt_sdxl,
+	change_dim
 )
 """
 f=open(__file__,"w")

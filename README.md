@@ -213,6 +213,28 @@ It is a script that make difference of checkpoints into lora. This script is bas
   ```
   subtract_ckpt_sdxl.gui()
   ```
+#### change_dim
+It is a script that changes dim of lora by svd.
+- change_dim
+  ```
+  change_dim.changedim(
+		path="",
+		#lora file path
+		precision="float",
+		#calculation accuracy
+		save_precision="fp16",
+		#output accuracy
+		new_rank=16,
+		#rank of output LoRA
+		new_conv_rank=None,
+		#rank of output LoRA for Conv2d 3x3
+		device=None,
+		#calculation device
+  )
+  ```
+  ```
+  change_dim.gui()
+  ```
 ### notebook only
 - #### mokuani  
   It is a scripts that make images by anima model.
@@ -244,8 +266,9 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		#output folder path
 		base_safe = "base.safetensors",
 		#checkpoint file path
-		url = "",
-		#If you input the webhook url of discord, images are sent to discord.
+		url = [],
+		#dropbox infomation [ App key, App secret, Refresh_token]
+		#If you input it, images are sent to dropbox.
 		dtype = "f32",
 		#calculation accuracy
 		#f32, f16, bf16
@@ -309,8 +332,9 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		#output folder path
 		base_safe = "base.safetensors",
 		#checkpoint file path
-		url = "",
-		#If you input the webhook url of discord, images are sent to discord.
+		url = [],
+		#dropbox infomation [ App key, App secret, Refresh_token]
+		#If you input it, images are sent to dropbox.
 		dtype = "f32",
 		#calculation accuracy
 		#f32, f16, bf16
@@ -397,8 +421,9 @@ It is a script that make difference of checkpoints into lora. This script is bas
 		#output folder path
 		base_safe = "base.safetensors",
 		#checkpoint file path
-		url = "",
-		#If you input the webhook url of discord, images are sent to discord.
+		url = [],
+		#dropbox infomation [ App key, App secret, Refresh_token]
+		#If you input it, images are sent to dropbox.
 		dtype = "f32",
 		#calculation accuracy
 		#f32, f16, bf16
