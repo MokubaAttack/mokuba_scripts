@@ -21,3 +21,4 @@ def to_discord(path,url):
 		path=os.path.splitext(os.path.basename(path))
 		dbx.files_upload(f.read(), "/"+path[0]+"_"+str(ut)+path[1])
 		f.close()
+	del dbx
