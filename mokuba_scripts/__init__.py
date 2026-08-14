@@ -40,6 +40,10 @@ try:
 		dlc,
 		dlk
 	)
+	from .common.discord import (
+		up_drop,
+		down_drop
+	)
 	from .notebook.workflow import (
 		mokusdxl,
 		mokuani,
@@ -84,6 +88,10 @@ try:
 	from .common.dl import (
 		dlc,
 		dlk
+	)
+	from .common.discord import (
+		up_drop,
+		down_drop
 	)
 	from .notebook.workflow import (
 		mokusdxl,
