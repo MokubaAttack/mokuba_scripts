@@ -266,8 +266,9 @@ It is a script that changes dim of lora by svd.
 		#output folder path
 		base_safe = "base.safetensors",
 		#checkpoint file path
-		url = "",
-		#If you input the webhook url of discord, images are sent to discord.
+		url = [],
+		#dropbox infomation [ App key, App secret, Refresh_token]
+		#If you input it, images are sent to dropbox.
 		dtype = "f32",
 		#calculation accuracy
 		#f32, f16, bf16
@@ -331,8 +332,9 @@ It is a script that changes dim of lora by svd.
 		#output folder path
 		base_safe = "base.safetensors",
 		#checkpoint file path
-		url = "",
-		#If you input the webhook url of discord, images are sent to discord.
+		url = [],
+		#dropbox infomation [ App key, App secret, Refresh_token]
+		#If you input it, images are sent to dropbox.
 		dtype = "f32",
 		#calculation accuracy
 		#f32, f16, bf16
@@ -419,8 +421,9 @@ It is a script that changes dim of lora by svd.
 		#output folder path
 		base_safe = "base.safetensors",
 		#checkpoint file path
-		url = "",
-		#If you input the webhook url of discord, images are sent to discord.
+		url = [],
+		#dropbox infomation [ App key, App secret, Refresh_token]
+		#If you input it, images are sent to dropbox.
 		dtype = "f32",
 		#calculation accuracy
 		#f32, f16, bf16
