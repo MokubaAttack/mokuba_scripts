@@ -22,3 +22,23 @@ def to_discord(path,url):
 		dbx.files_upload(f.read(), "/"+path[0]+"_"+str(ut)+path[1])
 		f.close()
 	del dbx
+
+def up_drop(path,url):
+	dbx=dropbox.Dropbox(
+		oauth2_refresh_token=url[2],
+		app_key=url[0],
+		app_secret=url[1]
+		)
+	f=open(path, "rb")
+	dbx.files_upload(f.read(), "/"+os.path.basename(path))
+	f.close()
+	del dbx
+	
+def down_drop(path,url):
+	dbx=dropbox.Dropbox(
+		oauth2_refresh_token=url[2],
+		app_key=url[0],
+		app_secret=url[1]
+		)
+	dbx.files_download_to_file(path, '/'+path)
+	del dbx
