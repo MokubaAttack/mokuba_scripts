@@ -7,7 +7,7 @@ import os
 import time
 
 from ..anima.mokuanipipe import mokuanipipe
-from ..common.discord import to_discord
+from ..common.discord import up_drop
 from ..common.flush import flush
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
@@ -63,6 +63,7 @@ class animagui:
 		dev="cuda",
 		mode=0
 	):
+		ut=round(time.time())
 		if not(isinstance(url, list)):
 			url=[]
 		if len(url)!=3:
@@ -114,7 +115,8 @@ class animagui:
 				meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
 				plus_meta(meta,img)
 				if url!=[]:
-					to_discord(meta["input"],url)
+					drop_path=str(ut)+"/0/"+str(i)+"_"+str(s)+".jpg"
+					up_drop(meta["input"],drop_path,url)
 				flush()
 			except Exception as e:
 				return e
@@ -122,7 +124,10 @@ class animagui:
 		if mode==0:
 			if url!=[]:
 				try:
-					to_discord(out_folder,url)
+					shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+					drop_path=str(ut)+".zip"
+					up_drop("archive_shutil.zip",drop_path,url)
+					os.remove("archive_shutil.zip")
 				except Exception as e:
 					return e
 			return "fin"
@@ -157,14 +162,18 @@ class animagui:
 				meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
 				plus_meta(meta,img)
 				if url!=[]:
-					to_discord(meta["input"],url)
+					drop_path=str(ut)+"/1/"+str(i)+"_"+str(s)+".jpg"
+					up_drop(meta["input"],drop_path,url)
 				flush()
 			except Exception as e:
 				return e
 			
 		if url!=[]:
 			try:
-				to_discord(out_folder,url)
+				shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+				drop_path=str(ut)+".zip"
+				up_drop("archive_shutil.zip",drop_path,url)
+				os.remove("archive_shutil.zip")
 			except Exception as e:
 				return e
 	
