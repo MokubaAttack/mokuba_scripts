@@ -7,11 +7,13 @@ from IPython.display import (
 	display,
 	clear_output
 )
+import time
+import shutil
 
 from ..anima.mokuanipipe import mokuanipipe
 from ..sd.mokusdxlpipe import mokusdxlpipe
 from ..sd.mokusdpipe import mokusdpipe
-from ..common.discord import to_discord
+from ..common.discord import up_drop
 from ..common.flush import (
 	flush,
 	reset_func
@@ -57,6 +59,7 @@ def mokuani(
 	del_pipe=True,
 	si=True,
 ):
+	ut=round(time.time())
 	if not(isinstance(url, list)):
 		url=[]
 	if len(url)!=3:
@@ -111,7 +114,8 @@ def mokuani(
 		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			to_discord(meta["input"],url)
+			drop_path=str(ut)+"/0/"+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
 		flush()
 		
 	clear_output(True)
@@ -120,7 +124,10 @@ def mokuani(
 
 	if mode==0:
 		if url!=[]:
-			to_discord(out_folder,url)
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=str(ut)+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
 		if del_pipe:
 			reset_func(pipe,ser)
 			pipe=None
@@ -156,14 +163,18 @@ def mokuani(
 		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			to_discord(meta["input"],url)
+			drop_path=str(ut)+"/1/"+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
 		flush()
 		
 	clear_output(True)
 	if si and len(imgs)>0:
 		imgshow(imgs)
 	if url!=[]:
-		to_discord(out_folder,url)
+		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+		drop_path=str(ut)+".zip"
+		up_drop("archive_shutil.zip",drop_path,url)
+		os.remove("archive_shutil.zip")
 	if del_pipe:
 		reset_func(pipe,ser)
 		pipe=None
@@ -208,6 +219,7 @@ def mokusdxl(
 	qprompt="masterpiece, best quality, ultra detailed",
 	qn_prompt="worst quality, low quality, normal quality"
 ):
+	ut=round(time.time())
 	if not(isinstance(url, list)):
 		url=[]
 	if len(url)!=3:
@@ -278,7 +290,8 @@ def mokusdxl(
 		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			to_discord(meta["input"],url)
+			drop_path=str(ut)+"/0/"+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
 		flush()
 
 	clear_output(True)
@@ -286,7 +299,10 @@ def mokusdxl(
 		imgshow(imgs)
 	if mode==0:
 		if url!=[]:
-			to_discord(out_folder,url)
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=str(ut)+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
 		if del_pipe:
 			reset_func(pipe,ser)
 			pipe=None
@@ -323,7 +339,8 @@ def mokusdxl(
 		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			to_discord(meta["input"],url)
+			drop_path=str(ut)+"/1/"+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
 		flush()
 
 	clear_output(True)
@@ -331,7 +348,10 @@ def mokusdxl(
 		imgshow(imgs)
 	if mode==1:
 		if url!=[]:
-			to_discord(out_folder,url)
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=str(ut)+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
 		if del_pipe:
 			reset_func(pipe,ser)
 			pipe=None
@@ -372,13 +392,17 @@ def mokusdxl(
 		meta["input"]=out_folder+"/2/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			to_discord(meta["input"],url)
+			drop_path=str(ut)+"/2/"+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
 		flush()
 	clear_output(True)
 	if si and len(imgs)>0:
 		imgshow(imgs)
 	if url!=[]:
-		to_discord(out_folder,url)
+		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+		drop_path=str(ut)+".zip"
+		up_drop("archive_shutil.zip",drop_path,url)
+		os.remove("archive_shutil.zip")
 	if del_pipe:
 		reset_func(pipe,ser)
 		pipe=None
@@ -423,6 +447,7 @@ def mokusd(
 	qprompt="masterpiece, best quality, ultra detailed",
 	qn_prompt="worst quality, low quality, normal quality"
 ):
+	ut=round(time.time())
 	if not(isinstance(url, list)):
 		url=[]
 	if len(url)!=3:
@@ -493,7 +518,8 @@ def mokusd(
 		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			to_discord(meta["input"],url)
+			drop_path=str(ut)+"/0/"+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
 		flush()
 
 	clear_output(True)
@@ -501,7 +527,10 @@ def mokusd(
 		imgshow(imgs)
 	if mode==0:
 		if url!=[]:
-			to_discord(out_folder,url)
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=str(ut)+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
 		if del_pipe:
 			reset_func(pipe,ser)
 			pipe=None
@@ -538,7 +567,8 @@ def mokusd(
 		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			to_discord(meta["input"],url)
+			drop_path=str(ut)+"/1/"+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
 		flush()
 
 	clear_output(True)
@@ -546,7 +576,10 @@ def mokusd(
 		imgshow(imgs)
 	if mode==1:
 		if url!=[]:
-			to_discord(out_folder,url)
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=str(ut)+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
 		if del_pipe:
 			reset_func(pipe,ser)
 			pipe=None
@@ -587,13 +620,17 @@ def mokusd(
 		meta["input"]=out_folder+"/2/"+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			to_discord(meta["input"],url)
+			drop_path=str(ut)+"/2/"+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
 		flush()
 	clear_output(True)
 	if si and len(imgs)>0:
 		imgshow(imgs)
 	if url!=[]:
-		to_discord(out_folder,url)
+		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+		drop_path=str(ut)+".zip"
+		up_drop("archive_shutil.zip",drop_path,url)
+		os.remove("archive_shutil.zip")
 	if del_pipe:
 		reset_func(pipe,ser)
 		pipe=None
