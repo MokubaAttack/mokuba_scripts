@@ -5,12 +5,15 @@ import tkinter as tk
 import json
 import os
 import time
+import re
 
 from ..anima.mokuanipipe import mokuanipipe
 from ..common.discord import up_drop
 from ..common.flush import flush
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
+from ..common.dl import dlc
+from ..tool.civitai_dl import check
 
 class animagui:
 	default_values={
@@ -61,7 +64,8 @@ class animagui:
 		step2=15,
 		ss=0.5,
 		dev="cuda",
-		mode=0
+		mode=0,
+		token="",
 	):
 		ut=round(time.time())
 		if not(isinstance(url, list)):
@@ -77,6 +81,15 @@ class animagui:
 				dtype=torch.float16
 			else:
 				dtype=torch.float32
+
+			base_safe=str(base_safe)
+			m=re.match(r"[0-9]+$",base_safe)
+			if m!=None:
+				ver_id=base_safe
+				base_safe=base_safe+".safetensors"
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				dlc(ver_id,base_safe,token)
 	
 			pipe=mokuanipipe()
 			if base_safe.endswith(".safetensors"):
@@ -89,6 +102,14 @@ class animagui:
 			if len(loras)!=len(lora_weights):
 				raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
 			for line,w in zip(loras,lora_weights):
+				line=str(line)
+				m=re.match(r"[0-9]+$",line)
+				if m!=None:
+					ver_id=line
+					line=line+".safetensors"
+					if token=="":
+						raise RuntimeWarning("civitai token doesn't input.")
+					dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
 				pipe.load_lycoris(path=line,weight=w)
@@ -218,6 +239,8 @@ class animagui:
 		f.close()
 
 	def gui(self):
+		if check()==False:
+			return
 		iv,d=self.setvalues()
 		
 		keys=[
@@ -440,6 +463,13 @@ class animagui:
 					step2=int(values["hs"])
 				except:
 					step2=16
+
+			try:
+				with open(os.getcwd()+"/token.json","r") as f:
+					d = json.load(f)
+				token=d["civitai_token"]
+			except:
+				token=""
 			
 			result=self.mokuani(
 				loras=loras,
@@ -463,7 +493,8 @@ class animagui:
 				up=up,
 				Interpolation=values["hum"],
 				step2=step2,
-				ss=ss
+				ss=ss,
+				token=token,
 				)
 			end_time=time.time()
 			time_sec=round(end_time-start_time)

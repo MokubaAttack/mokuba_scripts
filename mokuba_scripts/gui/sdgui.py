@@ -5,12 +5,15 @@ import tkinter as tk
 import json
 import os
 import time
+import re
 
 from ..sd.mokusdpipe import mokusdpipe
 from ..common.discord import up_drop
 from ..common.flush import flush
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
+from ..common.dl import dlc
+from ..tool.civitai_dl import check
 
 class sdgui:
 	default_values={
@@ -80,7 +83,8 @@ class sdgui:
 		freezeunet=False,
 		cs=2,
 		qprompt="masterpiece, best quality, ultra detailed",
-		qn_prompt="worst quality, low quality, normal quality"
+		qn_prompt="worst quality, low quality, normal quality",
+		token="",
 	):
 		ut=round(time.time())
 		if not(isinstance(url, list)):
@@ -97,6 +101,24 @@ class sdgui:
 			else:
 				dtype=torch.float32
 
+			base_safe=str(base_safe)
+			m=re.match(r"[0-9]+$",base_safe)
+			if m!=None:
+				ver_id=base_safe
+				base_safe=base_safe+".safetensors"
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				dlc(ver_id,base_safe,token)
+
+			vae_safe=str(vae_safe)
+			m=re.match(r"[0-9]+$",vae_safe)
+			if m!=None:
+				ver_id=vae_safe
+				vae_safe=vae_safe+".safetensors"
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				dlc(ver_id,vae_safe,token)
+
 			pipe=mokusdpipe()
 			if base_safe.endswith(".safetensors"):
 				pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
@@ -108,16 +130,40 @@ class sdgui:
 			if len(loras)!=len(lora_weights):
 				raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
 			for line,w in zip(loras,lora_weights):
+				line=str(line)
+				m=re.match(r"[0-9]+$",line)
+				if m!=None:
+					ver_id=line
+					line=line+".safetensors"
+					if token=="":
+						raise RuntimeWarning("civitai token doesn't input.")
+					dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
 				pipe.load_lycoris(path=line,weight=w)
 
 			for line in pos_emb:
+				line=str(line)
+				m=re.match(r"[0-9]+$",line)
+				if m!=None:
+					ver_id=line
+					line=line+".safetensors"
+					if token=="":
+						raise RuntimeWarning("civitai token doesn't input.")
+					dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
 				pipe.load_pos_embed(line)
 
 			for line in neg_emb:
+				line=str(line)
+				m=re.match(r"[0-9]+$",line)
+				if m!=None:
+					ver_id=line
+					line=line+".safetensors"
+					if token=="":
+						raise RuntimeWarning("civitai token doesn't input.")
+					dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
 				pipe.load_neg_embed(line)
@@ -305,6 +351,8 @@ class sdgui:
 		f.close()
 
 	def gui(self):
+		if check()==False:
+			return
 		iv,d=self.setvalues()
 
 		keys=[
@@ -591,6 +639,13 @@ class sdgui:
 				mode=1
 				if values["tu"]!="" and values["ts"]!="" and values["ccs"]!="":
 					mode=2
+
+			try:
+				with open(os.getcwd()+"/token.json","r") as f:
+					d = json.load(f)
+				token=d["civitai_token"]
+			except:
+				token=""
 			
 			result=self.mokusd(
 				loras=loras,
@@ -623,7 +678,8 @@ class sdgui:
 				up2=up2,
 				x=x,
 				y=y,
-				mode=mode
+				mode=mode,
+				token=token,
 				)
 			end_time=time.time()
 			time_sec=round(end_time-start_time)
