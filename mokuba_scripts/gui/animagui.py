@@ -82,13 +82,16 @@ class animagui:
 			else:
 				dtype=torch.float32
 
+			safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
 			base_safe=str(base_safe)
 			m=re.match(r"[0-9]+$",base_safe)
 			if m!=None:
 				ver_id=base_safe
-				base_safe=base_safe+".safetensors"
+				base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
 				if token=="":
 					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"ckpt")):
+					os.makedirs(safe_folder+"ckpt")
 				dlc(ver_id,base_safe,token)
 	
 			pipe=mokuanipipe()
@@ -106,9 +109,11 @@ class animagui:
 				m=re.match(r"[0-9]+$",line)
 				if m!=None:
 					ver_id=line
-					line=line+".safetensors"
+					line=safe_folder+"lora/"+line+".safetensors"
 					if token=="":
 						raise RuntimeWarning("civitai token doesn't input.")
+					if not(os.path.exists(safe_folder+"lora")):
+						os.makedirs(safe_folder+"lora")
 					dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
