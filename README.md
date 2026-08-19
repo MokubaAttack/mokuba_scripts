@@ -300,6 +300,8 @@ It is a script that changes dim of lora by svd.
 		#If you choice True, mokuanipipe object is deleted and None is returned.
 		si = True,
 		#If you choice True, output images are shown in the output window.
+		token = "",
+		#civitai token
   ) = mokuanipipe object
   ```
 - #### mokusdxl  
@@ -389,6 +391,8 @@ It is a script that changes dim of lora by svd.
 		#prompt for tile upscaler
 		qn_prompt = "worst quality, low quality, normal quality",
 		#negative prompt for tile upscaler
+		token = "",
+		#civitai token
   ) = mokusdxlpipe object
   ```
 - #### mokusd  
@@ -478,6 +482,8 @@ It is a script that changes dim of lora by svd.
 		#prompt for tile upscaler
 		qn_prompt = "worst quality, low quality, normal quality",
 		#negative prompt for tile upscaler
+		token = "",
+		#civitai token
   ) = mokusdpipe object
   ```
 ### gui only
