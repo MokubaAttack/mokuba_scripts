@@ -1,8 +1,10 @@
 import torch
 import os
 from safetensors.torch import save_file
+import re
 
 from ..common.diff2 import diff2anima
+from ..common.dl import dlc
 
 CLAMP_QUANTILE=0.99
 
@@ -25,7 +27,8 @@ def mergelora(
 	save_to=None,
 	meta_dict=None,
 	dof=False,
-	win=None
+	win=None,
+	token="",
 ):
 	if win!=None:
 		win['RUN'].Update(disabled=True)
@@ -43,8 +46,23 @@ def mergelora(
 	new_conv_rank = new_conv_rank if new_conv_rank is not None else new_rank
 	sds=[]
 	keys=[]
+	safe_folder=save_to.removesuffix(os.path.basename(save_to))
 	box=diff2anima()
-	for lora in loras:
+	for i in range(len(loras)):
+		lora=loras[i]
+		m=re.match(r"[0-9]+$")
+		if m!=None:
+			ver_id=lora
+			lora=safe_folder+lora+".safetensors"
+			loras[i]=loras
+			if token=="":
+				if win==None:
+					print("civitai token doesn't input.")
+				else:
+					win["info"].update("civitai token doesn't input.")
+					win['RUN'].Update(disabled=False)
+				return
+			dlc(ver_id,lora,token)
 		sd=box.lora(lora)
 		if sd=={}:
 			if win==None:
@@ -183,8 +201,14 @@ def gui():
 	import tkinter as tk
 	import pyperclip
 	import FreeSimpleGUI as sg
+	import json
+
+	from ..tool.civitai_dl import check
 
 	sg.theme('TealMono')
+
+	if check()==False:
+		return
 
 	grp_rclick_menu={}
 	keys=["ckpt1","ckpt2","ckpt3","ckpt4","w1","w2","w3","w4","id1","id2","id3","id4","out","d"]
@@ -264,9 +288,16 @@ def gui():
 				meta["id"]=str(ids).replace("[","").replace("]","").replace(" ","")
 				meta["weight"]=str(weights).replace("[","").replace("]","").replace(" ","")
 
+				try:
+					with open(os.getcwd()+"/token.json","r") as f:
+						d = json.load(f)
+					token=d["civitai_token"]
+				except:
+					token=""
+
 				ok = sg.popup_ok_cancel(out_path,title='output file',keep_on_top=True)
 				if ok=="OK":
-					thread1 = threading.Thread(target=mergelora,args=(names,weights,"float","bf16",dim,None,None,out_path,window,meta,values["dof"]))
+					thread1 = threading.Thread(target=mergelora,args=(names,weights,"float","bf16",dim,None,None,out_path,meta,values["dof"],window,token))
 					thread1.start()
 
 		elif "-copy-" in event:
