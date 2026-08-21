@@ -49,8 +49,8 @@ def mergelora(
 	safe_folder=save_to.removesuffix(os.path.basename(save_to))
 	box=diff2anima()
 	for i in range(len(loras)):
-		lora=loras[i]
-		m=re.match(r"[0-9]+$")
+		lora=str(loras[i])
+		m=re.match(r"[0-9]+$",lora)
 		if m!=None:
 			ver_id=lora
 			lora=safe_folder+lora+".safetensors"
