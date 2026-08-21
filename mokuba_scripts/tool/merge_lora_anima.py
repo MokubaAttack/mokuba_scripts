@@ -266,7 +266,7 @@ def gui():
 
 				ok = sg.popup_ok_cancel(out_path,title='output file',keep_on_top=True)
 				if ok=="OK":
-					thread1 = threading.Thread(target=mergelora,args=(names,weights,"float","bf16",dim,None,None,out_path,window,meta,values["dof"]))
+					thread1 = threading.Thread(target=mergelora,args=(names,weights,"float","bf16",dim,None,None,out_path,meta,values["dof"],window))
 					thread1.start()
 
 		elif "-copy-" in event:
