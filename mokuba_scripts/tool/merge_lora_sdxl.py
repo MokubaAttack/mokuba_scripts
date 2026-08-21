@@ -54,7 +54,7 @@ def mergelora(
 		if m!=None:
 			ver_id=lora
 			lora=safe_folder+lora+".safetensors"
-			loras[i]=loras
+			loras[i]=lora
 			if token=="":
 				if win==None:
 					print("civitai token doesn't input.")
