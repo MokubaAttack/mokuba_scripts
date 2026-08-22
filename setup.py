@@ -33,7 +33,7 @@ setup(
 			"torchao>=0.16.0",
 		],
 		"colab":[
-			"git+https://github.com/XPixelGroup/BasicSR.git",
+			"basicsr @ https://github.com/MokubaAttack/mokuba_scripts/raw/refs/heads/test/basicsr-1.4.2.tar.gz",
 			"ipython",
 			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl",
 			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl",
