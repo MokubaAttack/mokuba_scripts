@@ -8,7 +8,7 @@ setup(
 	author_email='xintao.wang@outlook.com',
 	keywords='computer vision, restoration, super resolution',
 	url='https://github.com/xinntao/BasicSR',
-	long_description=open('readme.md.md').read(),
+	long_description=open('readme.md').read(),
     long_description_content_type='text/markdown',
 	packages=find_packages(exclude=('options', 'datasets', 'experiments', 'results', 'tb_logger', 'wandb')),
 	include_package_data=True,
