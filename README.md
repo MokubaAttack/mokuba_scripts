@@ -1,13 +1,21 @@
 # mokuba_scripts
 These are scripts that I use when I create images in diffusers and make models.
 ## How to install
-- notebook by cuda
+- colab
 ```
 git clone https://github.com/MokubaAttack/mokuba_scripts.git
 cd mokuba_scripts
-pip install .[nbcuda]
+cd basicsr_copy
+pip install .
+cd ..
+pip install .[colab]
 ```
-In Google Colab, you need to select 2026.07 from runtime version.
+- kaggle
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[kaggle]
+```
 - notebook by cpu
 ```
 git clone https://github.com/MokubaAttack/mokuba_scripts.git
