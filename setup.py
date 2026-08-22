@@ -26,10 +26,16 @@ setup(
 		"dropbox",
 	],
 	extras_require={
-		"nbcuda":[
+		"kaggle":[
 			"ipython",
 			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
 			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
+			"torchao>=0.16.0",
+		],
+		"colab":[
+			"ipython",
+			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl",
 			"torchao>=0.16.0",
 		],
 		"nbcpu":[
