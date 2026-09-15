@@ -2,6 +2,7 @@ import os
 import shutil
 from safetensors.torch import save_file
 import torch
+import re
 
 from ..anima.animackpt2 import (
 	safe2diff,
@@ -10,12 +11,36 @@ from ..anima.animackpt2 import (
 from ..common.diff2 import diff2anima
 from ..common.flush import flush
 from ..common.save_safe import save_safe
+from ..common.dl import dlc
 
-def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None):
+def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 	if win!=None:
 		win["RUN"].Update(disabled=True)
+		
+	if not(out_path.endswith(".safetensors")):
+		if win==None:
+			print("the output path is needed to be a safetensors file.")
+		else:
+			win["RUN"].Update(disabled=False)
+			win["info"].update("the output path is needed to be a safetensors file.")
+		return
 
-	for path in ckpts:
+	safe_folder=out_path.removesuffix(os.path.basename(out_path))
+	for ind,path in enumerate(ckpts):
+		path=str(path)
+		m=re.match(r"[0-9]+$",path)
+		if m!=None:
+			ver_id=path
+			path=safe_folder+path+".safetensors"
+			ckpts[ind]=path
+			if token=="":
+				if win==None:
+					print("civitai token doesn't input.")
+				else:
+					win["info"].update("civitai token doesn't input.")
+					win['RUN'].Update(disabled=False)
+				return
+			dlc(ver_id,path,token)
 		if not(os.path.exists(path)):
 			if win==None:
 				print(path+" does not exist.")
@@ -424,8 +449,14 @@ def gui():
 	import tkinter as tk
 	import pyperclip
 	import threading
+	import json
+	
+	from ..tool.civitai_dl import check
 
 	sg.theme('TealMono')
+	
+	if check()==False:
+		return
 	
 	keys=["ckpt1","ckpt2","out"]
 	for i in range(31):
@@ -590,8 +621,15 @@ def gui():
 					vae=2
 				else:
 					vae=0
+					
+				try:
+					with open(os.getcwd()+"/token.json","r") as f:
+						d = json.load(f)
+					token=d["civitai_token"]
+				except:
+					token=""
 
-				thread1 = threading.Thread(target=mergeckpt,args=(ckpts,weights,out_path,mode,ff,window,vae))
+				thread1 = threading.Thread(target=mergeckpt,args=(ckpts,weights,out_path,mode,ff,vae,window,token))
 				thread1.start()
 
 		elif "-copy-" in event:

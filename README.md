@@ -250,7 +250,8 @@ It is a script that changes dim of lora by svd.
   ```
   mokuani(
 		loras = [],
-		#list of lora file path
+		#list of lora file path or version id of civitai
+		#When you input version id of civitai, token is needed.
 		lora_weights = [],
 		#list of lora weight
 		prompt = "",
@@ -274,7 +275,8 @@ It is a script that changes dim of lora by svd.
 		out_folder = "data",
 		#output folder path
 		base_safe = "base.safetensors",
-		#checkpoint file path
+		#checkpoint file path or version id of civitai
+		#When you input version id of civitai, token is needed.
 		url = [],
 		#dropbox infomation [ App key, App secret, Refresh_token]
 		#If you input it, images are sent to dropbox.
@@ -309,6 +311,8 @@ It is a script that changes dim of lora by svd.
 		#If you choice True, mokuanipipe object is deleted and None is returned.
 		si = True,
 		#If you choice True, output images are shown in the output window.
+		token = "",
+		#civitai token
   ) = mokuanipipe object
   ```
 - #### mokusdxl  
@@ -316,7 +320,8 @@ It is a script that changes dim of lora by svd.
   ```
   mokusdxl(
 		loras = [],
-		#list of lora file path
+		#list of lora file path or version id of civitai
+		#When you input version id of civitai, token is needed.
 		lora_weights = [],
 		#list of lora weight
 		prompt = "",
@@ -340,7 +345,8 @@ It is a script that changes dim of lora by svd.
 		out_folder = "data",
 		#output folder path
 		base_safe = "base.safetensors",
-		#checkpoint file path
+		#checkpoint file path or version id of civitai
+		#When you input version id of civitai, token is needed.
 		url = [],
 		#dropbox infomation [ App key, App secret, Refresh_token]
 		#If you input it, images are sent to dropbox.
@@ -376,11 +382,14 @@ It is a script that changes dim of lora by svd.
 		si = True,
 		#If you choice True, output images are shown in the output window.
 		pos_emb = [],
-		#list of positive embedding files
+		#list of positive embedding file or version id of civitai
+		#When you input version id of civitai, token is needed.
 		neg_emb = [],
-		#list of negative embedding files
+		#list of negative embedding file or version id of civitai
+		#When you input version id of civitai, token is needed.
 		vae_safe = "",
-		#vae file path
+		#vae file path or version id of civitai
+		#When you input version id of civitai, token is needed.
 		step3 = 20,
 		#num_inference_steps for tile upscaler
 		up2 = 1.5,
@@ -398,6 +407,8 @@ It is a script that changes dim of lora by svd.
 		#prompt for tile upscaler
 		qn_prompt = "worst quality, low quality, normal quality",
 		#negative prompt for tile upscaler
+		token = "",
+		#civitai token
   ) = mokusdxlpipe object
   ```
 - #### mokusd  
@@ -405,7 +416,8 @@ It is a script that changes dim of lora by svd.
   ```
   mokusd(
 		loras = [],
-		#list of lora file path
+		#list of lora file path or version id of civitai
+		#When you input version id of civitai, token is needed.
 		lora_weights = [],
 		#list of lora weight
 		prompt = "",
@@ -429,7 +441,8 @@ It is a script that changes dim of lora by svd.
 		out_folder = "data",
 		#output folder path
 		base_safe = "base.safetensors",
-		#checkpoint file path
+		#checkpoint file path or version id of civitai
+		#When you input version id of civitai, token is needed.
 		url = [],
 		#dropbox infomation [ App key, App secret, Refresh_token]
 		#If you input it, images are sent to dropbox.
@@ -465,11 +478,14 @@ It is a script that changes dim of lora by svd.
 		si = True,
 		#If you choice True, output images are shown in the output window.
 		pos_emb = [],
-		#list of positive embedding files
+		#list of positive embedding file or version id of civitai
+		#When you input version id of civitai, token is needed.
 		neg_emb = [],
-		#list of negative embedding files
+		#list of negative embedding file or version id of civitai
+		#When you input version id of civitai, token is needed.
 		vae_safe = "",
-		#vae file path
+		#vae file path or version id of civitai
+		#When you input version id of civitai, token is needed.
 		step3 = 20,
 		#num_inference_steps for tile upscaler
 		up2 = 1.5,
@@ -487,6 +503,8 @@ It is a script that changes dim of lora by svd.
 		#prompt for tile upscaler
 		qn_prompt = "worst quality, low quality, normal quality",
 		#negative prompt for tile upscaler
+		token = "",
+		#civitai token
   ) = mokusdpipe object
   ```
 ### gui only
