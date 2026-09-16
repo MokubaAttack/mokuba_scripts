@@ -5,9 +5,6 @@ These are scripts that I use when I create images in diffusers and make models.
 ```
 git clone https://github.com/MokubaAttack/mokuba_scripts.git
 cd mokuba_scripts
-cd basicsr_copy
-pip install .
-cd ..
 pip install .[colab]
 ```
 - kaggle
