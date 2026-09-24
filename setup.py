@@ -18,7 +18,7 @@ setup(
 		"diffusers==0.40.0",
 		"basicsr @ https://github.com/MokubaAttack/mokuba_scripts/raw/refs/heads/main/basicsr_copy/basicsr-1.4.2.tar.gz",
 		"realesrgan",
-		"lycoris-lora",
+		"lycoris-lora==4.0.0",
 		"piexif",
 		"transformers==5.14.1",
 		"optimum-quanto",
