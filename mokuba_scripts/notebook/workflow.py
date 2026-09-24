@@ -61,6 +61,7 @@ def mokuani(
 	del_pipe=True,
 	si=True,
 	token="",
+	del_out=False,
 ):
 	ut=round(time.time())
 	if not(isinstance(url, list)):
@@ -203,6 +204,8 @@ def mokuani(
 	if del_pipe:
 		reset_func(pipe,ser)
 		pipe=None
+	if del_out:
+		clear_output(True)
 	return pipe
 	
 def mokusdxl(
@@ -244,6 +247,7 @@ def mokusdxl(
 	qprompt="masterpiece, best quality, ultra detailed",
 	qn_prompt="worst quality, low quality, normal quality",
 	token="",
+	del_out=False,
 ):
 	ut=round(time.time())
 	if not(isinstance(url, list)):
@@ -485,6 +489,8 @@ def mokusdxl(
 	if del_pipe:
 		reset_func(pipe,ser)
 		pipe=None
+	if del_out:
+		clear_output(True)
 	return pipe
 	
 def mokusd(
@@ -526,6 +532,7 @@ def mokusd(
 	qprompt="masterpiece, best quality, ultra detailed",
 	qn_prompt="worst quality, low quality, normal quality",
 	token="",
+	del_out=False,
 ):
 	ut=round(time.time())
 	if not(isinstance(url, list)):
@@ -767,4 +774,6 @@ def mokusd(
 	if del_pipe:
 		reset_func(pipe,ser)
 		pipe=None
+	if del_out:
+		clear_output(True)
 	return pipe
