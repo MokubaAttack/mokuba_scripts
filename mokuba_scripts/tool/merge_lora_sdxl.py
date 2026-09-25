@@ -189,6 +189,7 @@ def mergelora(
 	if dof:
 		for lora in loras:
 			os.remove(lora)
+			os.remove(lora+".txt")
 	if win==None:
 		print("")
 		print("fin")
