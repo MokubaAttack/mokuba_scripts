@@ -14,7 +14,7 @@ def flush():
 	if torch.xpu.is_available():
 		torch.xpu.empty_cache()
 
-def reset_func(f,s="colab"):
+def reset_func(f):
 	try:
 		a1=f.__dict__
 	except:
@@ -40,7 +40,7 @@ def reset_func(f,s="colab"):
 		else:
 			a1=b1
 	
-	if s=="colab":
+	if "google.colab" in sys.modules:
 		file=os.path.dirname(__file__)+"/colab_default.txt"
 	else:
 		file=os.path.dirname(__file__)+"/kaggle_default.txt"
