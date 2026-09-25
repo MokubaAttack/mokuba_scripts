@@ -57,7 +57,6 @@ def mokuani(
 	step2=15,
 	ss=0.5,
 	p=None,
-	ser="colab",
 	del_pipe=True,
 	si=True,
 	token="",
@@ -154,7 +153,7 @@ def mokuani(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if del_pipe:
-			reset_func(pipe,ser)
+			reset_func(pipe)
 			pipe=None
 		return pipe
 
@@ -201,7 +200,7 @@ def mokuani(
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	if del_pipe:
-		reset_func(pipe,ser)
+		reset_func(pipe)
 		pipe=None
 	return pipe
 	
@@ -229,7 +228,6 @@ def mokusdxl(
 	step2=15,
 	ss=0.5,
 	p=None,
-	ser="colab",
 	del_pipe=True,
 	si=True,
 	pos_emb=[],
@@ -383,7 +381,7 @@ def mokusdxl(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if del_pipe:
-			reset_func(pipe,ser)
+			reset_func(pipe)
 			pipe=None
 		return pipe
 
@@ -432,7 +430,7 @@ def mokusdxl(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if del_pipe:
-			reset_func(pipe,ser)
+			reset_func(pipe)
 			pipe=None
 		return pipe
 
@@ -483,7 +481,7 @@ def mokusdxl(
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	if del_pipe:
-		reset_func(pipe,ser)
+		reset_func(pipe)
 		pipe=None
 	return pipe
 	
@@ -511,7 +509,6 @@ def mokusd(
 	step2=15,
 	ss=0.5,
 	p=None,
-	ser="colab",
 	del_pipe=True,
 	si=True,
 	pos_emb=[],
@@ -665,7 +662,7 @@ def mokusd(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if del_pipe:
-			reset_func(pipe,ser)
+			reset_func(pipe)
 			pipe=None
 		return pipe
 
@@ -714,7 +711,7 @@ def mokusd(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if del_pipe:
-			reset_func(pipe,ser)
+			reset_func(pipe)
 			pipe=None
 		return pipe
 
@@ -765,6 +762,6 @@ def mokusd(
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	if del_pipe:
-		reset_func(pipe,ser)
+		reset_func(pipe)
 		pipe=None
 	return pipe
