@@ -47,6 +47,7 @@ setup(
 			"torchvision==0.26.0",
 			"torchao==0.13.0",
 			"torchaudio==2.11.0",
+			"triton==3.8.0",
 		],
 		"guicpu":[
 			"FreeSimpleGUI",
