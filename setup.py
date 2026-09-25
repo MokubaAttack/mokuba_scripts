@@ -45,7 +45,7 @@ setup(
 			"ipython",
 			"torch==2.11.0",
 			"torchvision==0.26.0",
-			"torchao>=0.16.0",
+			"torchao==0.14.1",
 			"torchaudio==2.11.0",
 		],
 		"guicpu":[
