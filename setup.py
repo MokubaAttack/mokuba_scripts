@@ -1,4 +1,16 @@
 from setuptools import setup, find_packages
+import sys
+
+def cuda_require():
+	v=str(sys.version_info[1])
+	need=[
+		"ipython",
+		"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
+		"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
+		"torchao==0.13.0",
+		"torchaudio @ https://download-r2.pytorch.org/whl/cu128/torchaudio-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
+	]
+	return need
 
 setup(
 	name='mokuba_scripts',
@@ -27,20 +39,7 @@ setup(
 		"dropbox",
 	],
 	extras_require={
-		"kaggle":[
-			"ipython",
-			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
-			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
-			"torchao==0.13.0",
-			"torchaudio @ https://download-r2.pytorch.org/whl/cu128/torchaudio-2.11.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl",
-		],
-		"colab":[
-			"ipython",
-			"torch @ https://download-r2.pytorch.org/whl/cu130/torch-2.11.0%2Bcu130-cp313-cp313-manylinux_2_28_x86_64.whl",
-			"torchvision @ https://download-r2.pytorch.org/whl/cu130/torchvision-0.26.0%2Bcu130-cp313-cp313-manylinux_2_28_x86_64.whl",
-			"torchao==0.13.0",
-			"torchaudio @ https://download-r2.pytorch.org/whl/cu130/torchaudio-2.11.0%2Bcu130-cp313-cp313-manylinux_2_28_x86_64.whl",
-		],
+		"nbcuda":cuda_require(),
 		"nbcpu":[
 			"ipython",
 			"torch==2.11.0",
