@@ -296,8 +296,6 @@ It is a script that changes dim of lora by svd.
 		#denoising_strength ( a parameter of hires.fix )
 		p = None,
 		#If you input mokuanipipe object, you can use same pipeline without making the pipeline.
-		ser = "colab",
-		#In google colab, please input "colab". In kaggle, please input "kaggle".
 		del_pipe = True,
 		#If you choice True, mokuanipipe object is deleted and None is returned.
 		si = True,
@@ -366,8 +364,6 @@ It is a script that changes dim of lora by svd.
 		#denoising_strength ( a parameter of hires.fix and Tile Upscaler )
 		p = None,
 		#If you input mokusdxlpipe object, you can use same pipeline without making the pipeline.
-		ser = "colab",
-		#In google colab, please input "colab". In kaggle, please input "kaggle".
 		del_pipe = True,
 		#If you choice True, mokusdxlpipe object is deleted and None is returned.
 		si = True,
@@ -462,8 +458,6 @@ It is a script that changes dim of lora by svd.
 		#denoising_strength ( a parameter of hires.fix and Tile Upscaler )
 		p = None,
 		#If you input mokusdpipe object, you can use same pipeline without making the pipeline.
-		ser = "colab",
-		#In google colab, please input "colab". In kaggle, please input "kaggle".
 		del_pipe = True,
 		#If you choice True, mokusdpipe object is deleted and None is returned.
 		si = True,
