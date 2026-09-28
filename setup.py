@@ -1,21 +1,23 @@
 from setuptools import setup, find_packages
 import sys
 
+key="/pip/_vendor/pyproject_hooks/_in_process"
+paths=sys.path
+for p in paths:
+	p=p.replace("\\","/")
+	if key in p:
+		p=p.removesuffix(key)
+		sys.path=[p]+sys.path
+		break
+
+try:
+	import torch
+except:
+	from pip._internal.cli.main import main as _main
+	_main(["install","torch==2.11.0"])
+	import torch
+
 def cuda_require(w):
-	key="/pip/_vendor/pyproject_hooks/_in_process"
-	paths=sys.path
-	for p in paths:
-		p=p.replace("\\","/")
-		if key in p:
-			p=p.removesuffix(key)
-			sys.path=[p]+sys.path
-			break
-	try:
-		import torch
-	except:
-		from pip._internal.cli.main import main as _main
-		_main(["install","torch==2.11.0"])
-		import torch
 	v=str(sys.version_info[1])
 	need=[]
 	if w=="nb":
