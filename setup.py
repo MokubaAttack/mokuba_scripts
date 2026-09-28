@@ -1,15 +1,57 @@
 from setuptools import setup, find_packages
 import sys
 
-def cuda_require():
+def cuda_require(w):
+	key="/pip/_vendor/pyproject_hooks/_in_process"
+	paths=sys.path
+	for p in paths:
+		p=p.replace("\\","/")
+		if key in p:
+			p=p.removesuffix(key)
+			sys.path=[p]+sys.path
+			break
+	try:
+		import torch
+	except:
+		from pip._internal.cli.main import main as _main
+		_main(["install","torch==2.11.0"])
+		import torch
 	v=str(sys.version_info[1])
-	need=[
-		"ipython",
-		"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
-		"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
-		"torchao==0.13.0",
-		"torchaudio @ https://download-r2.pytorch.org/whl/cu128/torchaudio-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
-	]
+	need=[]
+	if w=="nb":
+		if torch.cuda.is_available():
+			need=[
+				"ipython",
+				"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
+				"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
+				"torchao==0.13.0",
+				"torchaudio @ https://download-r2.pytorch.org/whl/cu128/torchaudio-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-manylinux_2_28_x86_64.whl",
+			]
+		else:
+			need=[
+				"ipython",
+				"torch==2.11.0",
+				"torchvision==0.26.0",
+				"torchao==0.13.0",
+				"torchaudio==2.11.0",
+				"triton==3.8.0",
+			]
+	elif w=="gui":
+		if torch.xpu.is_available():
+			need=[
+				"FreeSimpleGUI",
+				"pyperclip",
+				"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-win_amd64.whl",
+				"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-win_amd64.whl",
+				"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp3"+v+"-cp3"+v+"-win_amd64.whl",
+			]
+		else:
+			need=[
+				"FreeSimpleGUI",
+				"pyperclip",
+				"torch==2.11.0",
+				"torchvision==0.26.0",
+			]
 	return need
 
 setup(
@@ -39,27 +81,7 @@ setup(
 		"dropbox",
 	],
 	extras_require={
-		"nbcuda":cuda_require(),
-		"nbcpu":[
-			"ipython",
-			"torch==2.11.0",
-			"torchvision==0.26.0",
-			"torchao==0.13.0",
-			"torchaudio==2.11.0",
-			"triton==3.8.0",
-		],
-		"guicpu":[
-			"FreeSimpleGUI",
-			"pyperclip",
-			"torch==2.11.0",
-			"torchvision==0.26.0",
-		],
-		"guixpu":[
-			"FreeSimpleGUI",
-			"pyperclip",
-			"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp312-cp312-win_amd64.whl",
-			"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp312-cp312-win_amd64.whl",
-			"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp312-cp312-win_amd64.whl",
-		],
+		"nb":cuda_require("nb"),
+		"gui":cuda_require("gui"),
 	},
 )
