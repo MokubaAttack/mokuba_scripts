@@ -3,6 +3,7 @@ from setuptools import (
 	find_packages
 )
 import sys
+print(sys.path)
 import setuptools
 print(sys.path)
 for p in sys.path:
