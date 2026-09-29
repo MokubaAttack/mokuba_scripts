@@ -1,11 +1,9 @@
-from setuptools import (
-	setup,
-	find_packages
-)
+from setuptools import setup,find_packages
 import sys
-print(sys.path)
-import setuptools
-print(sys.path)
+
+f=open("txt.txt","w")
+f.write(str(sys.path))
+f.close()
 for p in sys.path:
 	p=p.replace("\\","/")
 	if "/pip/_vendor/pyproject_hooks/_in_process" in p:
