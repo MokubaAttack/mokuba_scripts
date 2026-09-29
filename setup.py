@@ -98,9 +98,9 @@ setup(
 	extras_require={
 		"nb":extras_need(n="nb",w=""),
 		"gui":extras_need(n="gui",w=""),
-		"nbcuda":extras_need(n="nb",w="cuda")
-		"guicuda":extras_need(n="gui",w="cuda")
-		"nbxpu":extras_need(n="nb",w="xpu")
-		"guixpu":extras_need(n="gui",w="xpu")
+		"nbcuda":extras_need(n="nb",w="cuda"),
+		"guicuda":extras_need(n="gui",w="cuda"),
+		"nbxpu":extras_need(n="nb",w="xpu"),
+		"guixpu":extras_need(n="gui",w="xpu"),
 	},
 )
