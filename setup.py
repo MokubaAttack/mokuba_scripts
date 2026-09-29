@@ -5,27 +5,23 @@ from setuptools import (
 import sys
 import os
 
-if not(os.path.exists("temp_mokuba_scripts")):
-	os.mkdir("temp_mokuba_scripts")
-
 try:
 	import torch
 except:
-	sys.path=sys.path+["temp_mokuba_scripts/Lib/site-packages"]
+	if os.path.exists("temp_mokuba_scripts"):
+		sys.path=sys.path+["temp_mokuba_scripts/Lib/site-packages"]
+		import torch
+	else:
+		for p in sys.path:
+			p=p.replace("\\","/")
+			if "/pip/_vendor/pyproject_hooks/_in_process" in p:
+				p=p.removesuffix("/pip/_vendor/pyproject_hooks/_in_process")
+				sys.path=[p]+sys.path
 
-try:
-	import torch
-except:
-	for p in sys.path:
-		p=p.replace("\\","/")
-		if "/pip/_vendor/pyproject_hooks/_in_process" in p:
-			p=p.removesuffix("/pip/_vendor/pyproject_hooks/_in_process")
-			sys.path=[p]+sys.path
-
-	from pip._internal.cli.main import main as _main
-	_main(["install","torch==2.11.0",'--prefix=temp_mokuba_scripts'])
-	sys.path=sys.path+["temp_mokuba_scripts/Lib/site-packages"]
-	import torch
+		from pip._internal.cli.main import main as _main
+		_main(["install","torch==2.11.0",'--prefix=temp_mokuba_scripts'])
+		sys.path=sys.path+["temp_mokuba_scripts/Lib/site-packages"]
+		import torch
 
 v=str(sys.version_info[1])
 p=sys.platform
