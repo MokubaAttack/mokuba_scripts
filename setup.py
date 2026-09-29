@@ -48,7 +48,7 @@ elif torch.xpu.is_available():
 		"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
 		"torchao==0.13.0",
 		"torchaudio @ https://download-r2.pytorch.org/whl/xpu/torchaudio-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-		"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.6.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
+		"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
 	]
 else:
 	nb_need=[
@@ -66,7 +66,7 @@ if torch.xpu.is_available():
 		"pyperclip",
 		"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
 		"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-		"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.6.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
+		"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
 	]
 elif torch.cuda.is_available():
 	gui_need=[
