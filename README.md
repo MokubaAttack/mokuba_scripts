@@ -1,17 +1,41 @@
 # mokuba_scripts
 These are scripts that I use when I create images in diffusers and make models.
 ## How to install
-- notebook
+- notebook by cpu
 ```
 git clone https://github.com/MokubaAttack/mokuba_scripts.git
 cd mokuba_scripts
 pip install .[nb]
 ```
-- gui
+- gui by cpu
 ```
 git clone https://github.com/MokubaAttack/mokuba_scripts.git
 cd mokuba_scripts
 pip install .[gui]
+```
+- notebook by cuda
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[nbcuda]
+```
+- gui by cuda
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[guicuda]
+```
+- notebook by xpu
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[nbxpu]
+```
+- gui by xpu
+```
+git clone https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[guixpu]
 ```
 ## Scripts
 ### common
