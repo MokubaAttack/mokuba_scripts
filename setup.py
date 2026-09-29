@@ -3,20 +3,15 @@ from setuptools import (
 	find_packages
 )
 import sys
-import setuptools
 
 for p in sys.path:
 	p=p.replace("\\","/")
 	if "/pip/_vendor/pyproject_hooks/_in_process" in p:
 		p=p.removesuffix("/pip/_vendor/pyproject_hooks/_in_process")
 		sys.path=[p]+sys.path
-	elif p.endswith("overlay/Lib/site-packages"):
-		path=p.removesuffix("/Lib/site-packages")
 
-sv=setuptools.__version__
 from pip._internal.cli.main import main as _main
-_main(["install","torch==2.11.0",'--prefix='+path])
-_main(["install","setuptools=="+sv,'--prefix='+path])
+_main(["install","torch==2.11.0"])
 
 def cuda_require(w):
 	import torch
