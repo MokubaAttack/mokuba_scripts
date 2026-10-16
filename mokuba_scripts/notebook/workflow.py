@@ -42,7 +42,9 @@ def mokuani(
 	ss=0.5,
 	token="",
 ):
-	ut=round(time.time())
+	f=open("time.txt","w")
+	f.write(str(round(time.time())))
+	f.close()
 	if not(isinstance(url, list)):
 		url=[]
 	if len(url)!=3:
@@ -87,6 +89,10 @@ def mokuani(
 	distributed_state = PartialState()
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
+	distributed_state.wait_for_everyone()
+	f=open("time.txt","r")
+	ut=f.read()
+	f.close()
 	if base_safe.endswith(".safetensors"):
 		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev)
 	else:
@@ -131,6 +137,8 @@ def mokuani(
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
+		if distributed_state.is_main_process:
+			os.remove("time.txt")
 		return
 	
 	if not(os.path.exists(out_folder+"/1")):
@@ -171,9 +179,8 @@ def mokuani(
 		drop_path=str(ut)+".zip"
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
-	distributed_state.wait_for_everyone()
-	reset_func(pipe)
-	del pipe
+	if distributed_state.is_main_process:
+		os.remove("time.txt")
 		
 def mokusdxl(
 	loras=[],
@@ -210,7 +217,9 @@ def mokusdxl(
 	qn_prompt="worst quality, low quality, normal quality",
 	token="",
 ):
-	ut=round(time.time())
+	f=open("time.txt","w")
+	f.write(str(round(time.time())))
+	f.close()
 	if not(isinstance(url, list)):
 		url=[]
 	if len(url)!=3:
@@ -292,6 +301,10 @@ def mokusdxl(
 	distributed_state = PartialState()
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
+	distributed_state.wait_for_everyone()
+	f=open("time.txt","r")
+	ut=f.read()
+	f.close()
 	if base_safe.endswith(".safetensors"):
 		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
 	else:
@@ -323,39 +336,38 @@ def mokusdxl(
 		os.makedirs(out_folder+"/0")
 
 	imgs=[]
-	for i,s in enumerate(seed):
-		print(str(i)+"_"+str(s))
-		if si and len(imgs)>0:
-			imgshow(imgs)
-		img,meta=pipe.txt2img(
-			prompt=prompt,
-			n_prompt=n_prompt,
-			gs=gs,
-			step=step,
-			x=x,
-			y=y,
-			seed=s,
-			cs=cs
-		)
-		imgs.append(img)
-
-		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
-		plus_meta(meta,img)
-		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(i)+"_"+str(s)+".jpg"
-			up_drop(meta["input"],drop_path,url)
-		flush()
+	with distributed_state.split_between_processes(prompt) as prompt2:
+		for i,s in enumerate(seed):
+			print(str(process_ind)+str(i)+"_"+str(s))
+			img,meta=pipe.txt2img(
+				prompt=prompt,
+				n_prompt=n_prompt,
+				gs=gs,
+				step=step,
+				x=x,
+				y=y,
+				seed=s,
+				cs=cs,
+				prompt2=prompt2
+			)
+			imgs.append(img)
+	
+			meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			plus_meta(meta,img)
+			if url!=[]:
+				drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+				up_drop(meta["input"],drop_path,url)
+			flush()
 
 	if mode==0:
-		if url!=[]:
+		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
-		if del_pipe:
-			reset_func(pipe)
-			pipe=None
-		return pipe
+		if distributed_state.is_main_process:
+			os.remove("time.txt")
+		return
 
 	if not(os.path.exists(out_folder+"/1")):
 		os.makedirs(out_folder+"/1")
@@ -367,44 +379,39 @@ def mokusdxl(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	for i,s in enumerate(seed):
-		clear_output(True)
-		print(str(i)+"_"+str(s))
-		if si and len(imgs)>0:
-			imgshow(imgs)
-		img,meta=pipe.img2img(
-			prompt=prompt,
-			n_prompt=n_prompt,
-			gs=gs,
-			step=step2,
-			img=imgs[i],
-			seed=s,
-			ss=ss,
-			cs=cs,
-			hiresfix=True
-		)
-		imgs[i]=img
+	with distributed_state.split_between_processes(prompt) as prompt2:
+		for i,s in enumerate(seed):
+			print(str(process_ind)+str(i)+"_"+str(s))
+			img,meta=pipe.img2img(
+				prompt=prompt,
+				n_prompt=n_prompt,
+				gs=gs,
+				step=step2,
+				img=imgs[i],
+				seed=s,
+				ss=ss,
+				cs=cs,
+				hiresfix=True,
+				prompt2=prompt2
+			)
+			imgs[i]=img
+	
+			meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			plus_meta(meta,img)
+			if url!=[]:
+				drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+				up_drop(meta["input"],drop_path,url)
+			flush()
 
-		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
-		plus_meta(meta,img)
-		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(i)+"_"+str(s)+".jpg"
-			up_drop(meta["input"],drop_path,url)
-		flush()
-
-	clear_output(True)
-	if si and len(imgs)>0:
-		imgshow(imgs)
 	if mode==1:
-		if url!=[]:
+		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
-		if del_pipe:
-			reset_func(pipe)
-			pipe=None
-		return pipe
+		if distributed_state.is_main_process:
+			os.remove("time.txt")
+		return
 
 	if not(os.path.exists(out_folder+"/2")):
 		os.makedirs(out_folder+"/2")
@@ -420,42 +427,37 @@ def mokusdxl(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	for i,s in enumerate(seed):
-		clear_output(True)
-		print(str(i)+"_"+str(s))
-		if si and len(imgs)>0:
-			imgshow(imgs)
-		img,meta=pipe.tileup(
-			prompt=qprompt,
-			n_prompt=qn_prompt,
-			gs=gs,
-			step=step3,
-			img=imgs[i],
-			seed=s,
-			ss=ss,
-			ccs=ccs,
-			cs=cs
-		)
-		imgs[i]=img
+	with distributed_state.split_between_processes(qprompt) as prompt2:
+		for i,s in enumerate(seed):
+			print(str(process_ind)+str(i)+"_"+str(s))
+			img,meta=pipe.tileup(
+				prompt=qprompt,
+				n_prompt=qn_prompt,
+				gs=gs,
+				step=step3,
+				img=imgs[i],
+				seed=s,
+				ss=ss,
+				ccs=ccs,
+				cs=cs,
+				prompt2=prompt2
+			)
+			imgs[i]=img
+	
+			meta["input"]=out_folder+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			plus_meta(meta,img)
+			if url!=[]:
+				drop_path=str(ut)+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+				up_drop(meta["input"],drop_path,url)
+			flush()
 
-		meta["input"]=out_folder+"/2/"+str(i)+"_"+str(s)+".jpg"
-		plus_meta(meta,img)
-		if url!=[]:
-			drop_path=str(ut)+"/2/"+str(i)+"_"+str(s)+".jpg"
-			up_drop(meta["input"],drop_path,url)
-		flush()
-	clear_output(True)
-	if si and len(imgs)>0:
-		imgshow(imgs)
-	if url!=[]:
+	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 		drop_path=str(ut)+".zip"
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
-	if del_pipe:
-		reset_func(pipe)
-		pipe=None
-	return pipe
+	if distributed_state.is_main_process:
+		os.remove("time.txt")
 	
 def mokusd(
 	loras=[],
@@ -472,7 +474,6 @@ def mokusd(
 	base_safe="base.safetensors",
 	url="",
 	dtype="f32",
-	dev="cuda",
 	x=1024,
 	y=1024,
 	mode=0,
@@ -480,9 +481,6 @@ def mokusd(
 	Interpolation="BILINEAR",
 	step2=15,
 	ss=0.5,
-	p=None,
-	del_pipe=True,
-	si=True,
 	pos_emb=[],
 	neg_emb=[],
 	vae_safe="",
@@ -503,140 +501,148 @@ def mokusd(
 		url=[]
 	seed,pic_number=make_seed(seed,pic_number)
 
-	if p==None:
-		if dtype=="bf16":
-			dtype=torch.bfloat16
-		elif dtype=="f16":
-			dtype=torch.float16
-		else:
-			dtype=torch.float32
-
-		safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
-		base_safe=str(base_safe)
-		m=re.match(r"[0-9]+$",base_safe)
-		if m!=None:
-			ver_id=base_safe
-			base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"ckpt")):
-				os.makedirs(safe_folder+"ckpt")
-			dlc(ver_id,base_safe,token)
-
-		vae_safe=str(vae_safe)
-		m=re.match(r"[0-9]+$",vae_safe)
-		if m!=None:
-			ver_id=vae_safe
-			vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"vae")):
-				os.makedirs(safe_folder+"vae")
-			dlc(ver_id,vae_safe,token)
-
-		pipe=mokusdpipe()
-		if base_safe.endswith(".safetensors"):
-			pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
-		else:
-			pipe.from_folder(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
-
-		pipe.set_scheduler(sample,sgm)
-
-		if len(loras)!=len(lora_weights):
-			raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
-		for line,w in zip(loras,lora_weights):
-			line=str(line)
-			m=re.match(r"[0-9]+$",line)
-			if m!=None:
-				ver_id=line
-				line=safe_folder+"lora/"+line+".safetensors"
-				if token=="":
-					raise RuntimeWarning("civitai token doesn't input.")
-				if not(os.path.exists(safe_folder+"lora")):
-					os.makedirs(safe_folder+"lora")
-				dlc(ver_id,line,token)
-			if not(line.endswith(".safetensors")):
-				line=line+".safetensors"
-			pipe.load_lycoris(path=line,weight=w)
-
-		for line in pos_emb:
-			line=str(line)
-			m=re.match(r"[0-9]+$",line)
-			if m!=None:
-				ver_id=line
-				line=safe_folder+"embed/"+line+".safetensors"
-				if token=="":
-					raise RuntimeWarning("civitai token doesn't input.")
-				if not(os.path.exists(safe_folder+"embed")):
-					os.makedirs(safe_folder+"embed")
-				dlc(ver_id,line,token)
-			if not(line.endswith(".safetensors")):
-				line=line+".safetensors"
-			pipe.load_pos_embed(line)
-
-		for line in neg_emb:
-			line=str(line)
-			m=re.match(r"[0-9]+$",line)
-			if m!=None:
-				ver_id=line
-				line=safe_folder+"embed/"+line+".safetensors"
-				if token=="":
-					raise RuntimeWarning("civitai token doesn't input.")
-				if not(os.path.exists(safe_folder+"embed")):
-					os.makedirs(safe_folder+"embed")
-				dlc(ver_id,line,token)
-			if not(line.endswith(".safetensors")):
-				line=line+".safetensors"
-			pipe.load_neg_embed(line)
-
-		if gpulowmem:
-			pipe.set_gpu_lowmem()
-		if freezeunet:
-			pipe.set_freeze_unet()
+	if dtype=="bf16":
+		dtype=torch.bfloat16
+	elif dtype=="f16":
+		dtype=torch.float16
 	else:
-		pipe=p
+		dtype=torch.float32
+
+	safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
+	base_safe=str(base_safe)
+	m=re.match(r"[0-9]+$",base_safe)
+	if m!=None:
+		ver_id=base_safe
+		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
+		if token=="":
+			raise RuntimeWarning("civitai token doesn't input.")
+		if not(os.path.exists(safe_folder+"ckpt")):
+			os.makedirs(safe_folder+"ckpt")
+		dlc(ver_id,base_safe,token)
+
+	vae_safe=str(vae_safe)
+	m=re.match(r"[0-9]+$",vae_safe)
+	if m!=None:
+		ver_id=vae_safe
+		vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
+		if token=="":
+			raise RuntimeWarning("civitai token doesn't input.")
+		if not(os.path.exists(safe_folder+"vae")):
+			os.makedirs(safe_folder+"vae")
+		dlc(ver_id,vae_safe,token)
+	
+	if len(loras)!=len(lora_weights):
+		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
+	for i,line in enumerate(loras):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"lora/"+line+".safetensors"
+			loras[i]=line
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"lora")):
+				os.makedirs(safe_folder+"lora")
+			dlc(ver_id,line,token)
+
+	for i,line in enumerate(pos_emb):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"embed/"+line+".safetensors"
+			pos_emb[i]=line
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"embed")):
+				os.makedirs(safe_folder+"embed")
+			dlc(ver_id,line,token)
+
+	for i,line in enumerate(neg_emb):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"embed/"+line+".safetensors"
+			neg_emb[i]=line
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"embed")):
+				os.makedirs(safe_folder+"embed")
+			dlc(ver_id,line,token)
+
+	pipe=mokusdpipe()
+	distributed_state = PartialState()
+	dev=distributed_state.device
+	process_ind=distributed_state.process_index
+	distributed_state.wait_for_everyone()
+	f=open("time.txt","r")
+	ut=f.read()
+	f.close()
+	if base_safe.endswith(".safetensors"):
+		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
+	else:
+		pipe.from_folder(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
+
+	pipe.set_scheduler(sample,sgm)
+
+	for line,w in zip(loras,lora_weights):
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_lycoris(path=line,weight=w)
+
+	for line in pos_emb:
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_pos_embed(line)
+
+	for line in neg_emb:
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_neg_embed(line)
+
+	if gpulowmem:
+		pipe.set_gpu_lowmem()
+	if freezeunet:
+		pipe.set_freeze_unet()
 
 	if not(os.path.exists(out_folder+"/0")):
 		os.makedirs(out_folder+"/0")
 
 	imgs=[]
-	for i,s in enumerate(seed):
-		clear_output(True)
-		print(str(i)+"_"+str(s))
-		if si and len(imgs)>0:
-			imgshow(imgs)
-		img,meta=pipe.txt2img(
-			prompt=prompt,
-			n_prompt=n_prompt,
-			gs=gs,
-			step=step,
-			x=x,
-			y=y,
-			seed=s,
-			cs=cs
-		)
-		imgs.append(img)
+	with distributed_state.split_between_processes(prompt) as prompt2:
+		for i,s in enumerate(seed):
+			print(str(process_ind)+str(i)+"_"+str(s))
+			img,meta=pipe.txt2img(
+				prompt=prompt,
+				n_prompt=n_prompt,
+				gs=gs,
+				step=step,
+				x=x,
+				y=y,
+				seed=s,
+				cs=cs,
+				ptompt2=prompt2
+			)
+			imgs.append(img)
+	
+			meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			plus_meta(meta,img)
+			if url!=[]:
+				drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+				up_drop(meta["input"],drop_path,url)
+			flush()
 
-		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
-		plus_meta(meta,img)
-		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(i)+"_"+str(s)+".jpg"
-			up_drop(meta["input"],drop_path,url)
-		flush()
-
-	clear_output(True)
-	if si and len(imgs)>0:
-		imgshow(imgs)
 	if mode==0:
-		if url!=[]:
+		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
-		if del_pipe:
-			reset_func(pipe)
-			pipe=None
-		return pipe
+		if distributed_state.is_main_process:
+			os.remove("time.txt")
+		return
 
 	if not(os.path.exists(out_folder+"/1")):
 		os.makedirs(out_folder+"/1")
@@ -648,44 +654,39 @@ def mokusd(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	for i,s in enumerate(seed):
-		clear_output(True)
-		print(str(i)+"_"+str(s))
-		if si and len(imgs)>0:
-			imgshow(imgs)
-		img,meta=pipe.img2img(
-			prompt=prompt,
-			n_prompt=n_prompt,
-			gs=gs,
-			step=step2,
-			img=imgs[i],
-			seed=s,
-			ss=ss,
-			cs=cs,
-			hiresfix=True
-		)
-		imgs[i]=img
+	with distributed_state.split_between_processes(prompt) as prompt2:
+		for i,s in enumerate(seed):
+			print(str(process_ind)+str(i)+"_"+str(s))
+			img,meta=pipe.img2img(
+				prompt=prompt,
+				n_prompt=n_prompt,
+				gs=gs,
+				step=step2,
+				img=imgs[i],
+				seed=s,
+				ss=ss,
+				cs=cs,
+				hiresfix=True,
+				ptompt2=prompt2
+			)
+			imgs[i]=img
+	
+			meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			plus_meta(meta,img)
+			if url!=[]:
+				drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+				up_drop(meta["input"],drop_path,url)
+			flush()
 
-		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
-		plus_meta(meta,img)
-		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(i)+"_"+str(s)+".jpg"
-			up_drop(meta["input"],drop_path,url)
-		flush()
-
-	clear_output(True)
-	if si and len(imgs)>0:
-		imgshow(imgs)
 	if mode==1:
-		if url!=[]:
+		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
-		if del_pipe:
-			reset_func(pipe)
-			pipe=None
-		return pipe
+		if distributed_state.is_main_process:
+			os.remove("time.txt")
+		return
 
 	if not(os.path.exists(out_folder+"/2")):
 		os.makedirs(out_folder+"/2")
@@ -701,39 +702,34 @@ def mokusd(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	for i,s in enumerate(seed):
-		clear_output(True)
-		print(str(i)+"_"+str(s))
-		if si and len(imgs)>0:
-			imgshow(imgs)
-		img,meta=pipe.tileup(
-			prompt=qprompt,
-			n_prompt=qn_prompt,
-			gs=gs,
-			step=step3,
-			img=imgs[i],
-			seed=s,
-			ss=ss,
-			ccs=ccs,
-			cs=cs
-		)
-		imgs.append(img)
+	with distributed_state.split_between_processes(qprompt) as prompt2:
+		for i,s in enumerate(seed):
+			print(str(process_ind)+str(i)+"_"+str(s))
+			img,meta=pipe.tileup(
+				prompt=qprompt,
+				n_prompt=qn_prompt,
+				gs=gs,
+				step=step3,
+				img=imgs[i],
+				seed=s,
+				ss=ss,
+				ccs=ccs,
+				cs=cs,
+				ptompt2=prompt2
+			)
+			imgs.append(img)
+	
+			meta["input"]=out_folder+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			plus_meta(meta,img)
+			if url!=[]:
+				drop_path=str(ut)+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+				up_drop(meta["input"],drop_path,url)
+			flush()
 
-		meta["input"]=out_folder+"/2/"+str(i)+"_"+str(s)+".jpg"
-		plus_meta(meta,img)
-		if url!=[]:
-			drop_path=str(ut)+"/2/"+str(i)+"_"+str(s)+".jpg"
-			up_drop(meta["input"],drop_path,url)
-		flush()
-	clear_output(True)
-	if si and len(imgs)>0:
-		imgshow(imgs)
-	if url!=[]:
+	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 		drop_path=str(ut)+".zip"
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
-	if del_pipe:
-		reset_func(pipe)
-		pipe=None
-	return pipe
+	if distributed_state.is_main_process:
+		os.remove("time.txt")
