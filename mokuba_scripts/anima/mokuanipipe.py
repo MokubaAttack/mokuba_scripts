@@ -169,8 +169,7 @@ class mokuanipipe:
 		step,
 		x,
 		y,
-		seed,
-		prompt2
+		seed
 		):
 		self.pipe.guider.register_to_config(guidance_scale=gs)
 		self.moku_meta["st"]=str(step)
@@ -181,7 +180,7 @@ class mokuanipipe:
 		self.pipe.vae.enable_tiling()
 
 		out_img = self.pipe(
-			prompt=prompt2,
+			prompt=prompt,
 			negative_prompt=n_prompt,
 			num_inference_steps=step,
 			generator=torch.manual_seed(seed),
@@ -204,7 +203,6 @@ class mokuanipipe:
 		ss,
 		img,
 		seed,
-		prompt2,
 		hiresfix=False
 		):
 		self.pipe.guider.register_to_config(guidance_scale=gs)
@@ -220,7 +218,7 @@ class mokuanipipe:
 		self.pipe.vae.enable_tiling()
 
 		out_img = self.pipe(
-			prompt=prompt2,
+			prompt=prompt,
 			negative_prompt=n_prompt,
 			num_inference_steps=int(step/ss)+1,
 			generator=torch.manual_seed(seed),
