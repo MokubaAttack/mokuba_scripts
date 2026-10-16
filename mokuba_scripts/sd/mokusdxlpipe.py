@@ -332,7 +332,8 @@ class mokusdxlpipe:
 		x,
 		y,
 		seed,
-		cs
+		cs,
+		prompt2
 		):
 		self.pipe=StableDiffusionXLPipeline.from_pipe(self.pipe,torch_dtype=self.dtype)
 		self.pipe.to(self.dev)
@@ -346,7 +347,7 @@ class mokusdxlpipe:
 		self.pipe.vae.enable_tiling()
 
 		compel = CompelForSDXL(self.pipe)
-		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
+		conditioning = compel(prompt2+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
 		prompts=[conditioning.embeds,conditioning.pooled_embeds,conditioning.negative_embeds,conditioning.negative_pooled_embeds]
 
 		out_img = self.pipe(
@@ -379,6 +380,7 @@ class mokusdxlpipe:
 		img,
 		seed,
 		cs,
+		prompt2,
 		hiresfix=False
 		):
 		self.pipe=StableDiffusionXLImg2ImgPipeline.from_pipe(self.pipe,torch_dtype=self.dtype)
@@ -397,7 +399,7 @@ class mokusdxlpipe:
 		self.pipe.vae.enable_tiling()
 
 		compel = CompelForSDXL(self.pipe)
-		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
+		conditioning = compel(prompt2+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
 		prompts=[conditioning.embeds,conditioning.pooled_embeds,conditioning.negative_embeds,conditioning.negative_pooled_embeds]
 
 		out_img = self.pipe(
@@ -436,6 +438,7 @@ class mokusdxlpipe:
 		seed,
 		ss,
 		img,
+		prompt2,
 		ccs=0
 		):
 		if ccs==0:
@@ -460,7 +463,7 @@ class mokusdxlpipe:
 		self.pipe.vae.enable_tiling()
 
 		compel = CompelForSDXL(self.pipe)
-		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
+		conditioning = compel(prompt2+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
 		prompts=[conditioning.embeds,conditioning.pooled_embeds,conditioning.negative_embeds,conditioning.negative_pooled_embeds]
 
 		x=img.width
