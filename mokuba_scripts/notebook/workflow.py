@@ -12,10 +12,8 @@ from ..anima.mokuanipipe import mokuanipipe
 from ..sd.mokusdxlpipe import mokusdxlpipe
 from ..sd.mokusdpipe import mokusdpipe
 from ..common.discord import up_drop
-from ..common.flush import (
-	flush,
-	reset_func
-)
+from ..common.flush import flush
+
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
 from ..common.dl import dlc
@@ -133,13 +131,10 @@ def mokuani(
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
-		distributed_state.wait_for_everyone()
-		reset_func(pipe)
-		del pipe
 		return
 	
-		if not(os.path.exists(out_folder+"/1")):
-			os.makedirs(out_folder+"/1")
+	if not(os.path.exists(out_folder+"/1")):
+		os.makedirs(out_folder+"/1")
 	
 	pipe.make_upscaler(Interpolation,dev)
 	x=round(x*up/8)*8
