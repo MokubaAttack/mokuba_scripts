@@ -320,8 +320,7 @@ class mokusdpipe:
 		x,
 		y,
 		seed,
-		cs,
-		promot2
+		cs
 		):
 		self.pipe=StableDiffusionPipeline.from_pipe(self.pipe,torch_dtype=self.dtype)
 		self.pipe.to(self.dev)
@@ -335,7 +334,7 @@ class mokusdpipe:
 		self.pipe.vae.enable_tiling()
 
 		compel = CompelForSD(self.pipe)
-		conditioning = compel(prompt2+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
+		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
 		prompts=[conditioning.embeds,conditioning.negative_embeds]
 
 		out_img = self.pipe(
@@ -366,7 +365,6 @@ class mokusdpipe:
 		img,
 		seed,
 		cs,
-		prompt2,
 		hiresfix=False
 		):
 		self.pipe=StableDiffusionImg2ImgPipeline.from_pipe(self.pipe,torch_dtype=self.dtype)
@@ -385,7 +383,7 @@ class mokusdpipe:
 		self.pipe.vae.enable_tiling()
 
 		compel = CompelForSD(self.pipe)
-		conditioning = compel(prompt2+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
+		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
 		prompts=[conditioning.embeds,conditioning.negative_embeds]
 
 		out_img = self.pipe(
@@ -422,7 +420,6 @@ class mokusdpipe:
 		seed,
 		ss,
 		img,
-		prompt2,
 		ccs=0
 		):
 		if ccs==0:
@@ -446,7 +443,7 @@ class mokusdpipe:
 		self.pipe.vae.enable_tiling()
 
 		compel = CompelForSD(self.pipe)
-		conditioning = compel(prompt2+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
+		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
 		prompts=[conditioning.embeds,conditioning.negative_embeds]
 		
 		x=img.width
