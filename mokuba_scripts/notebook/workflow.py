@@ -109,27 +109,25 @@ def mokuani(
 		os.makedirs(out_folder+"/0")
 
 	imgs=[]
-	with distributed_state.split_between_processes(prompt) as prompt2:
-		for i,s in enumerate(seed):
-			print(str(process_ind)+str(i)+"_"+str(s))
-			img,meta=pipe.txt2img(
-				prompt=prompt,
-				n_prompt=n_prompt,
-				gs=gs,
-				step=step,
-				x=x,
-				y=y,
-				seed=s,
-				prompt2=prompt2
-			)
-			imgs.append(img)
-	
-			meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			plus_meta(meta,img)
-			if url!=[]:
-				drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-				up_drop(meta["input"],drop_path,url)
-			flush()	
+	for i,s in enumerate(seed):
+		print(str(process_ind)+str(i)+"_"+str(s))
+		img,meta=pipe.txt2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step,
+			x=x,
+			y=y,
+			seed=s,
+		)
+		imgs.append(img)
+
+		meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()	
 	
 	if mode==0:
 		distributed_state.wait_for_everyone()
@@ -152,28 +150,27 @@ def mokuani(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	with distributed_state.split_between_processes(prompt) as prompt2:
-		for i,s in enumerate(seed):
-			print(str(process_ind)+str(i)+"_"+str(s))
-			img,meta=pipe.img2img(
-				prompt=prompt,
-				n_prompt=n_prompt,
-				gs=gs,
-				step=step2,
-				img=imgs[i],
-				seed=s,
-				ss=ss,
-				hiresfix=True,
-				prompt2=prompt2
-			)
-			imgs[i]=img
-	
-			meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			plus_meta(meta,img)
-			if url!=[]:
-				drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-				up_drop(meta["input"],drop_path,url)
-			flush()
+	for i,s in enumerate(seed):
+		print(str(process_ind)+str(i)+"_"+str(s))
+		img,meta=pipe.img2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step2,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			hiresfix=True,
+			prompt2=prompt2
+		)
+		imgs[i]=img
+
+		meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
 
 	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
