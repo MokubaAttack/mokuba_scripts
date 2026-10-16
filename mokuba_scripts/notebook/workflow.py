@@ -132,6 +132,7 @@ def mokuani(
 			flush()	
 	
 	if mode==0:
+		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
@@ -173,7 +174,8 @@ def mokuani(
 				drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
 				up_drop(meta["input"],drop_path,url)
 			flush()
-	
+
+	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 		drop_path=str(ut)+".zip"
@@ -360,6 +362,7 @@ def mokusdxl(
 			flush()
 
 	if mode==0:
+		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
@@ -404,6 +407,7 @@ def mokusdxl(
 			flush()
 
 	if mode==1:
+		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
@@ -451,6 +455,7 @@ def mokusdxl(
 				up_drop(meta["input"],drop_path,url)
 			flush()
 
+	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 		drop_path=str(ut)+".zip"
@@ -635,6 +640,7 @@ def mokusd(
 			flush()
 
 	if mode==0:
+		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
@@ -679,6 +685,7 @@ def mokusd(
 			flush()
 
 	if mode==1:
+		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
@@ -726,6 +733,7 @@ def mokusd(
 				up_drop(meta["input"],drop_path,url)
 			flush()
 
+	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 		drop_path=str(ut)+".zip"
