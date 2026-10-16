@@ -4,7 +4,7 @@ from setuptools import (
 )
 import sys
 
-def extras_need(n,w):
+def extras_need(w):
 	v=str(sys.version_info[1])
 	p=sys.platform
 	if p.startswith("linux"):
@@ -14,59 +14,31 @@ def extras_need(n,w):
 		p="win_amd64"
 		tri="triton-windows==3.6.0.post26"
 
-	if n=="nb":
-		if w=="cuda":
-			need=[
-				"ipython",
-				"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				"torchao==0.13.0",
-				"torchaudio @ https://download-r2.pytorch.org/whl/cu128/torchaudio-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				tri,
-			]
-		elif w=="xpu":
-			need=[
-				"ipython",
-				"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				"torchao==0.13.0",
-				"torchaudio @ https://download-r2.pytorch.org/whl/xpu/torchaudio-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			]
-		else:
-			need=[
-				"ipython",
-				"torch==2.11.0",
-				"torchvision==0.26.0",
-				"torchao==0.13.0",
-				"torchaudio==2.11.0",
-				tri,
-			]
+	if w=="cuda":
+		need=[
+			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchao==0.13.0",
+			"torchaudio @ https://download-r2.pytorch.org/whl/cu128/torchaudio-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			tri,
+		]
+	elif w=="xpu":
+		need=[
+			"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchao==0.13.0",
+			"torchaudio @ https://download-r2.pytorch.org/whl/xpu/torchaudio-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
+		]
 	else:
-		if w=="cuda":
-			need=[
-				"FreeSimpleGUI",
-				"pyperclip",
-				"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				tri,
-			]
-		elif w=="xpu":
-			need=[
-				"FreeSimpleGUI",
-				"pyperclip",
-				"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-				"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			]
-		else:
-			need=[
-				"FreeSimpleGUI",
-				"pyperclip",
-				"torch==2.11.0",
-				"torchvision==0.26.0",
-				tri,
-			]
+		need=[
+			"ipython",
+			"torch==2.11.0",
+			"torchvision==0.26.0",
+			"torchao==0.13.0",
+			"torchaudio==2.11.0",
+			tri,
+		]
 	return need
 
 setup(
@@ -96,11 +68,8 @@ setup(
 		"dropbox",
 	],
 	extras_require={
-		"nb":extras_need(n="nb",w=""),
-		"gui":extras_need(n="gui",w=""),
-		"nbcuda":extras_need(n="nb",w="cuda"),
-		"guicuda":extras_need(n="gui",w="cuda"),
-		"nbxpu":extras_need(n="nb",w="xpu"),
-		"guixpu":extras_need(n="gui",w="xpu"),
+		"cuda":extras_need(w="cuda"),
+		"xpu":extras_need(w="xpu"),
+		"cpu":extras_need(w="cpu"),
 	},
 )
