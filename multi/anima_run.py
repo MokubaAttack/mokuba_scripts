@@ -1,13 +1,10 @@
 import mokuba_scripts
 import json
-import os
-import shutil
 
 f=open("params.json","r")
 sd=json.load(f)
 f.close()
-if os.path.exists(sd["out_folder"]):
-    shutil.rmtree(sd["out_folder"])
+
 pipe=mokuba_scripts.mokuani(
     base_safe=sd["base_safe"],
     loras=sd["loras"],
