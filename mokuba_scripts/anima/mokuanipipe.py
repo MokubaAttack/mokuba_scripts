@@ -6,7 +6,6 @@ from diffusers import (
 import torch
 import os
 from lycoris import create_lycoris_from_weights
-from accelerate import PartialState
 
 from .animackpt2 import (
 	check_anima_base,
@@ -170,7 +169,8 @@ class mokuanipipe:
 		step,
 		x,
 		y,
-		seed
+		seed,
+		prompt2
 		):
 		self.pipe.guider.register_to_config(guidance_scale=gs)
 		self.moku_meta["st"]=str(step)
@@ -180,18 +180,14 @@ class mokuanipipe:
 		self.moku_meta["se"]=str(seed)
 		self.pipe.vae.enable_tiling()
 
-		distributed_state = PartialState()
-		self.pipe.to(distributed_state.device)
-
-		with distributed_state.split_between_processes(prompt) as prompt2:
-			out_img = self.pipe(
-				prompt=prompt2,
-				negative_prompt=n_prompt,
-				num_inference_steps=step,
-				generator=torch.manual_seed(seed),
-				width=x,
-				height=y
-			).images[0]
+		out_img = self.pipe(
+			prompt=prompt2,
+			negative_prompt=n_prompt,
+			num_inference_steps=step,
+			generator=torch.manual_seed(seed),
+			width=x,
+			height=y
+		).images[0]
 
 		out_meta={}
 		for k in txt2img_params:
@@ -208,6 +204,7 @@ class mokuanipipe:
 		ss,
 		img,
 		seed,
+		prompt2,
 		hiresfix=False
 		):
 		self.pipe.guider.register_to_config(guidance_scale=gs)
@@ -222,20 +219,16 @@ class mokuanipipe:
 		self.moku_meta["se"]=str(seed)
 		self.pipe.vae.enable_tiling()
 
-		distributed_state = PartialState()
-		self.pipe.to(distributed_state.device)
-
-		with distributed_state.split_between_processes(prompt) as prompt2:
-			out_img = self.pipe(
-				prompt=prompt2,
-				negative_prompt=n_prompt,
-				num_inference_steps=int(step/ss)+1,
-				generator=torch.manual_seed(seed),
-				width=img.width,
-				height=img.height,
-				strength=ss,
-				image=img
-			).images[0]
+		out_img = self.pipe(
+			prompt=prompt2,
+			negative_prompt=n_prompt,
+			num_inference_steps=int(step/ss)+1,
+			generator=torch.manual_seed(seed),
+			width=img.width,
+			height=img.height,
+			strength=ss,
+			image=img
+		).images[0]
 
 		out_meta={}
 		if hiresfix:
