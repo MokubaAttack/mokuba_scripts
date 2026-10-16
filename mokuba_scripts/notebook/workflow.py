@@ -89,9 +89,9 @@ def mokuani(
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
 	if base_safe.endswith(".safetensors"):
-		pipe.from_safe(path=base_safe,torch_dtype=dtype,dev=dev)
+		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev)
 	else:
-		pipe.from_folder(path=base_safe,torch_dtype=dtype,dev=dev)
+		pipe.from_folder(path=base_safe,torch_dtype=dtype,device=dev)
 
 	pipe.set_scheduler(sample,sgm)
 
