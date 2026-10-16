@@ -10,6 +10,7 @@ from IPython.display import (
 import time
 import shutil
 import re
+from accelerate import PartialState
 
 from ..anima.mokuanipipe import mokuanipipe
 from ..sd.mokusdxlpipe import mokusdxlpipe
@@ -48,7 +49,6 @@ def mokuani(
 	base_safe="base.safetensors",
 	url="",
 	dtype="f32",
-	dev="cuda",
 	x=1024,
 	y=1024,
 	mode=0,
@@ -56,9 +56,6 @@ def mokuani(
 	Interpolation="BILINEAR",
 	step2=15,
 	ss=0.5,
-	p=None,
-	del_pipe=True,
-	si=True,
 	token="",
 ):
 	ut=round(time.time())
@@ -68,62 +65,61 @@ def mokuani(
 		url=[]
 	seed,pic_number=make_seed(seed,pic_number)
 
-	if p==None:
-		if dtype=="bf16":
-			dtype=torch.bfloat16
-		elif dtype=="f16":
-			dtype=torch.float16
-		else:
-			dtype=torch.float32
+	if dtype=="bf16":
+		dtype=torch.bfloat16
+	elif dtype=="f16":
+		dtype=torch.float16
+	else:
+		dtype=torch.float32
 
-		safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
-		base_safe=str(base_safe)
-		m=re.match(r"[0-9]+$",base_safe)
+	safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
+	base_safe=str(base_safe)
+	m=re.match(r"[0-9]+$",base_safe)
+	if m!=None:
+		ver_id=base_safe
+		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
+		if token=="":
+			raise RuntimeWarning("civitai token doesn't input.")
+		if not(os.path.exists(safe_folder+"ckpt")):
+			os.makedirs(safe_folder+"ckpt")
+		dlc(ver_id,base_safe,token)
+
+	pipe=mokuanipipe()
+	distributed_state = PartialState()
+	dev=distributed_state.device
+	process_ind=distributed_state.process_index
+	if base_safe.endswith(".safetensors"):
+		pipe.from_safe(path=base_safe,torch_dtype=dtype,dev=dev)
+	else:
+		pipe.from_folder(path=base_safe,torch_dtype=dtype,dev=dev)
+
+	pipe.set_scheduler(sample,sgm)
+
+	if len(loras)!=len(lora_weights):
+		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
+	for line,w in zip(loras,lora_weights):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
 		if m!=None:
-			ver_id=base_safe
-			base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
+			ver_id=line
+			line=safe_folder+"lora/"+line+".safetensors"
 			if token=="":
 				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"ckpt")):
-				os.makedirs(safe_folder+"ckpt")
-			dlc(ver_id,base_safe,token)
-
-		pipe=mokuanipipe()
-		if base_safe.endswith(".safetensors"):
-			pipe.from_safe(path=base_safe,torch_dtype=dtype)
-		else:
-			pipe.from_folder(path=base_safe,torch_dtype=dtype)
-
-		pipe.set_scheduler(sample,sgm)
-
-		if len(loras)!=len(lora_weights):
-			raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
-		for line,w in zip(loras,lora_weights):
-			line=str(line)
-			m=re.match(r"[0-9]+$",line)
-			if m!=None:
-				ver_id=line
-				line=safe_folder+"lora/"+line+".safetensors"
-				if token=="":
-					raise RuntimeWarning("civitai token doesn't input.")
-				if not(os.path.exists(safe_folder+"lora")):
-					os.makedirs(safe_folder+"lora")
-				dlc(ver_id,line,token)
-			if not(line.endswith(".safetensors")):
-				line=line+".safetensors"
-			pipe.load_lycoris(path=line,weight=w)
-	else:
-		pipe=p
+			if not(os.path.exists(safe_folder+"lora")):
+				os.makedirs(safe_folder+"lora")
+			dlc(ver_id,line,token)
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_lycoris(path=line,weight=w)
 
 	if not(os.path.exists(out_folder+"/0")):
 		os.makedirs(out_folder+"/0")
 
 	imgs=[]
+	prompt2=distributed_state.split_between_processes(prompt)
 	for i,s in enumerate(seed):
 		clear_output(True)
-		print(str(i)+"_"+str(s))
-		if si and len(imgs)>0:
-			imgshow(imgs)
+		print(str(process_ind)+str(i)+"_"+str(s))
 		img,meta=pipe.txt2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -131,20 +127,19 @@ def mokuani(
 			step=step,
 			x=x,
 			y=y,
-			seed=s
+			seed=s,
+			prompt2=prompt2
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/0/"+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 		
 	clear_output(True)
-	if si and len(imgs)>0:
-		imgshow(imgs)
 
 	if mode==0:
 		if url!=[]:
@@ -152,10 +147,7 @@ def mokuani(
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
-		if del_pipe:
-			reset_func(pipe)
-			pipe=None
-		return pipe
+		return
 
 	if not(os.path.exists(out_folder+"/1")):
 		os.makedirs(out_folder+"/1")
@@ -169,9 +161,7 @@ def mokuani(
 
 	for i,s in enumerate(seed):
 		clear_output(True)
-		print(str(i)+"_"+str(s))
-		if si and len(imgs)>0:
-			imgshow(imgs)
+		print(str(process_ind)+str(i)+"_"+str(s))
 		img,meta=pipe.img2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -180,29 +170,25 @@ def mokuani(
 			img=imgs[i],
 			seed=s,
 			ss=ss,
-			hiresfix=True
+			hiresfix=True,
+			prompt2=prompt2
 		)
 		imgs[i]=img
 
-		meta["input"]=out_folder+"/1/"+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 		
 	clear_output(True)
-	if si and len(imgs)>0:
-		imgshow(imgs)
+
 	if url!=[]:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 		drop_path=str(ut)+".zip"
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
-	if del_pipe:
-		reset_func(pipe)
-		pipe=None
-	return pipe
 	
 def mokusdxl(
 	loras=[],
