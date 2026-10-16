@@ -116,80 +116,80 @@ def mokuani(
 		os.makedirs(out_folder+"/0")
 
 	imgs=[]
-	prompt2=distributed_state.split_between_processes(prompt)
-	for i,s in enumerate(seed):
+	with distributed_state.split_between_processes(prompt) as prompt2:
+		for i,s in enumerate(seed):
+			clear_output(True)
+			print(str(process_ind)+str(i)+"_"+str(s))
+			img,meta=pipe.txt2img(
+				prompt=prompt,
+				n_prompt=n_prompt,
+				gs=gs,
+				step=step,
+				x=x,
+				y=y,
+				seed=s,
+				prompt2=prompt2
+			)
+			imgs.append(img)
+	
+			meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			plus_meta(meta,img)
+			if url!=[]:
+				drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+				up_drop(meta["input"],drop_path,url)
+			flush()
+			
 		clear_output(True)
-		print(str(process_ind)+str(i)+"_"+str(s))
-		img,meta=pipe.txt2img(
-			prompt=prompt,
-			n_prompt=n_prompt,
-			gs=gs,
-			step=step,
-			x=x,
-			y=y,
-			seed=s,
-			prompt2=prompt2
-		)
-		imgs.append(img)
-
-		meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-		plus_meta(meta,img)
-		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			up_drop(meta["input"],drop_path,url)
-		flush()
-		
-	clear_output(True)
-
-	if mode==0:
+	
+		if mode==0:
+			if url!=[] and distributed_state.is_main_process:
+				shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+				drop_path=str(ut)+".zip"
+				up_drop("archive_shutil.zip",drop_path,url)
+				os.remove("archive_shutil.zip")
+			return
+	
+		if not(os.path.exists(out_folder+"/1")):
+			os.makedirs(out_folder+"/1")
+	
+		pipe.make_upscaler(Interpolation,dev)
+		x=round(x*up/8)*8
+		y=round(y*up/8)*8
+		for i,img in enumerate(imgs):
+			imgs[i]=pipe.upscale(img,x,y)
+		pipe.delete_upscaler()
+	
+		for i,s in enumerate(seed):
+			clear_output(True)
+			print(str(process_ind)+str(i)+"_"+str(s))
+			img,meta=pipe.img2img(
+				prompt=prompt,
+				n_prompt=n_prompt,
+				gs=gs,
+				step=step2,
+				img=imgs[i],
+				seed=s,
+				ss=ss,
+				hiresfix=True,
+				prompt2=prompt2
+			)
+			imgs[i]=img
+	
+			meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			plus_meta(meta,img)
+			if url!=[]:
+				drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+				up_drop(meta["input"],drop_path,url)
+			flush()
+			
+		clear_output(True)
+	
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
-		return
-
-	if not(os.path.exists(out_folder+"/1")):
-		os.makedirs(out_folder+"/1")
-
-	pipe.make_upscaler(Interpolation,dev)
-	x=round(x*up/8)*8
-	y=round(y*up/8)*8
-	for i,img in enumerate(imgs):
-		imgs[i]=pipe.upscale(img,x,y)
-	pipe.delete_upscaler()
-
-	for i,s in enumerate(seed):
-		clear_output(True)
-		print(str(process_ind)+str(i)+"_"+str(s))
-		img,meta=pipe.img2img(
-			prompt=prompt,
-			n_prompt=n_prompt,
-			gs=gs,
-			step=step2,
-			img=imgs[i],
-			seed=s,
-			ss=ss,
-			hiresfix=True,
-			prompt2=prompt2
-		)
-		imgs[i]=img
-
-		meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-		plus_meta(meta,img)
-		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			up_drop(meta["input"],drop_path,url)
-		flush()
 		
-	clear_output(True)
-
-	if url!=[] and distributed_state.is_main_process:
-		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-		drop_path=str(ut)+".zip"
-		up_drop("archive_shutil.zip",drop_path,url)
-		os.remove("archive_shutil.zip")
-	
 def mokusdxl(
 	loras=[],
 	lora_weights=[],
