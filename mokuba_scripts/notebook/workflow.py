@@ -142,7 +142,7 @@ def mokuani(
 	clear_output(True)
 
 	if mode==0:
-		if url!=[]:
+		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 			drop_path=str(ut)+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
@@ -184,7 +184,7 @@ def mokuani(
 		
 	clear_output(True)
 
-	if url!=[]:
+	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
 		drop_path=str(ut)+".zip"
 		up_drop("archive_shutil.zip",drop_path,url)
