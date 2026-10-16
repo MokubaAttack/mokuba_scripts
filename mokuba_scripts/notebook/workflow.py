@@ -3,10 +3,6 @@ import os
 import math
 from diffusers.utils import make_image_grid
 from PIL import Image
-from IPython.display import (
-	display,
-	clear_output
-)
 import time
 import shutil
 import re
@@ -23,16 +19,6 @@ from ..common.flush import (
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
 from ..common.dl import dlc
-
-def imgshow(imgs):
-	r=math.ceil(len(imgs)/2)
-	if r*2!=len(imgs):
-		simgs=imgs+[Image.new('RGB', imgs[-1].size, (0, 0, 0))]
-	else:
-		simgs=imgs
-	x,y=imgs[-1].size
-	x=round(2*x/y*400)
-	display(make_image_grid(simgs, rows=r, cols=2).resize((x,400*r)))
 
 def mokuani(
 	loras=[],
@@ -84,6 +70,21 @@ def mokuani(
 			os.makedirs(safe_folder+"ckpt")
 		dlc(ver_id,base_safe,token)
 
+	if len(loras)!=len(lora_weights):
+		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
+	for i,line in enumerate(loras):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"lora/"+line+".safetensors"
+			loras[i]=line
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"lora")):
+				os.makedirs(safe_folder+"lora")
+			dlc(ver_id,line,token)
+
 	pipe=mokuanipipe()
 	distributed_state = PartialState()
 	dev=distributed_state.device
@@ -95,19 +96,7 @@ def mokuani(
 
 	pipe.set_scheduler(sample,sgm)
 
-	if len(loras)!=len(lora_weights):
-		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
 	for line,w in zip(loras,lora_weights):
-		line=str(line)
-		m=re.match(r"[0-9]+$",line)
-		if m!=None:
-			ver_id=line
-			line=safe_folder+"lora/"+line+".safetensors"
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"lora")):
-				os.makedirs(safe_folder+"lora")
-			dlc(ver_id,line,token)
 		if not(line.endswith(".safetensors")):
 			line=line+".safetensors"
 		pipe.load_lycoris(path=line,weight=w)
@@ -118,7 +107,6 @@ def mokuani(
 	imgs=[]
 	with distributed_state.split_between_processes(prompt) as prompt2:
 		for i,s in enumerate(seed):
-			clear_output(True)
 			print(str(process_ind)+str(i)+"_"+str(s))
 			img,meta=pipe.txt2img(
 				prompt=prompt,
@@ -137,30 +125,31 @@ def mokuani(
 			if url!=[]:
 				drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
 				up_drop(meta["input"],drop_path,url)
-			flush()
-			
-		clear_output(True)
+			flush()	
 	
-		if mode==0:
-			if url!=[] and distributed_state.is_main_process:
-				shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-				drop_path=str(ut)+".zip"
-				up_drop("archive_shutil.zip",drop_path,url)
-				os.remove("archive_shutil.zip")
-			return
+	if mode==0:
+		if url!=[] and distributed_state.is_main_process:
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=str(ut)+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
+		distributed_state.wait_for_everyone()
+		reset_func(pipe)
+		del pipe
+		return
 	
 		if not(os.path.exists(out_folder+"/1")):
 			os.makedirs(out_folder+"/1")
 	
-		pipe.make_upscaler(Interpolation,dev)
-		x=round(x*up/8)*8
-		y=round(y*up/8)*8
-		for i,img in enumerate(imgs):
-			imgs[i]=pipe.upscale(img,x,y)
-		pipe.delete_upscaler()
-	
+	pipe.make_upscaler(Interpolation,dev)
+	x=round(x*up/8)*8
+	y=round(y*up/8)*8
+	for i,img in enumerate(imgs):
+		imgs[i]=pipe.upscale(img,x,y)
+	pipe.delete_upscaler()
+
+	with distributed_state.split_between_processes(prompt) as prompt2:
 		for i,s in enumerate(seed):
-			clear_output(True)
 			print(str(process_ind)+str(i)+"_"+str(s))
 			img,meta=pipe.img2img(
 				prompt=prompt,
@@ -181,14 +170,15 @@ def mokuani(
 				drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
 				up_drop(meta["input"],drop_path,url)
 			flush()
-			
-		clear_output(True)
 	
-		if url!=[] and distributed_state.is_main_process:
-			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-			drop_path=str(ut)+".zip"
-			up_drop("archive_shutil.zip",drop_path,url)
-			os.remove("archive_shutil.zip")
+	if url!=[] and distributed_state.is_main_process:
+		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+		drop_path=str(ut)+".zip"
+		up_drop("archive_shutil.zip",drop_path,url)
+		os.remove("archive_shutil.zip")
+	distributed_state.wait_for_everyone()
+	reset_func(pipe)
+	del pipe
 		
 def mokusdxl(
 	loras=[],
