@@ -64,11 +64,12 @@ def mokuani(
 	if m!=None:
 		ver_id=base_safe
 		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-		if token=="":
-			raise RuntimeWarning("civitai token doesn't input.")
-		if not(os.path.exists(safe_folder+"ckpt")):
-			os.makedirs(safe_folder+"ckpt")
-		dlc(ver_id,base_safe,token)
+		if not(os.path.exists(base_safe)):
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"ckpt")):
+				os.makedirs(safe_folder+"ckpt")
+			dlc(ver_id,base_safe,token)
 
 	if len(loras)!=len(lora_weights):
 		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
@@ -79,11 +80,12 @@ def mokuani(
 			ver_id=line
 			line=safe_folder+"lora/"+line+".safetensors"
 			loras[i]=line
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"lora")):
-				os.makedirs(safe_folder+"lora")
-			dlc(ver_id,line,token)
+			if not(os.path.exists(line)):
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"lora")):
+					os.makedirs(safe_folder+"lora")
+				dlc(ver_id,line,token)
 
 	pipe=mokuanipipe()
 	distributed_state = PartialState()
@@ -238,22 +240,24 @@ def mokusdxl(
 	if m!=None:
 		ver_id=base_safe
 		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-		if token=="":
-			raise RuntimeWarning("civitai token doesn't input.")
-		if not(os.path.exists(safe_folder+"ckpt")):
-			os.makedirs(safe_folder+"ckpt")
-		dlc(ver_id,base_safe,token)
+		if not(os.path.exists(base_safe)):
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"ckpt")):
+				os.makedirs(safe_folder+"ckpt")
+			dlc(ver_id,base_safe,token)
 
 	vae_safe=str(vae_safe)
 	m=re.match(r"[0-9]+$",vae_safe)
 	if m!=None:
 		ver_id=vae_safe
 		vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
-		if token=="":
-			raise RuntimeWarning("civitai token doesn't input.")
-		if not(os.path.exists(safe_folder+"vae")):
-			os.makedirs(safe_folder+"vae")
-		dlc(ver_id,vae_safe,token)
+		if not(os.path.exists(vae_safe)):
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"vae")):
+				os.makedirs(safe_folder+"vae")
+			dlc(ver_id,vae_safe,token)
 
 	if len(loras)!=len(lora_weights):
 		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
@@ -264,11 +268,12 @@ def mokusdxl(
 			ver_id=line
 			line=safe_folder+"lora/"+line+".safetensors"
 			loras[i]=line
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"lora")):
-				os.makedirs(safe_folder+"lora")
-			dlc(ver_id,line,token)
+			if not(os.path.exists(line)):
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"lora")):
+					os.makedirs(safe_folder+"lora")
+				dlc(ver_id,line,token)
 
 	for i,line in enumerate(pos_emb):
 		line=str(line)
@@ -277,11 +282,12 @@ def mokusdxl(
 			ver_id=line
 			line=safe_folder+"embed/"+line+".safetensors"
 			pos_emb[i]=line
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"embed")):
-				os.makedirs(safe_folder+"embed")
-			dlc(ver_id,line,token)
+			if not(os.path.exists(line)):
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"embed")):
+					os.makedirs(safe_folder+"embed")
+				dlc(ver_id,line,token)
 
 	for i,line in enumerate(neg_emb):
 		line=str(line)
@@ -290,11 +296,12 @@ def mokusdxl(
 			ver_id=line
 			line=safe_folder+"embed/"+line+".safetensors"
 			neg_emb[i]=line
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"embed")):
-				os.makedirs(safe_folder+"embed")
-			dlc(ver_id,line,token)
+			if not(os.path.exists(line)):
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"embed")):
+					os.makedirs(safe_folder+"embed")
+				dlc(ver_id,line,token)
 
 	pipe=mokusdxlpipe()
 	distributed_state = PartialState()
@@ -335,28 +342,26 @@ def mokusdxl(
 		os.makedirs(out_folder+"/0")
 
 	imgs=[]
-	with distributed_state.split_between_processes(prompt) as prompt2:
-		for i,s in enumerate(seed):
-			print(str(process_ind)+str(i)+"_"+str(s))
-			img,meta=pipe.txt2img(
-				prompt=prompt,
-				n_prompt=n_prompt,
-				gs=gs,
-				step=step,
-				x=x,
-				y=y,
-				seed=s,
-				cs=cs,
-				prompt2=prompt2
-			)
-			imgs.append(img)
-	
-			meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			plus_meta(meta,img)
-			if url!=[]:
-				drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-				up_drop(meta["input"],drop_path,url)
-			flush()
+	for i,s in enumerate(seed):
+		print(str(process_ind)+str(i)+"_"+str(s))
+		img,meta=pipe.txt2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step,
+			x=x,
+			y=y,
+			seed=s,
+			cs=cs
+		)
+		imgs.append(img)
+
+		meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
 
 	if mode==0:
 		distributed_state.wait_for_everyone()
@@ -379,29 +384,27 @@ def mokusdxl(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	with distributed_state.split_between_processes(prompt) as prompt2:
-		for i,s in enumerate(seed):
-			print(str(process_ind)+str(i)+"_"+str(s))
-			img,meta=pipe.img2img(
-				prompt=prompt,
-				n_prompt=n_prompt,
-				gs=gs,
-				step=step2,
-				img=imgs[i],
-				seed=s,
-				ss=ss,
-				cs=cs,
-				hiresfix=True,
-				prompt2=prompt2
-			)
-			imgs[i]=img
-	
-			meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			plus_meta(meta,img)
-			if url!=[]:
-				drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-				up_drop(meta["input"],drop_path,url)
-			flush()
+	for i,s in enumerate(seed):
+		print(str(process_ind)+str(i)+"_"+str(s))
+		img,meta=pipe.img2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step2,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			cs=cs,
+			hiresfix=True
+		)
+		imgs[i]=img
+
+		meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
 
 	if mode==1:
 		distributed_state.wait_for_everyone()
@@ -428,29 +431,27 @@ def mokusdxl(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	with distributed_state.split_between_processes(qprompt) as prompt2:
-		for i,s in enumerate(seed):
-			print(str(process_ind)+str(i)+"_"+str(s))
-			img,meta=pipe.tileup(
-				prompt=qprompt,
-				n_prompt=qn_prompt,
-				gs=gs,
-				step=step3,
-				img=imgs[i],
-				seed=s,
-				ss=ss,
-				ccs=ccs,
-				cs=cs,
-				prompt2=prompt2
-			)
-			imgs[i]=img
+	for i,s in enumerate(seed):
+		print(str(process_ind)+str(i)+"_"+str(s))
+		img,meta=pipe.tileup(
+			prompt=qprompt,
+			n_prompt=qn_prompt,
+			gs=gs,
+			step=step3,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			ccs=ccs,
+			cs=cs
+		)
+		imgs[i]=img
 	
-			meta["input"]=out_folder+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			plus_meta(meta,img)
-			if url!=[]:
-				drop_path=str(ut)+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-				up_drop(meta["input"],drop_path,url)
-			flush()
+		meta["input"]=out_folder+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=str(ut)+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
 
 	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
@@ -516,22 +517,24 @@ def mokusd(
 	if m!=None:
 		ver_id=base_safe
 		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-		if token=="":
-			raise RuntimeWarning("civitai token doesn't input.")
-		if not(os.path.exists(safe_folder+"ckpt")):
-			os.makedirs(safe_folder+"ckpt")
-		dlc(ver_id,base_safe,token)
+		if not(os.path.exists(base_safe)):
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"ckpt")):
+				os.makedirs(safe_folder+"ckpt")
+			dlc(ver_id,base_safe,token)
 
 	vae_safe=str(vae_safe)
 	m=re.match(r"[0-9]+$",vae_safe)
 	if m!=None:
 		ver_id=vae_safe
 		vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
-		if token=="":
-			raise RuntimeWarning("civitai token doesn't input.")
-		if not(os.path.exists(safe_folder+"vae")):
-			os.makedirs(safe_folder+"vae")
-		dlc(ver_id,vae_safe,token)
+		if not(os.path.exists(vae_safe)):
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"vae")):
+				os.makedirs(safe_folder+"vae")
+			dlc(ver_id,vae_safe,token)
 	
 	if len(loras)!=len(lora_weights):
 		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
@@ -542,11 +545,12 @@ def mokusd(
 			ver_id=line
 			line=safe_folder+"lora/"+line+".safetensors"
 			loras[i]=line
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"lora")):
-				os.makedirs(safe_folder+"lora")
-			dlc(ver_id,line,token)
+			if not(os.path.exists(line)):
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"lora")):
+					os.makedirs(safe_folder+"lora")
+				dlc(ver_id,line,token)
 
 	for i,line in enumerate(pos_emb):
 		line=str(line)
@@ -555,11 +559,12 @@ def mokusd(
 			ver_id=line
 			line=safe_folder+"embed/"+line+".safetensors"
 			pos_emb[i]=line
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"embed")):
-				os.makedirs(safe_folder+"embed")
-			dlc(ver_id,line,token)
+			if not(os.path.exists(line)):
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"embed")):
+					os.makedirs(safe_folder+"embed")
+				dlc(ver_id,line,token)
 
 	for i,line in enumerate(neg_emb):
 		line=str(line)
@@ -568,11 +573,12 @@ def mokusd(
 			ver_id=line
 			line=safe_folder+"embed/"+line+".safetensors"
 			neg_emb[i]=line
-			if token=="":
-				raise RuntimeWarning("civitai token doesn't input.")
-			if not(os.path.exists(safe_folder+"embed")):
-				os.makedirs(safe_folder+"embed")
-			dlc(ver_id,line,token)
+			if not(os.path.exists(line)):
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"embed")):
+					os.makedirs(safe_folder+"embed")
+				dlc(ver_id,line,token)
 
 	pipe=mokusdpipe()
 	distributed_state = PartialState()
@@ -613,28 +619,26 @@ def mokusd(
 		os.makedirs(out_folder+"/0")
 
 	imgs=[]
-	with distributed_state.split_between_processes(prompt) as prompt2:
-		for i,s in enumerate(seed):
-			print(str(process_ind)+str(i)+"_"+str(s))
-			img,meta=pipe.txt2img(
-				prompt=prompt,
-				n_prompt=n_prompt,
-				gs=gs,
-				step=step,
-				x=x,
-				y=y,
-				seed=s,
-				cs=cs,
-				ptompt2=prompt2
-			)
-			imgs.append(img)
-	
-			meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			plus_meta(meta,img)
-			if url!=[]:
-				drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-				up_drop(meta["input"],drop_path,url)
-			flush()
+	for i,s in enumerate(seed):
+		print(str(process_ind)+str(i)+"_"+str(s))
+		img,meta=pipe.txt2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step,
+			x=x,
+			y=y,
+			seed=s,
+			cs=cs
+		)
+		imgs.append(img)
+
+		meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
 
 	if mode==0:
 		distributed_state.wait_for_everyone()
@@ -657,29 +661,27 @@ def mokusd(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	with distributed_state.split_between_processes(prompt) as prompt2:
-		for i,s in enumerate(seed):
-			print(str(process_ind)+str(i)+"_"+str(s))
-			img,meta=pipe.img2img(
-				prompt=prompt,
-				n_prompt=n_prompt,
-				gs=gs,
-				step=step2,
-				img=imgs[i],
-				seed=s,
-				ss=ss,
-				cs=cs,
-				hiresfix=True,
-				ptompt2=prompt2
-			)
-			imgs[i]=img
-	
-			meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			plus_meta(meta,img)
-			if url!=[]:
-				drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-				up_drop(meta["input"],drop_path,url)
-			flush()
+	for i,s in enumerate(seed):
+		print(str(process_ind)+str(i)+"_"+str(s))
+		img,meta=pipe.img2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step2,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			cs=cs,
+			hiresfix=True
+		)
+		imgs[i]=img
+
+		meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
 
 	if mode==1:
 		distributed_state.wait_for_everyone()
@@ -706,29 +708,27 @@ def mokusd(
 		imgs[i]=pipe.upscale(img,x,y)
 	pipe.delete_upscaler()
 
-	with distributed_state.split_between_processes(qprompt) as prompt2:
-		for i,s in enumerate(seed):
-			print(str(process_ind)+str(i)+"_"+str(s))
-			img,meta=pipe.tileup(
-				prompt=qprompt,
-				n_prompt=qn_prompt,
-				gs=gs,
-				step=step3,
-				img=imgs[i],
-				seed=s,
-				ss=ss,
-				ccs=ccs,
-				cs=cs,
-				ptompt2=prompt2
-			)
-			imgs.append(img)
-	
-			meta["input"]=out_folder+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-			plus_meta(meta,img)
-			if url!=[]:
-				drop_path=str(ut)+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
-				up_drop(meta["input"],drop_path,url)
-			flush()
+	for i,s in enumerate(seed):
+		print(str(process_ind)+str(i)+"_"+str(s))
+		img,meta=pipe.tileup(
+			prompt=qprompt,
+			n_prompt=qn_prompt,
+			gs=gs,
+			step=step3,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			ccs=ccs,
+			cs=cs
+		)
+		imgs.append(img)
+
+		meta["input"]=out_folder+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=str(ut)+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
 
 	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
