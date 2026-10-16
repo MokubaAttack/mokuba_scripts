@@ -162,8 +162,7 @@ def mokuani(
 			img=imgs[i],
 			seed=s,
 			ss=ss,
-			hiresfix=True,
-			prompt2=prompt2
+			hiresfix=True
 		)
 		imgs[i]=img
 
