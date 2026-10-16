@@ -90,9 +90,9 @@ def mokuani(
 
 		pipe=mokuanipipe()
 		if base_safe.endswith(".safetensors"):
-			pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev)
+			pipe.from_safe(path=base_safe,torch_dtype=dtype)
 		else:
-			pipe.from_folder(path=base_safe,torch_dtype=dtype,device=dev)
+			pipe.from_folder(path=base_safe,torch_dtype=dtype)
 
 		pipe.set_scheduler(sample,sgm)
 
