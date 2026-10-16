@@ -120,7 +120,7 @@ def mokuani(
 			step=step,
 			x=x,
 			y=y,
-			seed=s,
+			seed=s
 		)
 		imgs.append(img)
 
