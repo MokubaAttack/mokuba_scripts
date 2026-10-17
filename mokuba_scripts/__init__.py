@@ -10,5 +10,7 @@ from .common.discord import (
 	down_drop
 )
 from .notebook.run import (
-	mokuani2
+	mokuani2,
+	mokusd2,
+	mokusdxl2
 )
