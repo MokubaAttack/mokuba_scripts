@@ -55,9 +55,6 @@ def mokuani2(
 	f=open("params.json","w")
     json.dump(params,f,indent=2)
     f.close()
-
-	if os.path.exists(params["out_folder"]):
-        shutil.rmtree(params["out_folder"])
 	
 	path=__file__.replace("\\","/")
 	path=path.replace("notebook/run.py","run/anima_run.py")
