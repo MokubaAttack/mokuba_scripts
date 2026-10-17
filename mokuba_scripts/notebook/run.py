@@ -33,7 +33,7 @@ def mokuani2(
 	"n_prompt":n_prompt,
 	"pic_number":pic_number,
 	"gs":gs,
-	"step":setp,
+	"step":step,
 	"sample":sample,
 	"sgm":sgm,
 	"seed":seed,
