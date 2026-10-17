@@ -58,13 +58,14 @@ def mokuani(
 	else:
 		dtype=torch.float32
 
+	distributed_state = PartialState()
 	safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
 	base_safe=str(base_safe)
 	m=re.match(r"[0-9]+$",base_safe)
 	if m!=None:
 		ver_id=base_safe
 		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-		if not(os.path.exists(base_safe)):
+		if not(os.path.exists(base_safe)) and distributed_state.is_main_process:
 			if token=="":
 				raise RuntimeWarning("civitai token doesn't input.")
 			if not(os.path.exists(safe_folder+"ckpt")):
@@ -80,21 +81,21 @@ def mokuani(
 			ver_id=line
 			line=safe_folder+"lora/"+line+".safetensors"
 			loras[i]=line
-			if not(os.path.exists(line)):
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
 				if token=="":
 					raise RuntimeWarning("civitai token doesn't input.")
 				if not(os.path.exists(safe_folder+"lora")):
 					os.makedirs(safe_folder+"lora")
 				dlc(ver_id,line,token)
 
-	pipe=mokuanipipe()
-	distributed_state = PartialState()
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
 	distributed_state.wait_for_everyone()
 	f=open("time.txt","r")
 	ut=f.read()
 	f.close()
+
+	pipe=mokuanipipe()
 	if base_safe.endswith(".safetensors"):
 		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev)
 	else:
@@ -233,13 +234,14 @@ def mokusdxl(
 	else:
 		dtype=torch.float32
 
+	distributed_state = PartialState()
 	safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
 	base_safe=str(base_safe)
 	m=re.match(r"[0-9]+$",base_safe)
 	if m!=None:
 		ver_id=base_safe
 		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-		if not(os.path.exists(base_safe)):
+		if not(os.path.exists(base_safe)) and distributed_state.is_main_process:
 			if token=="":
 				raise RuntimeWarning("civitai token doesn't input.")
 			if not(os.path.exists(safe_folder+"ckpt")):
@@ -251,7 +253,7 @@ def mokusdxl(
 	if m!=None:
 		ver_id=vae_safe
 		vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
-		if not(os.path.exists(vae_safe)):
+		if not(os.path.exists(vae_safe)) and distributed_state.is_main_process:
 			if token=="":
 				raise RuntimeWarning("civitai token doesn't input.")
 			if not(os.path.exists(safe_folder+"vae")):
@@ -267,7 +269,7 @@ def mokusdxl(
 			ver_id=line
 			line=safe_folder+"lora/"+line+".safetensors"
 			loras[i]=line
-			if not(os.path.exists(line)):
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
 				if token=="":
 					raise RuntimeWarning("civitai token doesn't input.")
 				if not(os.path.exists(safe_folder+"lora")):
@@ -281,7 +283,7 @@ def mokusdxl(
 			ver_id=line
 			line=safe_folder+"embed/"+line+".safetensors"
 			pos_emb[i]=line
-			if not(os.path.exists(line)):
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
 				if token=="":
 					raise RuntimeWarning("civitai token doesn't input.")
 				if not(os.path.exists(safe_folder+"embed")):
@@ -295,21 +297,21 @@ def mokusdxl(
 			ver_id=line
 			line=safe_folder+"embed/"+line+".safetensors"
 			neg_emb[i]=line
-			if not(os.path.exists(line)):
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
 				if token=="":
 					raise RuntimeWarning("civitai token doesn't input.")
 				if not(os.path.exists(safe_folder+"embed")):
 					os.makedirs(safe_folder+"embed")
 				dlc(ver_id,line,token)
 
-	pipe=mokusdxlpipe()
-	distributed_state = PartialState()
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
 	distributed_state.wait_for_everyone()
 	f=open("time.txt","r")
 	ut=f.read()
 	f.close()
+
+	pipe=mokusdxlpipe()
 	if base_safe.endswith(".safetensors"):
 		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
 	else:
@@ -510,13 +512,14 @@ def mokusd(
 	else:
 		dtype=torch.float32
 
+	distributed_state = PartialState()
 	safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
 	base_safe=str(base_safe)
 	m=re.match(r"[0-9]+$",base_safe)
 	if m!=None:
 		ver_id=base_safe
 		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-		if not(os.path.exists(base_safe)):
+		if not(os.path.exists(base_safe)) and distributed_state.is_main_process:
 			if token=="":
 				raise RuntimeWarning("civitai token doesn't input.")
 			if not(os.path.exists(safe_folder+"ckpt")):
@@ -528,7 +531,7 @@ def mokusd(
 	if m!=None:
 		ver_id=vae_safe
 		vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
-		if not(os.path.exists(vae_safe)):
+		if not(os.path.exists(vae_safe)) and distributed_state.is_main_process:
 			if token=="":
 				raise RuntimeWarning("civitai token doesn't input.")
 			if not(os.path.exists(safe_folder+"vae")):
@@ -544,7 +547,7 @@ def mokusd(
 			ver_id=line
 			line=safe_folder+"lora/"+line+".safetensors"
 			loras[i]=line
-			if not(os.path.exists(line)):
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
 				if token=="":
 					raise RuntimeWarning("civitai token doesn't input.")
 				if not(os.path.exists(safe_folder+"lora")):
@@ -558,7 +561,7 @@ def mokusd(
 			ver_id=line
 			line=safe_folder+"embed/"+line+".safetensors"
 			pos_emb[i]=line
-			if not(os.path.exists(line)):
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
 				if token=="":
 					raise RuntimeWarning("civitai token doesn't input.")
 				if not(os.path.exists(safe_folder+"embed")):
@@ -572,21 +575,21 @@ def mokusd(
 			ver_id=line
 			line=safe_folder+"embed/"+line+".safetensors"
 			neg_emb[i]=line
-			if not(os.path.exists(line)):
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
 				if token=="":
 					raise RuntimeWarning("civitai token doesn't input.")
 				if not(os.path.exists(safe_folder+"embed")):
 					os.makedirs(safe_folder+"embed")
 				dlc(ver_id,line,token)
 
-	pipe=mokusdpipe()
-	distributed_state = PartialState()
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
 	distributed_state.wait_for_everyone()
 	f=open("time.txt","r")
 	ut=f.read()
 	f.close()
+
+	pipe=mokusdpipe()
 	if base_safe.endswith(".safetensors"):
 		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev,vae_path=vae_safe)
 	else:
