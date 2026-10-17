@@ -28,7 +28,7 @@ def mokuani2(
 ):
 	params={
 	"loras":loras,
-	"lora_weights":loraweights,
+	"lora_weights":lora_weights,
 	"prompt":prompt,
 	"n_prompt":n_prompt,
 	"pic_number":pic_number,
