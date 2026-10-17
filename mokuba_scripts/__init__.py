@@ -9,8 +9,6 @@ from .common.discord import (
 	up_drop,
 	down_drop
 )
-from .notebook.workflow import (
-	mokusdxl,
-	mokuani,
-	mokusd
+from .notebook.run import (
+	mokuani2
 )
