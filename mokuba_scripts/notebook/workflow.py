@@ -90,6 +90,7 @@ def mokuani(
 
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
+	count=distributed_state.num_processes
 	distributed_state.wait_for_everyone()
 	f=open("time.txt","r")
 	ut=f.read()
@@ -113,7 +114,7 @@ def mokuani(
 
 	imgs=[]
 	for i,s in enumerate(seed):
-		print(str(2*i+process_ind)+"_"+str(s))
+		print(str(count*i+process_ind)+"_"+str(s))
 		img,meta=pipe.txt2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -125,10 +126,10 @@ def mokuani(
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()	
 	
@@ -156,7 +157,7 @@ def mokuani(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(2*i+process_ind)+"_"+str(s))
+		print(str(count*i+process_ind)+"_"+str(s))
 		img,meta=pipe.img2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -169,10 +170,10 @@ def mokuani(
 		)
 		imgs[i]=img
 
-		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
