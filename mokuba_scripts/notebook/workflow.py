@@ -113,7 +113,7 @@ def mokuani(
 
 	imgs=[]
 	for i,s in enumerate(seed):
-		print(str(process_ind)+str(i)+"_"+str(s))
+		print(str(2*i+process_ind)+"_"+str(s))
 		img,meta=pipe.txt2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -125,10 +125,10 @@ def mokuani(
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()	
 	
@@ -141,6 +141,8 @@ def mokuani(
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
 			os.remove("time.txt")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
 		return
 	
 	if not(os.path.exists(out_folder+"/1")):
@@ -154,7 +156,7 @@ def mokuani(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(process_ind)+str(i)+"_"+str(s))
+		print(str(2*i+process_ind)+"_"+str(s))
 		img,meta=pipe.img2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -167,10 +169,10 @@ def mokuani(
 		)
 		imgs[i]=img
 
-		meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -346,7 +348,7 @@ def mokusdxl(
 
 	imgs=[]
 	for i,s in enumerate(seed):
-		print(str(process_ind)+str(i)+"_"+str(s))
+		print(str(2*i+process_ind)+"_"+str(s))
 		img,meta=pipe.txt2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -359,10 +361,10 @@ def mokusdxl(
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -375,6 +377,8 @@ def mokusdxl(
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
 			os.remove("time.txt")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
 		return
 
 	if not(os.path.exists(out_folder+"/1")):
@@ -388,7 +392,7 @@ def mokusdxl(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(process_ind)+str(i)+"_"+str(s))
+		print(str(2*i+process_ind)+"_"+str(s))
 		img,meta=pipe.img2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -402,10 +406,10 @@ def mokusdxl(
 		)
 		imgs[i]=img
 
-		meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -418,6 +422,8 @@ def mokusdxl(
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
 			os.remove("time.txt")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
 		return
 
 	if not(os.path.exists(out_folder+"/2")):
@@ -435,7 +441,7 @@ def mokusdxl(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(process_ind)+str(i)+"_"+str(s))
+		print(str(2*i+process_ind)+"_"+str(s))
 		img,meta=pipe.tileup(
 			prompt=qprompt,
 			n_prompt=qn_prompt,
@@ -449,10 +455,10 @@ def mokusdxl(
 		)
 		imgs[i]=img
 	
-		meta["input"]=out_folder+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -626,7 +632,7 @@ def mokusd(
 
 	imgs=[]
 	for i,s in enumerate(seed):
-		print(str(process_ind)+str(i)+"_"+str(s))
+		print(str(2*i+process_ind)+"_"+str(s))
 		img,meta=pipe.txt2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -639,10 +645,10 @@ def mokusd(
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -655,6 +661,8 @@ def mokusd(
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
 			os.remove("time.txt")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
 		return
 
 	if not(os.path.exists(out_folder+"/1")):
@@ -668,7 +676,7 @@ def mokusd(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(process_ind)+str(i)+"_"+str(s))
+		print(str(2*i+process_ind)+"_"+str(s))
 		img,meta=pipe.img2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -682,10 +690,10 @@ def mokusd(
 		)
 		imgs[i]=img
 
-		meta["input"]=out_folder+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -698,6 +706,8 @@ def mokusd(
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
 			os.remove("time.txt")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
 		return
 
 	if not(os.path.exists(out_folder+"/2")):
@@ -715,7 +725,7 @@ def mokusd(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(process_ind)+str(i)+"_"+str(s))
+		print(str(2*i+process_ind)+"_"+str(s))
 		img,meta=pipe.tileup(
 			prompt=qprompt,
 			n_prompt=qn_prompt,
@@ -729,10 +739,10 @@ def mokusd(
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/2/"+str(process_ind)+str(i)+"_"+str(s)+".jpg"
+			drop_path=str(ut)+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
