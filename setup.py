@@ -16,6 +16,7 @@ def extras_need(w):
 
 	if w=="cuda":
 		need=[
+			"ipython",
 			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			"torchao==0.13.0",
@@ -24,6 +25,7 @@ def extras_need(w):
 		]
 	elif w=="xpu":
 		need=[
+			"ipython",
 			"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			"torchao==0.13.0",
