@@ -182,6 +182,8 @@ def mokuani(
 		os.remove("archive_shutil.zip")
 	if distributed_state.is_main_process:
 		os.remove("time.txt")
+	distributed_state.wait_for_everyone()
+	distributed_state.destroy_process_group()
 		
 def mokusdxl(
 	loras=[],
@@ -462,6 +464,8 @@ def mokusdxl(
 		os.remove("archive_shutil.zip")
 	if distributed_state.is_main_process:
 		os.remove("time.txt")
+	distributed_state.wait_for_everyone()
+	distributed_state.destroy_process_group()
 	
 def mokusd(
 	loras=[],
@@ -740,3 +744,5 @@ def mokusd(
 		os.remove("archive_shutil.zip")
 	if distributed_state.is_main_process:
 		os.remove("time.txt")
+	distributed_state.wait_for_everyone()
+	distributed_state.destroy_process_group()
