@@ -1,5 +1,7 @@
-from ..notebook.workflow import mokuani
+from mokuba_scripts.notebook.workflow import mokuani
 import json
+import os
+os.environ["HF_HOME"]=os.getcwd()+"/pipecache"
 
 if __name__ == "__main__":
     f=open("params.json","r")
