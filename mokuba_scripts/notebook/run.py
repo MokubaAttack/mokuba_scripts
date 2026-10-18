@@ -256,6 +256,7 @@ def mokuani1(
 	ss=0.5,
 	token="",
 ):
+	"""
 	mokuani(
 		loras=loras,
 		lora_weights=lora_weights,
@@ -282,3 +283,40 @@ def mokuani1(
 	)
 	clear_output(True)
 	print("fin")
+	"""
+	params={
+	"loras":loras,
+	"lora_weights":lora_weights,
+	"prompt":prompt,
+	"n_prompt":n_prompt,
+	"pic_number":pic_number,
+	"gs":gs,
+	"step":step,
+	"sample":sample,
+	"sgm":sgm,
+	"seed":seed,
+	"out_folder":out_folder,
+	"base_safe":base_safe,
+	"url":url,
+	"dtype":dtype,
+	"x":x,
+	"y":y,
+	"mode":mode,
+	"up":up,
+	"Interpolation":Interpolation,
+	"step2":step2,
+	"ss":ss,
+	"token":token,
+	}
+	f=open("params.json","w")
+	json.dump(params,f,indent=2)
+	f.close()
+	
+	path=__file__.replace("\\","/")
+	path=path.replace("notebook/run.py","run/anima_run.py")
+	output=subprocess.call("accelerate launch "+path, shell=True)
+	
+	if output==0:
+		clear_output(True)
+		print("fin")
+
