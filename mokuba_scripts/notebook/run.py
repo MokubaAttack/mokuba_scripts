@@ -226,7 +226,7 @@ def mokusd2(
 		clear_output(True)
 		print("fin")
 
-from .notebook.workflow import (
+from .workflow import (
 	mokuani,
 	mokusd,
 	mokusdxl
