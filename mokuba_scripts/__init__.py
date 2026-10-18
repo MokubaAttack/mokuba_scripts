@@ -12,5 +12,8 @@ from .common.discord import (
 from .notebook.run import (
 	mokuani2,
 	mokusd2,
-	mokusdxl2
+	mokusdxl2,
+	mokuani1,
+	mokusd1,
+	mokusdxl1
 )
