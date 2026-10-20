@@ -56,9 +56,9 @@ def mokuani2(
 	
 	path=__file__.replace("\\","/")
 	path=path.replace("notebook/run.py","run/anima_run.py")
-	output=subprocess.call("accelerate launch --num_processes=2 "+path, shell=True)
+	output=subprocess.run("accelerate launch --num_processes=2 "+path, shell=True,check=False)
 	
-	if output==0:
+	if output.returncode==0:
 		clear_output(True)
 		print("fin")
 
@@ -138,9 +138,9 @@ def mokusdxl2(
 	
 	path=__file__.replace("\\","/")
 	path=path.replace("notebook/run.py","run/sdxl_run.py")
-	output=subprocess.call("accelerate launch --num_processes=2 "+path, shell=True)
+	output=subprocess.run("accelerate launch --num_processes=2 "+path, shell=True,check=False)
 	
-	if output==0:
+	if output.returncode==0:
 		clear_output(True)
 		print("fin")
 
@@ -220,9 +220,9 @@ def mokusd2(
 	
 	path=__file__.replace("\\","/")
 	path=path.replace("notebook/run.py","run/sd_run.py")
-	output=subprocess.call("accelerate launch --num_processes=2 "+path, shell=True)
+	output=subprocess.run("accelerate launch --num_processes=2 "+path, shell=True,check=False)
 	
-	if output==0:
+	if output.returncode==0:
 		clear_output(True)
 		print("fin")
 
@@ -280,9 +280,9 @@ def mokuani1(
 	
 	path=__file__.replace("\\","/")
 	path=path.replace("notebook/run.py","run/anima_run.py")
-	output=subprocess.call("accelerate launch "+path, shell=True)
+	output=subprocess.run("accelerate launch "+path, shell=True,check=False)
 	
-	if output==0:
+	if output.returncode==0:
 		clear_output(True)
 		print("fin")
 
@@ -362,9 +362,9 @@ def mokusdxl1(
 	
 	path=__file__.replace("\\","/")
 	path=path.replace("notebook/run.py","run/sdxl_run.py")
-	output=subprocess.call("accelerate launch "+path, shell=True)
+	output=subprocess.run("accelerate launch "+path, shell=True,check=False)
 	
-	if output==0:
+	if output.returncode==0:
 		clear_output(True)
 		print("fin")
 
@@ -444,8 +444,8 @@ def mokusd1(
 	
 	path=__file__.replace("\\","/")
 	path=path.replace("notebook/run.py","run/sd_run.py")
-	output=subprocess.call("accelerate launch "+path, shell=True)
+	output=subprocess.run("accelerate launch "+path, shell=True,check=False)
 	
-	if output==0:
+	if output.returncode==0:
 		clear_output(True)
 		print("fin")
