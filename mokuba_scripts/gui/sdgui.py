@@ -107,22 +107,24 @@ class sdgui:
 			if m!=None:
 				ver_id=base_safe
 				base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-				if token=="":
-					raise RuntimeWarning("civitai token doesn't input.")
-				if not(os.path.exists(safe_folder+"ckpt")):
-					os.makedirs(safe_folder+"ckpt")
-				dlc(ver_id,base_safe,token)
+				if not(os.path.exists(base_safe)):
+					if token=="":
+						raise RuntimeWarning("civitai token doesn't input.")
+					if not(os.path.exists(safe_folder+"ckpt")):
+						os.makedirs(safe_folder+"ckpt")
+					dlc(ver_id,base_safe,token)
 
 			vae_safe=str(vae_safe)
 			m=re.match(r"[0-9]+$",vae_safe)
 			if m!=None:
 				ver_id=vae_safe
 				vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
-				if token=="":
-					raise RuntimeWarning("civitai token doesn't input.")
-				if not(os.path.exists(safe_folder+"vae")):
-					os.makedirs(safe_folder+"vae")
-				dlc(ver_id,vae_safe,token)
+				if not(os.path.exists(vae_safe)):
+					if token=="":
+						raise RuntimeWarning("civitai token doesn't input.")
+					if not(os.path.exists(safe_folder+"vae")):
+						os.makedirs(safe_folder+"vae")
+					dlc(ver_id,vae_safe,token)
 
 			pipe=mokusdpipe()
 			if base_safe.endswith(".safetensors"):
@@ -140,11 +142,12 @@ class sdgui:
 				if m!=None:
 					ver_id=line
 					line=safe_folder+"lora/"+line+".safetensors"
-					if token=="":
-						raise RuntimeWarning("civitai token doesn't input.")
-					if not(os.path.exists(safe_folder+"lora")):
-						os.makedirs(safe_folder+"lora")
-					dlc(ver_id,line,token)
+					if not(os.path.exists(line)):
+						if token=="":
+							raise RuntimeWarning("civitai token doesn't input.")
+						if not(os.path.exists(safe_folder+"lora")):
+							os.makedirs(safe_folder+"lora")
+						dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
 				pipe.load_lycoris(path=line,weight=w)
@@ -155,11 +158,12 @@ class sdgui:
 				if m!=None:
 					ver_id=line
 					line=safe_folder+"embed/"+line+".safetensors"
-					if token=="":
-						raise RuntimeWarning("civitai token doesn't input.")
-					if not(os.path.exists(safe_folder+"embed")):
-						os.makedirs(safe_folder+"embed")
-					dlc(ver_id,line,token)
+					if not(os.path.exists(line)):
+						if token=="":
+							raise RuntimeWarning("civitai token doesn't input.")
+						if not(os.path.exists(safe_folder+"embed")):
+							os.makedirs(safe_folder+"embed")
+						dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
 				pipe.load_pos_embed(line)
@@ -170,11 +174,12 @@ class sdgui:
 				if m!=None:
 					ver_id=line
 					line=safe_folder+"embed/"+line+".safetensors"
-					if token=="":
-						raise RuntimeWarning("civitai token doesn't input.")
-					if not(os.path.exists(safe_folder+"embed")):
-						os.makedirs(safe_folder+"embed")
-					dlc(ver_id,line,token)
+					if not(os.path.exists(line)):
+						if token=="":
+							raise RuntimeWarning("civitai token doesn't input.")
+						if not(os.path.exists(safe_folder+"embed")):
+							os.makedirs(safe_folder+"embed")
+						dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
 				pipe.load_neg_embed(line)
