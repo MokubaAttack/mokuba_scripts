@@ -7,7 +7,6 @@ if __name__ == "__main__":
     f=open("params.json","r")
     sd=json.load(f)
     f.close()
-	os.remove("params.json")
     
 	pipe=mokusd(
 		base_safe=sd["base_safe"],
@@ -44,3 +43,6 @@ if __name__ == "__main__":
 		qprompt=sd["qprompt"],
 		qn_prompt=sd["qn_prompt"],
     )
+
+	if os.path.exists("params.json"):
+        os.remove("params.json")
