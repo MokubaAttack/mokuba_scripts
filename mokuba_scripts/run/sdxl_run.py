@@ -7,6 +7,7 @@ if __name__ == "__main__":
     f=open("params.json","r")
     sd=json.load(f)
     f.close()
+	os.remove("params.json")
     
     pipe=mokusdxl(
 		base_safe=sd["base_safe"],
