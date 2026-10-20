@@ -88,11 +88,12 @@ class animagui:
 			if m!=None:
 				ver_id=base_safe
 				base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
-				if token=="":
-					raise RuntimeWarning("civitai token doesn't input.")
-				if not(os.path.exists(safe_folder+"ckpt")):
-					os.makedirs(safe_folder+"ckpt")
-				dlc(ver_id,base_safe,token)
+				if not(os.path.exists(base_safe)):
+					if token=="":
+						raise RuntimeWarning("civitai token doesn't input.")
+					if not(os.path.exists(safe_folder+"ckpt")):
+						os.makedirs(safe_folder+"ckpt")
+					dlc(ver_id,base_safe,token)
 	
 			pipe=mokuanipipe()
 			if base_safe.endswith(".safetensors"):
@@ -110,11 +111,12 @@ class animagui:
 				if m!=None:
 					ver_id=line
 					line=safe_folder+"lora/"+line+".safetensors"
-					if token=="":
-						raise RuntimeWarning("civitai token doesn't input.")
-					if not(os.path.exists(safe_folder+"lora")):
-						os.makedirs(safe_folder+"lora")
-					dlc(ver_id,line,token)
+					if not(os.path.exists(line)):
+						if token=="":
+							raise RuntimeWarning("civitai token doesn't input.")
+						if not(os.path.exists(safe_folder+"lora")):
+							os.makedirs(safe_folder+"lora")
+						dlc(ver_id,line,token)
 				if not(line.endswith(".safetensors")):
 					line=line+".safetensors"
 				pipe.load_lycoris(path=line,weight=w)
