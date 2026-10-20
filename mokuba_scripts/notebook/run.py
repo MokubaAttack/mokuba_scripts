@@ -55,8 +55,9 @@ def mokuani2(
 	f.close()
 	
 	path=__file__.replace("\\","/")
+	path2=path.replace("notebook/run.py","yaml/double.yaml")
 	path=path.replace("notebook/run.py","run/anima_run.py")
-	output=subprocess.run("accelerate launch --num_processes=2 "+path, shell=True,check=False)
+	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
 	
 	if output.returncode==0:
 		clear_output(True)
@@ -137,8 +138,9 @@ def mokusdxl2(
 	f.close()
 	
 	path=__file__.replace("\\","/")
+	path2=path.replace("notebook/run.py","yaml/double.yaml")
 	path=path.replace("notebook/run.py","run/sdxl_run.py")
-	output=subprocess.run("accelerate launch --num_processes=2 "+path, shell=True,check=False)
+	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
 	
 	if output.returncode==0:
 		clear_output(True)
@@ -219,8 +221,9 @@ def mokusd2(
 	f.close()
 	
 	path=__file__.replace("\\","/")
+	path2=path.replace("notebook/run.py","yaml/double.yaml")
 	path=path.replace("notebook/run.py","run/sd_run.py")
-	output=subprocess.run("accelerate launch --num_processes=2 "+path, shell=True,check=False)
+	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
 	
 	if output.returncode==0:
 		clear_output(True)
@@ -279,8 +282,9 @@ def mokuani1(
 	f.close()
 	
 	path=__file__.replace("\\","/")
+	path2=path.replace("notebook/run.py","yaml/single.yaml")
 	path=path.replace("notebook/run.py","run/anima_run.py")
-	output=subprocess.run("accelerate launch "+path, shell=True,check=False)
+	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
 	
 	if output.returncode==0:
 		clear_output(True)
@@ -361,8 +365,9 @@ def mokusdxl1(
 	f.close()
 	
 	path=__file__.replace("\\","/")
+	path2=path.replace("notebook/run.py","yaml/single.yaml")
 	path=path.replace("notebook/run.py","run/sdxl_run.py")
-	output=subprocess.run("accelerate launch "+path, shell=True,check=False)
+	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
 	
 	if output.returncode==0:
 		clear_output(True)
@@ -443,8 +448,9 @@ def mokusd1(
 	f.close()
 	
 	path=__file__.replace("\\","/")
+	path2=path.replace("notebook/run.py","yaml/single.yaml")
 	path=path.replace("notebook/run.py","run/sd_run.py")
-	output=subprocess.run("accelerate launch "+path, shell=True,check=False)
+	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
 	
 	if output.returncode==0:
 		clear_output(True)
