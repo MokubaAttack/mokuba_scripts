@@ -1,3 +1,2 @@
-include mokuba_scripts/yaml/*.yaml
 include LICENSE.txt
 include README.md
