@@ -5,6 +5,9 @@ import os
 
 from ..common.yaml import mk_yaml
 
+path=__file__.replace("\\","/")
+path3=path.replace("Lib/site-packages/mokuba_scripts/notebook/run.py","Scripts/accelerate")
+
 def mokuani2(
 	loras=[],
 	lora_weights=[],
@@ -58,10 +61,9 @@ def mokuani2(
 	json.dump(params,f,indent=2)
 	f.close()
 	
-	path=__file__.replace("\\","/")
-	path=path.replace("notebook/run.py","run/anima_run.py")
+	path1=path.replace("notebook/run.py","run/anima_run.py")
 	path2=mk_yaml(gpu_num)
-	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
+	output=subprocess.run(path3+" launch --config_file "+path2+" "+path1, shell=True,check=False)
 
 	if os.path.exists("params.json"):
 		os.remove("params.json")
@@ -147,10 +149,9 @@ def mokusdxl2(
 	json.dump(params,f,indent=2)
 	f.close()
 	
-	path=__file__.replace("\\","/")
 	path2=mk_yaml(gpu_num)
-	path=path.replace("notebook/run.py","run/sdxl_run.py")
-	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
+	path1=path.replace("notebook/run.py","run/sdxl_run.py")
+	output=subprocess.run(path3+" launch --config_file "+path2+" "+path1, shell=True,check=False)
 
 	if os.path.exists("params.json"):
 		os.remove("params.json")
@@ -236,10 +237,9 @@ def mokusd2(
 	json.dump(params,f,indent=2)
 	f.close()
 	
-	path=__file__.replace("\\","/")
 	path2=mk_yaml(gpu_num)
-	path=path.replace("notebook/run.py","run/sd_run.py")
-	output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
+	path1=path.replace("notebook/run.py","run/sd_run.py")
+	output=subprocess.run(path3+" launch --config_file "+path2+" "+path1, shell=True,check=False)
 
 	if os.path.exists("params.json"):
 		os.remove("params.json")
