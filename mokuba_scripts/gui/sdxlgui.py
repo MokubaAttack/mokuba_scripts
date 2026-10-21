@@ -501,6 +501,3 @@ class sdxlgui:
 					pass
 
 		window.close()
-
-if __name__=="__main__":
-	sdxlgui.gui()
