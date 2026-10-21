@@ -32,6 +32,3 @@ if __name__ == "__main__":
         ss=sd["ss"],
         token=sd["token"],
     )
-
-    if os.path.exists("params.json"):
-        os.remove("params.json")
