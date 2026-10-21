@@ -16,28 +16,22 @@ def extras_need(w):
 
 	if w=="cuda":
 		need=[
-			"ipython",
 			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"torchao==0.13.0",
 			"torchaudio @ https://download-r2.pytorch.org/whl/cu128/torchaudio-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			tri,
 		]
 	elif w=="xpu":
 		need=[
-			"ipython",
 			"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"torchao==0.13.0",
 			"torchaudio @ https://download-r2.pytorch.org/whl/xpu/torchaudio-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
 		]
 	else:
 		need=[
-			"ipython",
 			"torch==2.11.0",
 			"torchvision==0.26.0",
-			"torchao==0.13.0",
 			"torchaudio==2.11.0",
 			tri,
 		]
@@ -68,6 +62,10 @@ setup(
 		"accelerate",
 		"PEFT",
 		"dropbox",
+		"ipython",
+		"torchao==0.13.0",
+		"FreeSimpleGUI",
+		"pyperclip",
 	],
 	extras_require={
 		"cuda":extras_need(w="cuda"),
