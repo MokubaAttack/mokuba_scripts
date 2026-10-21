@@ -43,6 +43,3 @@ if __name__ == "__main__":
 		qprompt=sd["qprompt"],
 		qn_prompt=sd["qn_prompt"],
     )
-
-	if os.path.exists("params.json"):
-        os.remove("params.json")
