@@ -50,11 +50,14 @@ if __name__=="__main__":
 				print(key)
 		else:
 			if args[1]=="animagui":
-				animagui.gui()
+				box=animagui()
+				box.gui()
 			elif args[1]=="sdgui":
-				sdgui.gui()
+				box=sdgui()
+				box.gui()
 			elif args[1]=="sdgui":
-				sdxlgui.gui()
+				box=sdxlgui()
+				box.gui()
 			elif args[1]=="merge_ckpt_anima":
 				merge_ckpt_anima.gui()
 			elif args[1]=="merge_ckpt_sdxl":
