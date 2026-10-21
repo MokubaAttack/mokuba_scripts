@@ -11,7 +11,7 @@ pip install .[cuda]
 - ### mokuani  
   It is a scripts that make images by anima model.
   ```
-  mokuani(
+  mokuani2(
 		loras = [],
 		#list of lora file path or version id of civitai
 		#When you input version id of civitai, token is needed.
@@ -72,7 +72,7 @@ pip install .[cuda]
 - ### mokusdxl  
   It is a scripts that make images by sdxl1.0 model.
   ```
-  mokusdxl(
+  mokusdxl2(
 		loras = [],
 		#list of lora file path or version id of civitai
 		#When you input version id of civitai, token is needed.
@@ -159,7 +159,7 @@ pip install .[cuda]
 - ### mokusd  
   It is a scripts that make images by sd1.5 model.
   ```
-  mokusd(
+  mokusd2(
 		loras = [],
 		#list of lora file path or version id of civitai
 		#When you input version id of civitai, token is needed.
