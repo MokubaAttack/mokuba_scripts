@@ -44,7 +44,7 @@ tools=[
 if __name__=="__main__":
 	args = sys.argv
 	if len(args)>1:
-		if not(arges[1] in tools):
+		if not(args[1] in tools):
 			print("You must select one from the following tools.")
 			for key in tools:
 				print(key)
