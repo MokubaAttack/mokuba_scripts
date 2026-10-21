@@ -5,6 +5,7 @@ import tkinter as tk
 import json
 import os
 import threading
+import subprocess
 
 from ..tool.civitai_dl import check
 from ..common.yaml import mk_yaml
