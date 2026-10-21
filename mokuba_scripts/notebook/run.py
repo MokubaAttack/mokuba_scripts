@@ -1,6 +1,7 @@
 import json
 from IPython.display import clear_output
 import subprocess
+import os
 
 from ..common.yaml import mk_yaml
 
