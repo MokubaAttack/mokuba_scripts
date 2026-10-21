@@ -11,7 +11,7 @@ pip install .[cuda]
 - ### mokuani  
   It is a scripts that make images by anima model.
   ```
-  mokuani2(
+  mokuani(
 		loras = [],
 		#list of lora file path or version id of civitai
 		#When you input version id of civitai, token is needed.
@@ -65,12 +65,14 @@ pip install .[cuda]
 		#denoising_strength ( a parameter of hires.fix )
 		token = "",
 		#civitai token
+  		gpu_num = 1,
+  		#number of using gpus
   )
   ```
 - ### mokusdxl  
   It is a scripts that make images by sdxl1.0 model.
   ```
-  mokusdxl2(
+  mokusdxl(
 		loras = [],
 		#list of lora file path or version id of civitai
 		#When you input version id of civitai, token is needed.
@@ -150,12 +152,14 @@ pip install .[cuda]
 		#negative prompt for tile upscaler
 		token = "",
 		#civitai token
+  		gpu_num = 1,
+  		#number of using gpus
   )
   ```
 - ### mokusd  
   It is a scripts that make images by sd1.5 model.
   ```
-  mokusd2(
+  mokusd(
 		loras = [],
 		#list of lora file path or version id of civitai
 		#When you input version id of civitai, token is needed.
@@ -235,6 +239,8 @@ pip install .[cuda]
 		#negative prompt for tile upscaler
 		token = "",
 		#civitai token
+  		gpu_num = 1,
+  		#number of using gpus
   )
   ```
 ## Credits
