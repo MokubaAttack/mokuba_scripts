@@ -4,7 +4,7 @@ import subprocess
 
 from ..common.yaml import mk_yaml
 
-def mokuani(
+def mokuani2(
 	loras=[],
 	lora_weights=[],
 	prompt = "",
@@ -71,7 +71,7 @@ def mokuani(
 		clear_output(True)
 		print("fin")
 
-def mokusdxl(
+def mokusdxl2(
 	loras=[],
 	lora_weights=[],
 	prompt = "",
@@ -160,7 +160,7 @@ def mokusdxl(
 		clear_output(True)
 		print("fin")
 
-def mokusd(
+def mokusd2(
 	loras=[],
 	lora_weights=[],
 	prompt = "",
