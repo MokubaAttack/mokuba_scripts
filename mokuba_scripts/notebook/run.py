@@ -1,6 +1,5 @@
 import json
 from IPython.display import clear_output
-import subprocess
 import os
 from accelerate.commands.launch import (
 	launch_command_parser,
@@ -152,16 +151,14 @@ def mokusdxl2(
 	
 	path2=mk_yaml(gpu_num)
 	path1=path.replace("notebook/run.py","run/sdxl_run.py")
-	output=subprocess.run(path3+" launch --config_file "+path2+" "+path1, shell=True,check=False)
+	parser = launch_command_parser()
+	args = parser.parse_args(["--config_file",path2,path1])
+	launch_command(args)
 
 	if os.path.exists("params.json"):
 		os.remove("params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
-	
-	if output.returncode==0:
-		clear_output(True)
-		print("fin")
 
 def mokusd2(
 	loras=[],
@@ -240,13 +237,11 @@ def mokusd2(
 	
 	path2=mk_yaml(gpu_num)
 	path1=path.replace("notebook/run.py","run/sd_run.py")
-	output=subprocess.run(path3+" launch --config_file "+path2+" "+path1, shell=True,check=False)
+	parser = launch_command_parser()
+	args = parser.parse_args(["--config_file",path2,path1])
+	launch_command(args)
 
 	if os.path.exists("params.json"):
 		os.remove("params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
-	
-	if output.returncode==0:
-		clear_output(True)
-		print("fin")
