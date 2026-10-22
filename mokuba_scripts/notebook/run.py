@@ -2,11 +2,14 @@ import json
 from IPython.display import clear_output
 import subprocess
 import os
+from accelerate.commands.launch import (
+	launch_command_parser,
+	launch_command
+)
 
 from ..common.yaml import mk_yaml
 
 path=__file__.replace("\\","/")
-path3=path.replace("Lib/site-packages/mokuba_scripts/notebook/run.py","Scripts/accelerate")
 
 def mokuani2(
 	loras=[],
@@ -63,16 +66,14 @@ def mokuani2(
 	
 	path1=path.replace("notebook/run.py","run/anima_run.py")
 	path2=mk_yaml(gpu_num)
-	output=subprocess.run(path3+" launch --config_file "+path2+" "+path1, shell=True,check=False)
+	parser = launch_command_parser(["--config_file",path2,path1])
+	args = parser.parse_args()
+	launch_command(args)
 
 	if os.path.exists("params.json"):
 		os.remove("params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
-	
-	if output.returncode==0:
-		clear_output(True)
-		print("fin")
 
 def mokusdxl2(
 	loras=[],
