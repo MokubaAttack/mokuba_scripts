@@ -74,7 +74,7 @@ setup(
 	},
 	entry_points={
 		'console_scripts': [
-        	'mokugui = mokugui:main',
+        	'mokugui = mokuba_scripts.mokugui:main',
         ]
 	},
 )
