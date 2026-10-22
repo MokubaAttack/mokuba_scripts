@@ -164,7 +164,10 @@ class animagui:
 		path2=mk_yaml(gpu_num)
 		parser = launch_command_parser()
 		args = parser.parse_args(["--config_file",path2,path1])
-		launch_command(args)
+		try:
+			launch_command(args)
+		except Exception as e:
+			print(e)
 
 		if os.path.exists("params.json"):
 			os.remove("params.json")
