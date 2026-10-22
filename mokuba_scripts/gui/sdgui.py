@@ -5,7 +5,10 @@ import tkinter as tk
 import json
 import os
 import threading
-import subprocess
+from accelerate.commands.launch import (
+	launch_command_parser,
+	launch_command
+)
 
 from ..tool.civitai_dl import check
 from ..common.yaml import mk_yaml
@@ -252,9 +255,14 @@ class sdgui:
 
 		gpu_num=int(values["gpu_number"])
 		path=__file__.replace("\\","/")
-		path=path.replace("gui/sdgui.py","run/sd_run.py")
+		path1=path.replace("gui/sdgui.py","run/sd_run.py")
 		path2=mk_yaml(gpu_num)
-		output=subprocess.run("accelerate launch --config_file "+path2+" "+path, shell=True,check=False)
+		parser = launch_command_parser()
+		args = parser.parse_args(["--config_file",path2,path1])
+		try:
+			launch_command(args)
+		except Exception as e:
+			print(e)
 
 		if os.path.exists("params.json"):
 			os.remove("params.json")
