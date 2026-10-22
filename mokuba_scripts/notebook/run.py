@@ -66,8 +66,8 @@ def mokuani2(
 	
 	path1=path.replace("notebook/run.py","run/anima_run.py")
 	path2=mk_yaml(gpu_num)
-	parser = launch_command_parser(["--config_file",path2,path1])
-	args = parser.parse_args()
+	parser = launch_command_parser()
+	args = parser.parse_args(["--config_file",path2,path1])
 	launch_command(args)
 
 	if os.path.exists("params.json"):
