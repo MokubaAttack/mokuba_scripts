@@ -24,10 +24,10 @@ tools=[
 def main():
 	layout=[
 		[sg.Text("Tool Name")],
-		[sg.Combo(default_value="mokuanima",values=tools,key="tool")],
-		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
+		[sg.Push(),sg.Combo(default_value="mokuanima",values=tools,key="tool"),sg.Push()],
+		[sg.Push(),sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT'),sg.Push()],
 	]
-	window = sg.Window('mokugui', layout)
+	window = sg.Window('mokugui', layout,size=(250, 120))
 
 	while True:
 		event, values = window.read()
