@@ -74,6 +74,9 @@ def mokuani2(
 	if os.path.exists(path2):
 		os.remove(path2)
 
+	clear_output(True)
+	print("fin")
+
 def mokusdxl2(
 	loras=[],
 	lora_weights=[],
@@ -160,6 +163,9 @@ def mokusdxl2(
 	if os.path.exists(path2):
 		os.remove(path2)
 
+	clear_output(True)
+	print("fin")
+
 def mokusd2(
 	loras=[],
 	lora_weights=[],
@@ -245,3 +251,6 @@ def mokusd2(
 		os.remove("params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
+
+	clear_output(True)
+	print("fin")
