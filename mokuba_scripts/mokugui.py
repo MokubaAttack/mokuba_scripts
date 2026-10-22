@@ -59,6 +59,7 @@ def main():
 			name=None
 			break
 		elif event=="RUN":
+			name=values["tool"]
 			break
 	window.close()
 
