@@ -72,4 +72,9 @@ setup(
 		"xpu":extras_need(w="xpu"),
 		"cpu":extras_need(w="cpu"),
 	},
+	entry_points={
+		'console_scripts': [
+        	'mokugui = mokugui:main',
+        ]
+	},
 )
