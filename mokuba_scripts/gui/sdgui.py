@@ -258,7 +258,7 @@ class sdgui:
 		path1=path.replace("gui/sdgui.py","run/sd_run.py")
 		path2=mk_yaml(gpu_num)
 		parser = launch_command_parser()
-		args = parser.parse_args(["--config_file",path2,path1])
+		args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 		try:
 			launch_command(args)
 		except Exception as e:
