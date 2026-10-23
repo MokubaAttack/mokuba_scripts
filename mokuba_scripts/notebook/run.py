@@ -155,7 +155,7 @@ def mokusdxl2(
 	path2=mk_yaml(gpu_num)
 	path1=path.replace("notebook/run.py","run/sdxl_run.py")
 	parser = launch_command_parser()
-	args = parser.parse_args(["--config_file",path2,path1])
+	args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 	launch_command(args)
 
 	if os.path.exists("params.json"):
@@ -244,7 +244,7 @@ def mokusd2(
 	path2=mk_yaml(gpu_num)
 	path1=path.replace("notebook/run.py","run/sd_run.py")
 	parser = launch_command_parser()
-	args = parser.parse_args(["--config_file",path2,path1])
+	args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 	launch_command(args)
 
 	if os.path.exists("params.json"):
