@@ -1,11 +1,24 @@
 # mokuba_scripts
 These are scripts that I use when I create images in diffusers and make models.  
-These are scripts using two gpus in notebooks.
+These are scripts using multi gpus.
 ## How to install
+- cuda
 ```
 git clone -b multi https://github.com/MokubaAttack/mokuba_scripts.git
 cd mokuba_scripts
 pip install .[cuda]
+```
+- xpu
+```
+git clone -b multi https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[xpu]
+```
+- cpu
+```
+git clone -b multi https://github.com/MokubaAttack/mokuba_scripts.git
+cd mokuba_scripts
+pip install .[cpu]
 ```
 ## Scripts
 - ### mokuani  
@@ -65,8 +78,8 @@ pip install .[cuda]
 		#denoising_strength ( a parameter of hires.fix )
 		token = "",
 		#civitai token
-  		gpu_num = 1,
-  		#number of using gpus
+		gpu_num = 1,
+		#number of using gpus
   )
   ```
 - ### mokusdxl  
@@ -152,8 +165,8 @@ pip install .[cuda]
 		#negative prompt for tile upscaler
 		token = "",
 		#civitai token
-  		gpu_num = 1,
-  		#number of using gpus
+		gpu_num = 1,
+		#number of using gpus
   )
   ```
 - ### mokusd  
@@ -239,10 +252,13 @@ pip install .[cuda]
 		#negative prompt for tile upscaler
 		token = "",
 		#civitai token
-  		gpu_num = 1,
-  		#number of using gpus
+		gpu_num = 1,
+		#number of using gpus
   )
   ```
+## Gui
+If you run mokugui command, Gui is opened.  
+I intended to make it easy to understand.
 ## Credits
 - [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts)
 - [huggingface/diffusers](https://github.com/huggingface/diffusers/tree/main)
