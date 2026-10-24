@@ -45,7 +45,7 @@ class sdgui:
 		"ccs":"1.0",
 		"lowmem":True,
 	}
-	default_json=os.getcwd()+"/sd_default.json"
+	default_json=os.getcwd()+"/pipecache/sd_default.json"
 
 	def mokusd2(
 		self,values,win,
@@ -207,7 +207,7 @@ class sdgui:
 			win["ccs"].update("")
 
 		try:
-			with open(os.getcwd()+"/token.json","r") as f:
+			with open(os.getcwd()+"/pipecache/token.json","r") as f:
 				d = json.load(f)
 			token=d["civitai_token"]
 		except:
@@ -248,7 +248,7 @@ class sdgui:
 		"qprompt":"masterpiece, best quality, ultra detailed",
 		"qn_prompt":"worst quality, low quality, normal quality",
 		}
-		f=open("params.json","w")
+		f=open("pipecache/params.json","w")
 		json.dump(params,f,indent=2)
 		f.close()
 		self.savevalues(values,values["out"]+"_params.json")
@@ -264,8 +264,8 @@ class sdgui:
 		except Exception as e:
 			print(e)
 
-		if os.path.exists("params.json"):
-			os.remove("params.json")
+		if os.path.exists("pipecache/params.json"):
+			os.remove("pipecache/params.json")
 		if os.path.exists(path2):
 			os.remove(path2)
 		win["RUN"].Update(disabled=False)

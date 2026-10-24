@@ -36,7 +36,7 @@ class animagui:
 		"out":"",
 		"dtype":"bf16",
 	}
-	default_json=os.getcwd()+"/anima_default.json"
+	default_json=os.getcwd()+"/pipecache/anima_default.json"
 
 	def mokuani2(
 		self,values,win,
@@ -123,7 +123,7 @@ class animagui:
 			win["hs"].update(str(step2))
 
 		try:
-			with open(os.getcwd()+"/token.json","r") as f:
+			with open(os.getcwd()+"/pipecache/token.json","r") as f:
 				d = json.load(f)
 			token=d["civitai_token"]
 		except:
@@ -153,7 +153,7 @@ class animagui:
 		"ss":ss,
 		"token":token,
 		}
-		f=open("params.json","w")
+		f=open("pipecache/params.json","w")
 		json.dump(params,f,indent=2)
 		f.close()
 		self.savevalues(values,values["out"]+"_params.json")
@@ -169,8 +169,8 @@ class animagui:
 		except Exception as e:
 			print(e)
 
-		if os.path.exists("params.json"):
-			os.remove("params.json")
+		if os.path.exists("pipecache/params.json"):
+			os.remove("pipecache/params.json")
 		if os.path.exists(path2):
 			os.remove(path2)
 		win["RUN"].Update(disabled=False)
