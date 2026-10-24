@@ -1,5 +1,7 @@
 import os
 os.environ["HF_HOME"]=os.getcwd()+"/pipecache"
+if not(os.path.exists(os.getcwd()+"/pipecache")):
+	os.mkdir(os.getcwd()+"/pipecache")
 
 from .common.dl import (
 	dlc,
