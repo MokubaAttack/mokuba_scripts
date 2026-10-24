@@ -69,7 +69,7 @@ def gui():
 		[
 				sg.Text("dtype"), sg.Combo(default_value="fp16",values=choices,key="dtype"),
 		],
-		[sg.Text("infomation",key="info")],
+		[sg.Text("information",key="info")],
 		[sg.Button('RUN'),sg.Button('EXIT')]
 	]
 	

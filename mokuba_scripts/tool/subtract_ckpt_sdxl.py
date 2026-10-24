@@ -160,7 +160,7 @@ def gui():
 		[sg.Text("dim"), sg.Input(key="dim",right_click_menu=grp_rclick_menu["dim"])],
 		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('lora file', '.safetensors'),))],
 		[sg.Checkbox('unet', default=True, key='unet'),sg.Checkbox('text_encoder', default=True, key='text1'),sg.Checkbox('text_encoder_2', default=True, key='text2')],
-		[sg.Text("infomation",key="info")],
+		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 

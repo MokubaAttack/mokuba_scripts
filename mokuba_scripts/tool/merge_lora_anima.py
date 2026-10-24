@@ -233,7 +233,7 @@ def gui():
 		[sg.Text("dim"), sg.Input("16",key="d",right_click_menu=grp_rclick_menu["d"])],
 		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('lora file', '.safetensors'),)),sg.Button('clear', key='clear_out')],
 		[sg.Checkbox('del original files', key='dof')],
-		[sg.Text("infomation",key="info")],
+		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
@@ -290,7 +290,7 @@ def gui():
 				meta["weight"]=str(weights).replace("[","").replace("]","").replace(" ","")
 
 				try:
-					with open(os.getcwd()+"/token.json","r") as f:
+					with open(os.getcwd()+"/pipecache/token.json","r") as f:
 						d = json.load(f)
 					token=d["civitai_token"]
 				except:

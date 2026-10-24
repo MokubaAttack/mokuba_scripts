@@ -31,7 +31,7 @@ default_sd={
 	"up":"",
 	"cont":""
 }
-default_json=os.getcwd()+"/metadata_default.json"
+default_json=os.getcwd()+"/pipecache/metadata_default.json"
 
 def setvalues():
 	if os.path.exists(default_json):
@@ -179,7 +179,7 @@ def gui():
 		[sg.Text("embed1 modelVersionId"), sg.Input(ivs["embed1"],key="embed1",right_click_menu=grp_rclick_menu["embed1"], size=(20, 1)),sg.Text("embed2 modelVersionId"), sg.Input(ivs["embed2"],key="embed2",right_click_menu=grp_rclick_menu["embed2"], size=(20, 1))],
 		[sg.Text("embed3 modelVersionId"), sg.Input(ivs["embed3"],key="embed3",right_click_menu=grp_rclick_menu["embed3"], size=(20, 1)),sg.Text("embed4 modelVersionId"), sg.Input(ivs["embed4"],key="embed4",right_click_menu=grp_rclick_menu["embed4"], size=(20, 1))],
 		[sg.Text("controlnet modelVersionId"), sg.Input(ivs["cont"],key="cont",right_click_menu=grp_rclick_menu["cont"], size=(20, 1)),sg.Text("upscaler modelVersionId"), sg.Input(ivs["up"],key="up",right_click_menu=grp_rclick_menu["up"], size=(20, 1))],
-		[sg.Text("infomation",key="info")],
+		[sg.Text("information",key="info")],
 		[sg.Button("Save Params",key="save"),sg.Button("Load Params",key="load",disabled=e),sg.Button("Save Params to",key="save2"),sg.Button("Load Params from",key="load2")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]

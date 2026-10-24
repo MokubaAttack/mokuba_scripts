@@ -85,9 +85,9 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			print(os.path.basename(ckpts[1])+" isn't supported.")
 		return
 
-	if os.path.exists(os.getcwd()+"/safe_temp"):
-		shutil.rmtree(os.getcwd()+"/safe_temp")
-	os.mkdir(os.getcwd()+"/safe_temp")
+	if os.path.exists(os.getcwd()+"/pipecache/safe_temp"):
+		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+	os.mkdir(os.getcwd()+"/pipecache/safe_temp")
 	dict_sum=len(list(sdxl_data))
 	key_count=0
 
@@ -136,13 +136,13 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			if k.startswith("first_stage_model."):
 				if v==0:
 					out_dict[k]=t1.to(torch.float16)
-					save_file(out_dict,os.getcwd()+"/safe_temp/"+k+".safetensors")
+					save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
 					del out_dict
 					flush()
 					continue
 				elif v==1:
 					out_dict[k]=t2.to(torch.float16)
-					save_file(out_dict,os.getcwd()+"/safe_temp/"+k+".safetensors")
+					save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
 					del out_dict
 					flush()
 					continue
@@ -189,13 +189,13 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			w2=round(t1.size()[0]*(w1+w2))
 			if w1==0:
 				out_dict[k]=t2.to(torch.float16)
-				save_file(out_dict,os.getcwd()+"/safe_temp/"+k+".safetensors")
+				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
 				del w,out_dict,t1,t2,w1,w1
 				flush()
 				continue
 			elif w2==0:
 				out_dict[k]=t1.to(torch.float16)
-				save_file(out_dict,os.getcwd()+"/safe_temp/"+k+".safetensors")
+				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
 				del w,out_dict,t1,t2,w1,w1
 				flush()
 				continue
@@ -220,7 +220,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			out_dict[k]=t1.to(torch.float16)
 			del w1,w2
 
-		save_file(out_dict,os.getcwd()+"/safe_temp/"+k+".safetensors")
+		save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
 		del w,out_dict,t1,t2
 		flush()
 
@@ -242,13 +242,13 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 				else:
 					win["RUN"].Update(disabled=False)
 					win["info"].update(os.path.basename(v)+" does not exist.")
-				if os.path.exists(os.getcwd()+"/safe_temp"):
-					shutil.rmtree(os.getcwd()+"/safe_temp")
+				if os.path.exists(os.getcwd()+"/pipecache/safe_temp"):
+					shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
 				return
 			for k in vae_dict:
 				out_dict={}
 				out_dict["first_stage_model."+k]=vae_dict[k].to(torch.float16)
-				save_file(out_dict,os.getcwd()+"/safe_temp/first_stage_model."+k+".safetensors")
+				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/first_stage_model."+k+".safetensors")
 				del out_dict
 			del vae_dict
 			flush()
@@ -258,8 +258,8 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			else:
 				win["RUN"].Update(disabled=False)
 				win["info"].update(os.path.basename(v)+" does not exist.")
-			if os.path.exists(os.getcwd()+"/safe_temp"):
-				shutil.rmtree(os.getcwd()+"/safe_temp")
+			if os.path.exists(os.getcwd()+"/pipecache/safe_temp"):
+				shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
 			return
 
 	if win==None:
@@ -267,7 +267,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 	else:
 		win["info"].update("making output")
 	
-	save_safe(list(sdxl_data),out_path,os.getcwd()+"/safe_temp")
+	save_safe(list(sdxl_data),out_path,os.getcwd()+"/pipecache/safe_temp")
 		
 	f=open(out_path.replace(".safetensors",".txt"),"w")
 	for i in range(len(ckpts)):
@@ -363,7 +363,7 @@ def gui():
 		[sg.Checkbox('bake vae', key='bakevae',default=False,enable_events=True)],
 		[sg.Text("vae path"), sg.Input(key="vaefile",right_click_menu=grp_rclick_menu["vaefile"]),sg.FileBrowse( file_types=(('vae file', '.safetensors'),))],
 		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('ckpt file', '.safetensors'),))],
-		[sg.Text("infomation",key="info")],
+		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('Cancel Vae', key='cancel'),sg.Button('EXIT', key='EXIT')]
 	]
 
@@ -492,7 +492,7 @@ def gui():
 					mode="normal"
 				
 				try:
-					with open(os.getcwd()+"/token.json","r") as f:
+					with open(os.getcwd()+"/pipecache/token.json","r") as f:
 						d = json.load(f)
 					token=d["civitai_token"]
 				except:

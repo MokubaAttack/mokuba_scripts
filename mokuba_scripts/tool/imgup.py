@@ -56,7 +56,7 @@ def gui():
 		[sg.InputText(key='input_pic',right_click_menu=grp_rclick_menu["input_pic"]),sg.FileBrowse('input file', file_types=(('input file', '.jpg'),('input file', '.png'),))],
 		[sg.Text("upscaler")],
 		[sg.Combo(default_value="NEAREST",key="up",values=inters,enable_events = True)],
-		[sg.Text("infomation",key="info")],
+		[sg.Text("information",key="info")],
 		[sg.Button('RUN'),sg.Button('EXIT')]
 	]
 	window = sg.Window('imgup', layout)
