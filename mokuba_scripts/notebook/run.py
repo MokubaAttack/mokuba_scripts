@@ -59,7 +59,7 @@ def mokuani2(
 	"ss":ss,
 	"token":token,
 	}
-	f=open("params.json","w")
+	f=open("pipecache/params.json","w")
 	json.dump(params,f,indent=2)
 	f.close()
 	
@@ -69,8 +69,8 @@ def mokuani2(
 	args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 	launch_command(args)
 
-	if os.path.exists("params.json"):
-		os.remove("params.json")
+	if os.path.exists("pipecache/params.json"):
+		os.remove("pipecache/params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
 
@@ -148,7 +148,7 @@ def mokusdxl2(
 	"qprompt":qprompt,
 	"qn_prompt":qn_prompt,
 	}
-	f=open("params.json","w")
+	f=open("pipecache/params.json","w")
 	json.dump(params,f,indent=2)
 	f.close()
 	
@@ -158,8 +158,8 @@ def mokusdxl2(
 	args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 	launch_command(args)
 
-	if os.path.exists("params.json"):
-		os.remove("params.json")
+	if os.path.exists("pipecache/params.json"):
+		os.remove("pipecache/params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
 
@@ -237,7 +237,7 @@ def mokusd2(
 	"qprompt":qprompt,
 	"qn_prompt":qn_prompt,
 	}
-	f=open("params.json","w")
+	f=open("pipecache/params.json","w")
 	json.dump(params,f,indent=2)
 	f.close()
 	
@@ -247,8 +247,8 @@ def mokusd2(
 	args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 	launch_command(args)
 
-	if os.path.exists("params.json"):
-		os.remove("params.json")
+	if os.path.exists("pipecache/params.json"):
+		os.remove("pipecache/params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
 

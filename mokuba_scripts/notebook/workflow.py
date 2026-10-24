@@ -42,7 +42,7 @@ def mokuani(
 	ss=0.5,
 	token="",
 ):
-	f=open("time.txt","w")
+	f=open("pipecache/time.txt","w")
 	f.write(str(round(time.time())))
 	f.close()
 	if not(isinstance(url, list)):
@@ -92,7 +92,7 @@ def mokuani(
 	process_ind=distributed_state.process_index
 	count=distributed_state.num_processes
 	distributed_state.wait_for_everyone()
-	f=open("time.txt","r")
+	f=open("pipecache/time.txt","r")
 	ut=f.read()
 	f.close()
 
@@ -141,7 +141,7 @@ def mokuani(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
-			os.remove("time.txt")
+			os.remove("pipecache/time.txt")
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -184,7 +184,7 @@ def mokuani(
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	if distributed_state.is_main_process:
-		os.remove("time.txt")
+		os.remove("pipecache/time.txt")
 	distributed_state.wait_for_everyone()
 	distributed_state.destroy_process_group()
 		
@@ -223,7 +223,7 @@ def mokusdxl(
 	qn_prompt="worst quality, low quality, normal quality",
 	token="",
 ):
-	f=open("time.txt","w")
+	f=open("pipecache/time.txt","w")
 	f.write(str(round(time.time())))
 	f.close()
 	if not(isinstance(url, list)):
@@ -312,7 +312,7 @@ def mokusdxl(
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
 	distributed_state.wait_for_everyone()
-	f=open("time.txt","r")
+	f=open("pipecache/time.txt","r")
 	ut=f.read()
 	f.close()
 
@@ -377,7 +377,7 @@ def mokusdxl(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
-			os.remove("time.txt")
+			os.remove("pipecache/time.txt")
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -422,7 +422,7 @@ def mokusdxl(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
-			os.remove("time.txt")
+			os.remove("pipecache/time.txt")
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -470,7 +470,7 @@ def mokusdxl(
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	if distributed_state.is_main_process:
-		os.remove("time.txt")
+		os.remove("pipecache/time.txt")
 	distributed_state.wait_for_everyone()
 	distributed_state.destroy_process_group()
 	
@@ -509,7 +509,9 @@ def mokusd(
 	qn_prompt="worst quality, low quality, normal quality",
 	token="",
 ):
-	ut=round(time.time())
+	f=open("pipecache/time.txt","w")
+	f.write(str(round(time.time())))
+	f.close()
 	if not(isinstance(url, list)):
 		url=[]
 	if len(url)!=3:
@@ -596,7 +598,7 @@ def mokusd(
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
 	distributed_state.wait_for_everyone()
-	f=open("time.txt","r")
+	f=open("pipecache/time.txt","r")
 	ut=f.read()
 	f.close()
 
@@ -661,7 +663,7 @@ def mokusd(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
-			os.remove("time.txt")
+			os.remove("pipecache/time.txt")
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -706,7 +708,7 @@ def mokusd(
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		if distributed_state.is_main_process:
-			os.remove("time.txt")
+			os.remove("pipecache/time.txt")
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -754,6 +756,6 @@ def mokusd(
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	if distributed_state.is_main_process:
-		os.remove("time.txt")
+		os.remove("pipecache/time.txt")
 	distributed_state.wait_for_everyone()
 	distributed_state.destroy_process_group()
