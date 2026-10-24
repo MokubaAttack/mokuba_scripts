@@ -71,7 +71,7 @@ def mk_yaml(n=0):
 		sd["use_cpu"] = False
 		sd["num_processes"] = 2
 
-	f=open("process_params.yaml","w")
+	f=open("pipecache/process_params.yaml","w")
 	json.dump(sd,f,indent=2)
 	f.close()
-	return "process_params.yaml"
+	return "pipecache/process_params.yaml"

@@ -69,10 +69,10 @@ def dlk(dataname,username,token,path):
 
 	res = requests.get(url,allow_redirects=True,stream=True,auth=requests.auth.HTTPBasicAuth(username,token))
 
-	with open('hogehoge.zip', 'wb') as f:
+	with open('pipecache/hogehoge.zip', 'wb') as f:
 		for chunk in res.iter_content(chunk_size=1024*1024):
 			f.write(chunk)
 
-	with zipfile.ZipFile('hogehoge.zip') as myzip:
+	with zipfile.ZipFile('pipecache/hogehoge.zip') as myzip:
 		myzip.extractall(path)
-	os.remove('hogehoge.zip')
+	os.remove('pipecache/hogehoge.zip')
