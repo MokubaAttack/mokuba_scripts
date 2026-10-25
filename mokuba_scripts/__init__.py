@@ -2,6 +2,9 @@ import os
 os.environ["HF_HOME"]=os.getcwd()+"/pipecache"
 if not(os.path.exists(os.getcwd()+"/pipecache")):
 	os.mkdir(os.getcwd()+"/pipecache")
+	
+import FreeSimpleGUI as sg
+sg.theme('TealMono')
 
 from .common.dl import (
 	dlc,
