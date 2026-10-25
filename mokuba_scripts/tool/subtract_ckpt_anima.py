@@ -310,8 +310,6 @@ def gui():
 	import threading
 	import FreeSimpleGUI as sg
 
-	sg.theme('TealMono')
-
 	keys=["ckpt1","ckpt2","out","dim"]
 
 	grp_rclick_menu={}

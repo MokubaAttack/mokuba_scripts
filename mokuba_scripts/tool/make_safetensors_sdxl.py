@@ -101,8 +101,6 @@ def gui():
 	import threading
 	import pyperclip
 
-	sg.theme('TealMono')
-
 	keys=[
 		'ckpt','vae','lora1','lora2','lora3',"out",'w1','w2','w3'
 	]

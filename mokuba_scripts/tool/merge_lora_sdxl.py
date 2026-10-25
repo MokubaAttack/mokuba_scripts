@@ -206,8 +206,6 @@ def gui():
 
 	from ..tool.civitai_dl import check
 
-	sg.theme('TealMono')
-
 	if check()==False:
 		return
 

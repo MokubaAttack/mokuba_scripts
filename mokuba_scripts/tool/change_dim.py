@@ -150,8 +150,6 @@ def gui():
 	import tkinter as tk
 	import threading
 	import pyperclip
-
-	sg.theme('TealMono')
 	
 	choices=[
 		"fp32","fp16","bf16"

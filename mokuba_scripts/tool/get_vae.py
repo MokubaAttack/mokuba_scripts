@@ -57,8 +57,6 @@ def gui():
 	import tkinter as tk
 	import threading
 	import pyperclip
-
-	sg.theme('TealMono')
 	
 	keys=['ckpt']
 	grp_rclick_menu={}

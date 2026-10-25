@@ -96,8 +96,6 @@ def gui():
 	import tkinter as tk
 	import pyperclip
 	
-	sg.theme('TealMono')
-	
 	ivs,e=setvalues()
 	
 	keys=[
