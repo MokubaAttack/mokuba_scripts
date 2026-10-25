@@ -9,7 +9,7 @@ def extras_need(w):
 	p=sys.platform
 	if p.startswith("linux"):
 		p="manylinux_2_28_x86_64"
-		tri="triton==3.6.0"
+		tri="triton @ https://download-r2.pytorch.org/whl/triton-3.6.0-cp3"+v+"-cp3"+v+"-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
 	else:
 		p="win_amd64"
 		tri="triton-windows==3.6.0.post26"
@@ -30,9 +30,9 @@ def extras_need(w):
 		]
 	else:
 		need=[
-			"torch==2.11.0",
-			"torchvision==0.26.0",
-			"torchaudio==2.11.0",
+			"torch @ https://download-r2.pytorch.org/whl/cpu/torch-2.11.0%2Bcpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/cpu/torchvision-0.26.0%2Bcpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchaudio @ https://download-r2.pytorch.org/whl/cpu/torchaudio-2.11.0%2Bcpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			tri,
 		]
 	return need
@@ -63,9 +63,9 @@ setup(
 		"PEFT",
 		"dropbox",
 		"ipython",
-		"torchao==0.13.0",
 		"FreeSimpleGUI",
 		"pyperclip",
+		"torchao==0.13.0",
 	],
 	extras_require={
 		"cuda":extras_need(w="cuda"),
