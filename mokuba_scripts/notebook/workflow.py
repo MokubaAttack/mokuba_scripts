@@ -122,7 +122,8 @@ def mokuani(
 		meta["input"]=out_folder+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			ut=out_folder.replace("\\","/").split("/")[-1]
+			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()	
 	
@@ -164,7 +165,8 @@ def mokuani(
 		meta["input"]=out_folder+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			ut=out_folder.replace("\\","/").split("/")[-1]
+			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -348,7 +350,8 @@ def mokusdxl(
 		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			ut=out_folder.replace("\\","/").split("/")[-1]
+			drop_path=ut+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -391,7 +394,8 @@ def mokusdxl(
 		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			ut=out_folder.replace("\\","/").split("/")[-1]
+			drop_path=ut+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -438,7 +442,8 @@ def mokusdxl(
 		meta["input"]=out_folder+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			ut=out_folder.replace("\\","/").split("/")[-1]
+			drop_path=ut+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -622,7 +627,8 @@ def mokusd(
 		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			ut=out_folder.replace("\\","/").split("/")[-1]
+			drop_path=ut+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -665,7 +671,8 @@ def mokusd(
 		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			ut=out_folder.replace("\\","/").split("/")[-1]
+			drop_path=ut+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -712,7 +719,8 @@ def mokusd(
 		meta["input"]=out_folder+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=str(ut)+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			ut=out_folder.replace("\\","/").split("/")[-1]
+			drop_path=ut+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
