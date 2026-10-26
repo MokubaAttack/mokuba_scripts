@@ -104,6 +104,7 @@ def mokuani(
 
 	if not(os.path.exists(out_folder+"/0")):
 		os.makedirs(out_folder+"/0")
+	ut=out_folder.replace("\\","/").split("/")[-1]
 
 	imgs=[]
 	for i,s in enumerate(seed):
@@ -122,7 +123,6 @@ def mokuani(
 		meta["input"]=out_folder+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			ut=out_folder.replace("\\","/").split("/")[-1]
 			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()	
@@ -131,7 +131,7 @@ def mokuani(
 		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-			drop_path=out_folder+".zip"
+			drop_path=ut+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		distributed_state.wait_for_everyone()
@@ -165,7 +165,6 @@ def mokuani(
 		meta["input"]=out_folder+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			ut=out_folder.replace("\\","/").split("/")[-1]
 			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
@@ -173,7 +172,7 @@ def mokuani(
 	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-		drop_path=out_folder+".zip"
+		drop_path=ut+".zip"
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	distributed_state.wait_for_everyone()
@@ -331,6 +330,7 @@ def mokusdxl(
 
 	if not(os.path.exists(out_folder+"/0")):
 		os.makedirs(out_folder+"/0")
+	ut=out_folder.replace("\\","/").split("/")[-1]
 
 	imgs=[]
 	for i,s in enumerate(seed):
@@ -350,7 +350,6 @@ def mokusdxl(
 		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			ut=out_folder.replace("\\","/").split("/")[-1]
 			drop_path=ut+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
@@ -359,7 +358,7 @@ def mokusdxl(
 		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-			drop_path=out_folder+".zip"
+			drop_path=ut+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		distributed_state.wait_for_everyone()
@@ -394,7 +393,6 @@ def mokusdxl(
 		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			ut=out_folder.replace("\\","/").split("/")[-1]
 			drop_path=ut+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
@@ -403,7 +401,7 @@ def mokusdxl(
 		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-			drop_path=out_folder+".zip"
+			drop_path=ut+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		distributed_state.wait_for_everyone()
@@ -442,7 +440,6 @@ def mokusdxl(
 		meta["input"]=out_folder+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			ut=out_folder.replace("\\","/").split("/")[-1]
 			drop_path=ut+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
@@ -450,7 +447,7 @@ def mokusdxl(
 	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-		drop_path=out_folder+".zip"
+		drop_path=ut+".zip"
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	distributed_state.wait_for_everyone()
@@ -608,6 +605,7 @@ def mokusd(
 
 	if not(os.path.exists(out_folder+"/0")):
 		os.makedirs(out_folder+"/0")
+	ut=out_folder.replace("\\","/").split("/")[-1]
 
 	imgs=[]
 	for i,s in enumerate(seed):
@@ -627,7 +625,6 @@ def mokusd(
 		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			ut=out_folder.replace("\\","/").split("/")[-1]
 			drop_path=ut+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
@@ -636,7 +633,7 @@ def mokusd(
 		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-			drop_path=out_folder+".zip"
+			drop_path=ut+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		distributed_state.wait_for_everyone()
@@ -671,7 +668,6 @@ def mokusd(
 		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			ut=out_folder.replace("\\","/").split("/")[-1]
 			drop_path=ut+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
@@ -680,7 +676,7 @@ def mokusd(
 		distributed_state.wait_for_everyone()
 		if url!=[] and distributed_state.is_main_process:
 			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-			drop_path=out_folder+".zip"
+			drop_path=ut+".zip"
 			up_drop("archive_shutil.zip",drop_path,url)
 			os.remove("archive_shutil.zip")
 		distributed_state.wait_for_everyone()
@@ -719,7 +715,6 @@ def mokusd(
 		meta["input"]=out_folder+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			ut=out_folder.replace("\\","/").split("/")[-1]
 			drop_path=ut+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
@@ -727,7 +722,7 @@ def mokusd(
 	distributed_state.wait_for_everyone()
 	if url!=[] and distributed_state.is_main_process:
 		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
-		drop_path=out_folder+".zip"
+		drop_path=ut+".zip"
 		up_drop("archive_shutil.zip",drop_path,url)
 		os.remove("archive_shutil.zip")
 	distributed_state.wait_for_everyone()
