@@ -37,5 +37,6 @@ from .tool import (
 	plus_metadata,
 	civitai_dl,
 	kaggle_dl,
-	imgup
+	imgup,
+	token_setting
 )
