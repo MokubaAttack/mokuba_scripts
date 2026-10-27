@@ -271,8 +271,8 @@ class sdxlgui:
 		if os.path.exists(path2):
 			os.remove(path2)
 		end=time.time()
-		process_min=int((end-start)/60)
-		process_sec=round(end-start-60*process_min)
+		process_min=int(round(end-start)/60)
+		process_sec=round(end-start)-60*process_min
 		print(str(process_min)+"min"+str(process_sec)+"sec")
 		win["RUN"].Update(disabled=False)
 
