@@ -9,6 +9,7 @@ from accelerate.commands.launch import (
 	launch_command_parser,
 	launch_command
 )
+import time
 
 from ..tool.civitai_dl import check
 from ..common.yaml import mk_yaml
@@ -51,6 +52,7 @@ class sdxlgui:
 		self,values,win,
 	):
 		win["RUN"].Update(disabled=True)
+		start=time.time()
 		loras=[]
 		lora_weights=[]
 		for i in range(4):
@@ -268,6 +270,10 @@ class sdxlgui:
 			os.remove("pipecache/params.json")
 		if os.path.exists(path2):
 			os.remove(path2)
+		end=time.time()
+		process_min=int((end-start)/60)
+		process_sec=round(end-start-60*process_min)
+		print(str(process_min)+"min"+str(process_sec)+"sec")
 		win["RUN"].Update(disabled=False)
 
 	def setvalues(self):
