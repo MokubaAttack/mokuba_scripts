@@ -58,7 +58,8 @@ default_trans_config={
   "img_context_dim_out": 2048,
   "_class_name": "CosmosTransformer3DModel",
   "_diffusers_version": "0.39.0.dev0",
-  "_name_or_path": os.getcwd()+"/AnimaBaseV1"
+  "_name_or_path": os.getcwd()+"/AnimaBaseV1",
+  "dtype":torch.bfloat16,
 }
 
 class mokuanipipe:
