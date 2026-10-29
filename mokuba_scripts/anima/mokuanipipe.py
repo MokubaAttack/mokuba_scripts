@@ -1,11 +1,13 @@
 from diffusers import (
 	AnimaModularPipeline,
 	FlowMatchLCMScheduler,
-	FlowMatchEulerDiscreteScheduler
+	FlowMatchEulerDiscreteScheduler,
+	CosmosTransformer3DModel
 )
 import torch
 import os
 from lycoris import create_lycoris_from_weights
+from safetensors.torch import load_file
 
 from .animackpt2 import (
 	check_anima_base,
@@ -21,6 +23,44 @@ txt2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa"]
 img2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds"]
 hiresfix_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds","up","hu","hum","hs"]
 
+default_trans_config={
+  "in_channels": 16,
+  "out_channels": 16,
+  "num_attention_heads": 16,
+  "attention_head_dim": 128,
+  "num_layers": 40,
+  "mlp_ratio": 4.0,
+  "text_embed_dim": 1024,
+  "adaln_lora_dim": 256,
+  "max_size": [
+    128,
+    240,
+    240
+  ],
+  "patch_size": [
+    1,
+    2,
+    2
+  ],
+  "rope_scale": [
+    1.0,
+    4.0,
+    4.0
+  ],
+  "concat_padding_mask": True,
+  "extra_pos_embed_type": None,
+  "use_crossattn_projection": False,
+  "crossattn_proj_in_channels": 1024,
+  "encoder_hidden_states_channels": 1024,
+  "controlnet_block_every_n": None,
+  "img_context_dim_in": None,
+  "img_context_num_tokens": 256,
+  "img_context_dim_out": 2048,
+  "_class_name": "CosmosTransformer3DModel",
+  "_diffusers_version": "0.39.0.dev0",
+  "_name_or_path": os.getcwd()+"/AnimaBaseV1"
+}
+
 class mokuanipipe:
 	def __init__(self):
 		self.moku_meta={
@@ -31,21 +71,27 @@ class mokuanipipe:
 		}
 
 		check_anima_base()
-		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
-		self.pipe.load_components()
 
 		self.upscaler=None
 
 	def from_safe(self,path,torch_dtype=torch.float,device="cpu"):
 		self.moku_meta["ckpt"]=get_id(path)
 
-		self.pipe.to(device,torch_dtype)
-		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd=safe2diff(path=path)
+		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=safe2diff(path=path)
 
+		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1",torch_dtype=torch_dtype)
 		if transformer_sd!={}:
-			for k,p in self.pipe.transformer.named_parameters():
-				p.data=transformer_sd.pop(k).to(device,torch_dtype)
+			transformer_config = default_trans_config
+			transformer_config["num_layers"] = block_num
+			self.pipe.transformer=CosmosTransformer3DModel.from_config(transformer_config)
+			for k in transformer_sd:
+				transformer_sd[k]=transformer_sd[k].to(torch_dtype)
+			self.pipe.transformer.load_state_dict(transformer_sd)
+			self.pipe.transformer.to(device)
 		del transformer_sd
+		self.pipe.load_components()
+		self.pipe.to(device)
+
 		if text_encoder_sd!={}:
 			for k,p in self.pipe.text_encoder.named_parameters():
 				p.data=text_encoder_sd.pop(k).to(device,torch_dtype)
@@ -64,13 +110,21 @@ class mokuanipipe:
 	def from_folder(self,path,torch_dtype=torch.float,device="cpu"):
 		self.moku_meta["ckpt"]=get_id(path)
 
-		self.pipe.to(device,torch_dtype)
-		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd=folder2diff(path=path)
+		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=folder2diff(path=path)
 
+		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1",torch_dtype=torch_dtype)
 		if transformer_sd!={}:
-			for k,p in self.pipe.transformer.named_parameters():
-				p.data=transformer_sd.pop(k).to(device,torch_dtype)
+			transformer_config = default_trans_config
+			transformer_config["num_layers"] = block_num
+			self.pipe.transformer=CosmosTransformer3DModel.from_config(transformer_config)
+			for k in transformer_sd:
+				transformer_sd[k]=transformer_sd[k].to(torch_dtype)
+			self.pipe.transformer.load_state_dict(transformer_sd)
+			self.pipe.transformer.to(device)
 		del transformer_sd
+		self.pipe.load_components()
+		self.pipe.to(device)
+
 		if text_encoder_sd!={}:
 			for k,p in self.pipe.text_encoder.named_parameters():
 				p.data=text_encoder_sd.pop(k).to(device,torch_dtype)
@@ -83,6 +137,7 @@ class mokuanipipe:
 			for k,p in self.pipe.vae.named_parameters():
 				p.data=vae_sd.pop(k).to(device,torch_dtype)
 		del vae_sd
+		
 		print(path+" is loaded.")
 		flush()
 

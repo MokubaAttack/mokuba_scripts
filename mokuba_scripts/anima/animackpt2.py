@@ -72,6 +72,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 
 	plus_key=[[],[],[],[]]
 	minus_key=[[],[],[],[],[]]
+	block_num=27
 
 	for k in keys:
 		if head_teco!=None and teco:
@@ -121,11 +122,15 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 						mapped_tail=tail
 					if mapped_tail is not None:
 						transformer_sd[f"transformer_blocks.{block_index}.{mapped_tail}"] = sd.pop(k)
+						if int(block_index)>block_num:
+							block_num=int(block_index)
 						continue
 		minus_key.append("unknown."+k)
 
 	if transformer_sd=={} and text_encoder_sd=={} and text_conditioner_sd=={} and vae_sd=={}:
 		raise RuntimeWarning(path+" isn't supported.")
+
+	block_num=block_num+1
 
 	if teco:
 		sd2=load_file(os.getcwd()+"/AnimaBaseV1/text_conditioner/diffusion_pytorch_model.safetensors")
@@ -148,7 +153,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 				plus_key[0].append("transformer."+k)
 		keys=list(transformer_sd)
 		for k in keys:
-			if not(k in sd2):
+			if not(k in sd2) and not(k.startswith("transformer_blocks.")):
 				del transformer_sd[k]
 				minus_key[0].append("transformer."+k)
 		del sd2
@@ -190,7 +195,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 			f.write(k+"\n")
 	f.close()
 	
-	return (transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd)
+	return (transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num)
 
 def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 	check_anima_base()
@@ -207,6 +212,7 @@ def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 	
 	plus_key=[[],[],[],[]]
 	minus_key=[[],[],[],[]]
+	block_num=27
 	
 	if trans:
 		if not(os.path.exists(transformer_path)):
@@ -219,11 +225,17 @@ def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 				plus_key[0].append("transformer."+k)
 		keys=list(sd1)
 		for k in keys:
-			if not(k in sd22):
+			if not(k in sd22) and not(k.startswith("transformer_blocks.")):
 				del sd1[k]
 				minus_key[0].append("transformer."+k)
+			m = re.match(r"transformer_blocks\.(\d+)\.(.+)",k)
+			if m is not None:
+				block_index = m.group(1)
+				if int(block_index)>block_num:
+					block_num=int(block_index)
 	else:
 		sd1={}
+	block_num=block_num+1
 
 	if teco:	
 		if not(os.path.exists(text_conditioner_path)):
@@ -287,4 +299,4 @@ def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 			f.write(k+"\n")
 	f.close()
 	
-	return (sd1,sd2,sd3,sd4)
+	return (sd1,sd2,sd3,sd4,block_num)
