@@ -2,7 +2,11 @@ import os
 import json
 from huggingface_hub import snapshot_download
 import re
-from safetensors.torch import load_file
+from safetensors.torch import (
+	load_file,
+	save_file
+)
+import torch
 
 from ..common.keys import anima
 
@@ -12,7 +16,7 @@ vae_keys1=anima.vae_keys1
 vae_keys2=anima.vae_keys2
 vae_keys3=anima.vae_keys3
 
-def check_anima_base():
+def check_anima_base(n):
 	if not(os.path.exists(os.getcwd()+"/AnimaBaseV1")):
 		snapshot_download(repo_id="circlestone-labs/Anima-Base-v1.0-Diffusers", local_dir=os.getcwd()+"/AnimaBaseV1")
 
@@ -36,9 +40,34 @@ def check_anima_base():
 		f=open(os.getcwd()+"/AnimaBaseV1/id.txt","w")
 		f.write("2945208")
 		f.close()
+		
+	if not(os.path.exists(os.getcwd()+"/AnimaBaseV1/transformer"+str(n))) and n!=28:
+		os.mkdir(os.getcwd()+"/AnimaBaseV1/transformer"+str(n))
+		f=open(os.getcwd()+"/AnimaBaseV1/transformer/config.json","r")
+		json_sd=json.load(f)
+		f.close()
+		
+		json_sd["num_layers"]=n
+		
+		f=open(os.getcwd()+"/AnimaBaseV1/transformer"+str(n)+"/config.json","w")
+		json.dump(json_sd, f, indent=2)
+		f.close()
+		
+		sd=load_file(os.getcwd()+"/AnimaBaseV1/transformer/diffusion_pytorch_model.safetensors")
+		temp_sd={}
+		for k in sd:
+			if k.startswith("transformer_blocks.0"):
+				temp_sd[k.removeprefix("transformer_blocks.0")]=torch.zeros_like(sd[k])
+			sd[k]=torch.zeros_like(sd[k])
+		for i in range(n):
+			for k in temp_sd:
+				key="transformer_blocks."+str(i)+k
+				if not(key in sd):
+					sd[key]=torch.zeros_like(temp_sd[k])
+		save_file(sd,os.getcwd()+"/AnimaBaseV1/transformer"+str(n)+"/diffusion_pytorch_model.safetensors")
 
 def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
-	check_anima_base()
+	check_anima_base(28)
 
 	sd=load_file(path)
 	keys=[]
@@ -198,7 +227,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 	return (transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num)
 
 def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
-	check_anima_base()
+	check_anima_base(28)
 	if not(os.path.exists(path+"/modular_model_index.json")):
 		raise RuntimeWarning("modular_model_index.json does not exist.")
 	f=open(path+"/modular_model_index.json","r")

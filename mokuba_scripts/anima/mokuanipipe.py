@@ -7,7 +7,6 @@ from diffusers import (
 import torch
 import os
 from lycoris import create_lycoris_from_weights
-from safetensors.torch import load_file
 
 from .animackpt2 import (
 	check_anima_base,
@@ -23,44 +22,16 @@ txt2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa"]
 img2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds"]
 hiresfix_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds","up","hu","hum","hs"]
 
-default_trans_config={
-  "in_channels": 16,
-  "out_channels": 16,
-  "num_attention_heads": 16,
-  "attention_head_dim": 128,
-  "num_layers": 40,
-  "mlp_ratio": 4.0,
-  "text_embed_dim": 1024,
-  "adaln_lora_dim": 256,
-  "max_size": [
-    128,
-    240,
-    240
-  ],
-  "patch_size": [
-    1,
-    2,
-    2
-  ],
-  "rope_scale": [
-    1.0,
-    4.0,
-    4.0
-  ],
-  "concat_padding_mask": True,
-  "extra_pos_embed_type": None,
-  "use_crossattn_projection": False,
-  "crossattn_proj_in_channels": 1024,
-  "encoder_hidden_states_channels": 1024,
-  "controlnet_block_every_n": None,
-  "img_context_dim_in": None,
-  "img_context_num_tokens": 256,
-  "img_context_dim_out": 2048,
-  "_class_name": "CosmosTransformer3DModel",
-  "_diffusers_version": "0.39.0.dev0",
-  "_name_or_path": os.getcwd()+"/AnimaBaseV1",
-  "dtype":torch.bfloat16,
-}
+init_components=[
+"text_encoder",
+"tokenizer",
+"t5_tokenizer",
+"guider",
+"vae",
+"image_processor",
+"text_conditioner",
+"scheduler",
+]
 
 class mokuanipipe:
 	def __init__(self):
@@ -71,29 +42,33 @@ class mokuanipipe:
 			"sa":"FlowMatch_Euler normal"
 		}
 
-		check_anima_base()
-
 		self.upscaler=None
 
 	def from_safe(self,path,torch_dtype=torch.float,device="cpu"):
 		self.moku_meta["ckpt"]=get_id(path)
 
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=safe2diff(path=path)
-
-		transformer=0
-		if transformer_sd!={}:
-			transformer_config = default_trans_config
-			transformer_config["num_layers"] = block_num
-			transformer=CosmosTransformer3DModel.from_config(transformer_config)
-			transformer.load_state_dict(transformer_sd)
-			transformer.to(device)
-		del transformer_sd
+		check_anima_base(block_num)
 
 		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
-		if transformer!=0:
-			self.pipe.transformer=transformer
-		self.pipe.load_components()
+		self.pipe.load_components(names=init_components)
 		self.pipe.to(device).to(torch_dtype)
+		
+		if block_num==28:
+			self.pipe.transformer=CosmosTransformer3DModel.from_pretrained(
+				os.getcwd()+"/AnimaBaseV1/transformer",
+				torch_dtype=torch.bfloat16
+			)
+		else:
+			self.pipe.transformer=CosmosTransformer3DModel.from_pretrained(
+				os.getcwd()+"/AnimaBaseV1/transformer"+str(block_num),
+				torch_dtype=torch.bfloat16
+			)
+		if transformer_sd!={}:
+			for k,p in self.pipe.transformer.named_parameters():
+				p.data=transformer_sd.pop(k)
+		del transformer_sd
+		self.pipe.transformer.to(device).to(torch_dtype)
 
 		if text_encoder_sd!={}:
 			for k,p in self.pipe.text_encoder.named_parameters():
@@ -114,21 +89,27 @@ class mokuanipipe:
 		self.moku_meta["ckpt"]=get_id(path)
 
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=folder2diff(path=path)
-
-		transformer=0
-		if transformer_sd!={}:
-			transformer_config = default_trans_config
-			transformer_config["num_layers"] = block_num
-			transformer=CosmosTransformer3DModel.from_config(transformer_config)
-			transformer.load_state_dict(transformer_sd)
-			transformer.to(device)
-		del transformer_sd
+		check_anima_base(block_num)
 
 		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
-		if transformer!=0:
-			self.pipe.transformer=transformer
-		self.pipe.load_components()
+		self.pipe.load_components(names=init_components)
 		self.pipe.to(device).to(torch_dtype)
+		
+		if block_num==28:
+			self.pipe.transformer=CosmosTransformer3DModel.from_pretrained(
+				os.getcwd()+"/AnimaBaseV1/transformer",
+				torch_dtype=torch.bfloat16
+			)
+		else:
+			self.pipe.transformer=CosmosTransformer3DModel.from_pretrained(
+				os.getcwd()+"/AnimaBaseV1/transformer"+str(block_num),
+				torch_dtype=torch.bfloat16
+			)
+		if transformer_sd!={}:
+			for k,p in self.pipe.transformer.named_parameters():
+				p.data=transformer_sd.pop(k)
+		del transformer_sd
+		self.pipe.transformer.to(device).to(torch_dtype)
 
 		if text_encoder_sd!={}:
 			for k,p in self.pipe.text_encoder.named_parameters():
