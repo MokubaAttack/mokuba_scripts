@@ -85,6 +85,7 @@ class mokuanipipe:
 			transformer_config["num_layers"] = block_num
 			self.pipe.transformer=CosmosTransformer3DModel.from_config(transformer_config)
 			self.pipe.transformer.load_state_dict(transformer_sd)
+			self.pipe.transformer.to(device)
 		del transformer_sd
 		self.pipe.load_components()
 		self.pipe.to(device).to(torch_dtype)
@@ -115,6 +116,7 @@ class mokuanipipe:
 			transformer_config["num_layers"] = block_num
 			self.pipe.transformer=CosmosTransformer3DModel.from_config(transformer_config)
 			self.pipe.transformer.load_state_dict(transformer_sd)
+			self.pipe.transformer.to(device)
 		del transformer_sd
 		self.pipe.load_components()
 		self.pipe.to(device).to(torch_dtype)
