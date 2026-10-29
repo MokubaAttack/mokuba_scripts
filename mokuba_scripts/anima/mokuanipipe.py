@@ -79,30 +79,27 @@ class mokuanipipe:
 
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=safe2diff(path=path)
 
-		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1",torch_dtype=torch_dtype)
+		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
 		if transformer_sd!={}:
 			transformer_config = default_trans_config
 			transformer_config["num_layers"] = block_num
 			self.pipe.transformer=CosmosTransformer3DModel.from_config(transformer_config)
-			for k in transformer_sd:
-				transformer_sd[k]=transformer_sd[k].to(torch_dtype)
 			self.pipe.transformer.load_state_dict(transformer_sd)
-			self.pipe.transformer.to(device)
 		del transformer_sd
 		self.pipe.load_components()
-		self.pipe.to(device)
+		self.pipe.to(device).to(torch_dtype)
 
 		if text_encoder_sd!={}:
 			for k,p in self.pipe.text_encoder.named_parameters():
-				p.data=text_encoder_sd.pop(k).to(device,torch_dtype)
+				p.data=text_encoder_sd.pop(k).to(device).to(torch_dtype)
 		del text_encoder_sd
 		if text_conditioner_sd!={}:
 			for k,p in self.pipe.text_conditioner.named_parameters():
-				p.data=text_conditioner_sd.pop(k).to(device,torch_dtype)
+				p.data=text_conditioner_sd.pop(k).to(device).to(torch_dtype)
 		del text_conditioner_sd
 		if vae_sd!={}:
 			for k,p in self.pipe.vae.named_parameters():
-				p.data=vae_sd.pop(k).to(device,torch_dtype)
+				p.data=vae_sd.pop(k).to(device).to(torch_dtype)
 		del vae_sd
 		print(path+" is loaded.")
 		flush()
@@ -112,30 +109,27 @@ class mokuanipipe:
 
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=folder2diff(path=path)
 
-		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1",torch_dtype=torch_dtype)
+		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
 		if transformer_sd!={}:
 			transformer_config = default_trans_config
 			transformer_config["num_layers"] = block_num
 			self.pipe.transformer=CosmosTransformer3DModel.from_config(transformer_config)
-			for k in transformer_sd:
-				transformer_sd[k]=transformer_sd[k].to(torch_dtype)
 			self.pipe.transformer.load_state_dict(transformer_sd)
-			self.pipe.transformer.to(device)
 		del transformer_sd
 		self.pipe.load_components()
-		self.pipe.to(device)
+		self.pipe.to(device).to(torch_dtype)
 
 		if text_encoder_sd!={}:
 			for k,p in self.pipe.text_encoder.named_parameters():
-				p.data=text_encoder_sd.pop(k).to(device,torch_dtype)
+				p.data=text_encoder_sd.pop(k).to(device).to(torch_dtype)
 		del text_encoder_sd
 		if text_conditioner_sd!={}:
 			for k,p in self.pipe.text_conditioner.named_parameters():
-				p.data=text_conditioner_sd.pop(k).to(device,torch_dtype)
+				p.data=text_conditioner_sd.pop(k).to(device).to(torch_dtype)
 		del text_conditioner_sd
 		if vae_sd!={}:
 			for k,p in self.pipe.vae.named_parameters():
-				p.data=vae_sd.pop(k).to(device,torch_dtype)
+				p.data=vae_sd.pop(k).to(device).to(torch_dtype)
 		del vae_sd
 		
 		print(path+" is loaded.")
