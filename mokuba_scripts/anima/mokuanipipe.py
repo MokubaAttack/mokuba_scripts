@@ -79,6 +79,7 @@ class mokuanipipe:
 
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=safe2diff(path=path)
 
+		transformer=0
 		if transformer_sd!={}:
 			transformer_config = default_trans_config
 			transformer_config["num_layers"] = block_num
@@ -88,6 +89,8 @@ class mokuanipipe:
 		del transformer_sd
 
 		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
+		if transformer!=0:
+			self.pipe.transformer=transformer
 		self.pipe.load_components()
 		self.pipe.to(device).to(torch_dtype)
 
@@ -111,15 +114,18 @@ class mokuanipipe:
 
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=folder2diff(path=path)
 
-		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
+		transformer=0
 		if transformer_sd!={}:
 			transformer_config = default_trans_config
 			transformer_config["num_layers"] = block_num
-			self.pipe.transformer=CosmosTransformer3DModel.from_config(transformer_config)
-			for k in transformer_sd:
-				transformer_sd[k]=transformer_sd[k].to(device)
-			self.pipe.transformer.load_state_dict(transformer_sd)
+			transformer=CosmosTransformer3DModel.from_config(transformer_config)
+			transformer.load_state_dict(transformer_sd)
+			transformer.to(device)
 		del transformer_sd
+
+		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
+		if transformer!=0:
+			self.pipe.transformer=transformer
 		self.pipe.load_components()
 		self.pipe.to(device).to(torch_dtype)
 
