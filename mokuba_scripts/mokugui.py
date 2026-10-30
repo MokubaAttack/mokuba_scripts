@@ -19,6 +19,7 @@ tools=[
 	"civitai_dl",
 	"kaggle_dl",
 	"imgup",
+	"token_setting",
 ]
 
 def main():
@@ -97,6 +98,9 @@ def main():
 		elif name=="kaggle_dl":
 			from .tool import kaggle_dl
 			kaggle_dl.gui()
+		elif name=="token_setting":
+			from .tool import token_setting
+			token_setting.gui()
 		else:
 			from .tool import imgup
 			imgup.gui()
