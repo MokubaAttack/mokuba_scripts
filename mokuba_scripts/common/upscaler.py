@@ -91,6 +91,12 @@ class mokuup:
 				self.id=""
 				return
 
+			if dev==None or dev=="cpu":
+				dev=None
+				h=False
+			else:
+				h=True
+
 			self.model = RealESRGANer(
 				scale=scale,
 				model_path=path,
@@ -99,7 +105,7 @@ class mokuup:
 				tile=256,
 				tile_pad=10,
 				pre_pad=0,
-				half=True,
+				half=h,
 				device=dev
 			)
 			self.path=os.path.basename(path)
