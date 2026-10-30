@@ -9,7 +9,6 @@ import os
 from lycoris import create_lycoris_from_weights
 
 from .animackpt2 import (
-	check_anima_base,
 	safe2diff,
 	folder2diff
 )
@@ -48,7 +47,6 @@ class mokuanipipe:
 		self.moku_meta["ckpt"]=get_id(path)
 
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=safe2diff(path=path)
-		check_anima_base(block_num)
 
 		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
 		self.pipe.load_components(names=init_components)
@@ -89,7 +87,6 @@ class mokuanipipe:
 		self.moku_meta["ckpt"]=get_id(path)
 
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num=folder2diff(path=path)
-		check_anima_base(block_num)
 
 		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
 		self.pipe.load_components(names=init_components)

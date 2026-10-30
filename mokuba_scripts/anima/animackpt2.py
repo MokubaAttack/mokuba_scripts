@@ -16,7 +16,30 @@ vae_keys1=anima.vae_keys1
 vae_keys2=anima.vae_keys2
 vae_keys3=anima.vae_keys3
 
-def check_anima_base(n):
+def check_anima_base(base_safe):
+	if base_safe.endswith(".safetensors"):
+		sd=load_file(base_safe)
+	else:
+		if not(os.path.exists(base_safe+"/modular_model_index.json")):
+			raise RuntimeWarning("modular_model_index.json does not exist.")
+		f=open(base_safe+"/modular_model_index.json","r")
+		json_sd=json.load(f)
+		f.close()
+		transformer_path=json_sd["transformer"][-1]["pretrained_model_name_or_path"]+"/"+json_sd["transformer"][-1]["subfolder"]+"/diffusion_pytorch_model.safetensors"
+		if not(os.path.exists(transformer_path)):
+			raise RuntimeWarning("transformer file does not exist.")
+		sd=load_file(transformer_path)
+	
+	n=27
+	for k in sd:
+		m = re.search(r"blocks\.(\d+)\.(.+)",k)
+		if m is not None:
+			block_index = m.group(1)
+			if int(block_index)>n:
+				n=int(block_index)
+	n=n+1
+	del sd
+	
 	if not(os.path.exists(os.getcwd()+"/AnimaBaseV1")):
 		snapshot_download(repo_id="circlestone-labs/Anima-Base-v1.0-Diffusers", local_dir=os.getcwd()+"/AnimaBaseV1")
 
@@ -67,8 +90,6 @@ def check_anima_base(n):
 		save_file(sd,os.getcwd()+"/AnimaBaseV1/transformer"+str(n)+"/diffusion_pytorch_model.safetensors")
 
 def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
-	check_anima_base(28)
-
 	sd=load_file(path)
 	keys=[]
 	head_trans=None
@@ -227,7 +248,6 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 	return (transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,block_num)
 
 def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
-	check_anima_base(28)
 	if not(os.path.exists(path+"/modular_model_index.json")):
 		raise RuntimeWarning("modular_model_index.json does not exist.")
 	f=open(path+"/modular_model_index.json","r")
