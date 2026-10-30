@@ -1,5 +1,4 @@
 import os
-import requests
 import torch
 import numpy
 from PIL import Image
@@ -36,16 +35,10 @@ class mokuup:
 			self.id=""
 		else:
 			if not(os.path.exists(path)):
-				path=os.getcwd()+'/upscaler/RealESRGAN_x4plus.pth'
-				if not(os.path.exists(os.path.dirname(path))):
-					os.mkdir(os.path.dirname(path))
-				url="https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
-				res = requests.get(url,stream=True)
-				f=open(path, 'wb')
-				for chunk in res.iter_content(chunk_size=1024*1024):
-					f.write(chunk)
-				f.close()
-				del res
+				self.model=Image.BILINEAR
+				self.path="BILINEAR"
+				self.id=""
+				return
 
 			sd=torch.load(path)
 			if "id" in sd:
