@@ -2,6 +2,7 @@ import json
 import pyperclip
 import FreeSimpleGUI as sg
 import os
+import tkinter as tk
 
 dv={
 	"civitai_token":"",
@@ -61,4 +62,28 @@ def gui():
 		elif event=="SAVE":
 			save_token(values)
 			break
+		elif "-copy-" in event:
+			try:
+				key=event.replace("-copy-::","")
+				selected = window[key].widget.selection_get()
+				pyperclip.copy(selected)
+			except:
+				pass
+		elif "-cut-" in event:
+			try:
+				key=event.replace("-cut-::","")
+				selected = window[key].widget.selection_get()
+				pyperclip.copy(selected)
+				window[key].widget.delete(tk.SEL_FIRST, tk.SEL_LAST)
+			except:
+				pass
+		elif "-paste-" in event:
+			try:
+				key=event.replace("-paste-::","")
+				selected = pyperclip.paste()
+				insert_pos = window[key].widget.index("insert")
+				window[key].Widget.insert(insert_pos, selected)
+				window[key].widget.delete(tk.SEL_FIRST, tk.SEL_LAST)
+			except:
+				pass
 	window.close()
