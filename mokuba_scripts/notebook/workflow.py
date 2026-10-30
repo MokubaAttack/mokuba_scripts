@@ -12,7 +12,7 @@ from ..sd.mokusdxlpipe import mokusdxlpipe
 from ..sd.mokusdpipe import mokusdpipe
 from ..common.discord import up_drop
 from ..common.flush import flush
-
+from ..anima.animackpt2 import check_anima_base
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
 from ..common.dl import dlc
@@ -67,6 +67,9 @@ def mokuani(
 			if not(os.path.exists(safe_folder+"ckpt")):
 				os.makedirs(safe_folder+"ckpt")
 			dlc(ver_id,base_safe,token)
+			
+	if distributed_state.is_main_process:
+		check_anima_base(base_safe=base_safe)
 
 	if len(loras)!=len(lora_weights):
 		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
@@ -102,7 +105,7 @@ def mokuani(
 			line=line+".safetensors"
 		pipe.load_lycoris(path=line,weight=w)
 
-	if not(os.path.exists(out_folder+"/0")):
+	if not(os.path.exists(out_folder+"/0")) and distributed_state.is_main_process:
 		os.makedirs(out_folder+"/0")
 	ut=out_folder.replace("\\","/").split("/")[-1]
 
@@ -138,7 +141,7 @@ def mokuani(
 		distributed_state.destroy_process_group()
 		return
 	
-	if not(os.path.exists(out_folder+"/1")):
+	if not(os.path.exists(out_folder+"/1")) and distributed_state.is_main_process:
 		os.makedirs(out_folder+"/1")
 	
 	pipe.make_upscaler(Interpolation,dev)
@@ -328,7 +331,7 @@ def mokusdxl(
 	if freezeunet:
 		pipe.set_freeze_unet()
 
-	if not(os.path.exists(out_folder+"/0")):
+	if not(os.path.exists(out_folder+"/0")) and distributed_state.is_main_process:
 		os.makedirs(out_folder+"/0")
 	ut=out_folder.replace("\\","/").split("/")[-1]
 
@@ -365,7 +368,7 @@ def mokusdxl(
 		distributed_state.destroy_process_group()
 		return
 
-	if not(os.path.exists(out_folder+"/1")):
+	if not(os.path.exists(out_folder+"/1")) and distributed_state.is_main_process:
 		os.makedirs(out_folder+"/1")
 
 	pipe.make_upscaler(Interpolation,dev)
@@ -408,7 +411,7 @@ def mokusdxl(
 		distributed_state.destroy_process_group()
 		return
 
-	if not(os.path.exists(out_folder+"/2")):
+	if not(os.path.exists(out_folder+"/2")) and distributed_state.is_main_process:
 		os.makedirs(out_folder+"/2")
 
 	pipe.make_upscaler(Interpolation,dev)
@@ -603,7 +606,7 @@ def mokusd(
 	if freezeunet:
 		pipe.set_freeze_unet()
 
-	if not(os.path.exists(out_folder+"/0")):
+	if not(os.path.exists(out_folder+"/0")) and distributed_state.is_main_process:
 		os.makedirs(out_folder+"/0")
 	ut=out_folder.replace("\\","/").split("/")[-1]
 
@@ -640,7 +643,7 @@ def mokusd(
 		distributed_state.destroy_process_group()
 		return
 
-	if not(os.path.exists(out_folder+"/1")):
+	if not(os.path.exists(out_folder+"/1")) and distributed_state.is_main_process:
 		os.makedirs(out_folder+"/1")
 
 	pipe.make_upscaler(Interpolation,dev)
@@ -683,7 +686,7 @@ def mokusd(
 		distributed_state.destroy_process_group()
 		return
 
-	if not(os.path.exists(out_folder+"/2")):
+	if not(os.path.exists(out_folder+"/2")) and distributed_state.is_main_process:
 		os.makedirs(out_folder+"/2")
 
 	pipe.make_upscaler(Interpolation,dev)
