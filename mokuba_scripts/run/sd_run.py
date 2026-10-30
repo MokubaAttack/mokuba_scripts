@@ -1,7 +1,5 @@
 from mokuba_scripts.notebook.workflow import mokusd
 import json
-import os
-os.environ["HF_HOME"]=os.getcwd()+"/pipecache"
 
 if __name__ == "__main__":
     f=open("pipecache/params.json","r")
