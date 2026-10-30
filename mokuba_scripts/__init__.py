@@ -6,6 +6,14 @@ if not(os.path.exists(os.getcwd()+"/pipecache")):
 import FreeSimpleGUI as sg
 sg.theme('TealMono')
 
+import json
+if os.path.exists(os.getcwd()+"/pipecache/token.json"):
+	f=open(os.getcwd()+"/pipecache/token.json","r")
+	sd=json.load(f)
+	f.close()
+	if "huggingface_token" in sd:
+		os.environ["HF_TOKEN"]=sd["huggingface_token"]
+
 from .common.dl import (
 	dlc,
 	dlk
