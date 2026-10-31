@@ -16,30 +16,7 @@ vae_keys1=anima.vae_keys1
 vae_keys2=anima.vae_keys2
 vae_keys3=anima.vae_keys3
 
-def check_anima_base(base_safe):
-	if base_safe.endswith(".safetensors"):
-		sd=load_file(base_safe)
-	else:
-		if not(os.path.exists(base_safe+"/modular_model_index.json")):
-			raise RuntimeWarning("modular_model_index.json does not exist.")
-		f=open(base_safe+"/modular_model_index.json","r")
-		json_sd=json.load(f)
-		f.close()
-		transformer_path=json_sd["transformer"][-1]["pretrained_model_name_or_path"]+"/"+json_sd["transformer"][-1]["subfolder"]+"/diffusion_pytorch_model.safetensors"
-		if not(os.path.exists(transformer_path)):
-			raise RuntimeWarning("transformer file does not exist.")
-		sd=load_file(transformer_path)
-	
-	n=27
-	for k in sd:
-		m = re.search(r"blocks\.(\d+)\.(.+)",k)
-		if m is not None:
-			block_index = m.group(1)
-			if int(block_index)>n:
-				n=int(block_index)
-	n=n+1
-	del sd
-	
+def check_anima_base1():
 	if not(os.path.exists(os.getcwd()+"/AnimaBaseV1")):
 		snapshot_download(repo_id="circlestone-labs/Anima-Base-v1.0-Diffusers", local_dir=os.getcwd()+"/AnimaBaseV1")
 
@@ -64,6 +41,7 @@ def check_anima_base(base_safe):
 		f.write("2945208")
 		f.close()
 		
+def check_anima_base2(n):
 	if not(os.path.exists(os.getcwd()+"/AnimaBaseV1/transformer"+str(n))) and n!=28:
 		os.mkdir(os.getcwd()+"/AnimaBaseV1/transformer"+str(n))
 		f=open(os.getcwd()+"/AnimaBaseV1/transformer/config.json","r")
