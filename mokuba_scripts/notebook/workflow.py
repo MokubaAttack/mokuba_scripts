@@ -12,7 +12,6 @@ from ..sd.mokusdxlpipe import mokusdxlpipe
 from ..sd.mokusdpipe import mokusdpipe
 from ..common.discord import up_drop
 from ..common.flush import flush
-from ..anima.animackpt2 import check_anima_base
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
 from ..common.dl import dlc
@@ -67,9 +66,6 @@ def mokuani(
 			if not(os.path.exists(safe_folder+"ckpt")):
 				os.makedirs(safe_folder+"ckpt")
 			dlc(ver_id,base_safe,token)
-			
-	if distributed_state.is_main_process:
-		check_anima_base(base_safe=base_safe)
 
 	if len(loras)!=len(lora_weights):
 		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
@@ -90,13 +86,12 @@ def mokuani(
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
 	count=distributed_state.num_processes
-	distributed_state.wait_for_everyone()
 
 	pipe=mokuanipipe()
 	if base_safe.endswith(".safetensors"):
-		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=dev)
+		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=distributed_state)
 	else:
-		pipe.from_folder(path=base_safe,torch_dtype=dtype,device=dev)
+		pipe.from_folder(path=base_safe,torch_dtype=dtype,device=distributed_state)
 
 	pipe.set_scheduler(sample,sgm)
 
