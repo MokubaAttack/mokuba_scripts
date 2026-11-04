@@ -67,7 +67,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 		print("loading "+os.path.basename(ckpts[0]))
 	if ckpts[0].endswith(".safetensors"):
 		try:
-			sd10,sd11,sd12,sd13=safe2diff(path=ckpts[0],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
+			sd10,sd11,sd12,sd13,_=safe2diff(path=ckpts[0],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
 		except:
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[0])+".")
@@ -78,7 +78,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			return
 	else:
 		try:
-			sd10,sd11,sd12,sd13=folder2diff(path=ckpts[0],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
+			sd10,sd11,sd12,sd13,_=folder2diff(path=ckpts[0],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
 		except:
 			if win==None:
 				print("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
@@ -94,7 +94,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 		print("loading "+os.path.basename(ckpts[1]))
 	if ckpts[1].endswith(".safetensors"):
 		try:
-			sd20,sd21,sd22,sd23=safe2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
+			sd20,sd21,sd22,sd23,_=safe2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
 		except:
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[1])+".")
@@ -105,7 +105,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			return
 	else:
 		try:
-			sd20,sd21,sd22,sd23=folder2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
+			sd20,sd21,sd22,sd23,_=folder2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
 		except:
 			if win==None:
 				print("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
