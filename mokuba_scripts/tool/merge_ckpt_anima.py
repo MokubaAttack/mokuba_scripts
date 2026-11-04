@@ -115,7 +115,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
 			return
 
-	keys0=list(sd10)
+	keys0=list(set(list(sd10)+list(sd20)))
 	keys1=list(sd11)
 	keys2=list(sd12)
 	keys3=list(sd13)
@@ -134,8 +134,14 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 
 		out_dict={}
 		try:
-			t1=sd10.pop(k).to(torch.float32)
-			t2=sd20.pop(k).to(torch.float32)
+			if k in sd10:
+				t1=sd10.pop(k).to(torch.float32)
+			else:
+				t1=torch.zeros_like(sd20[k]).to(torch.float32)
+			if k in sd20:
+				t2=sd20.pop(k).to(torch.float32)
+			else:
+				t2=torch.zeros_like(t1).to(torch.float32)
 		except:
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
