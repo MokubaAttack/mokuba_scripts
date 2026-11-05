@@ -30,7 +30,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
 		print("loading "+os.path.basename(ckpts[0]))
 	if ckpts[0].endswith(".safetensors"):
 		try:
-			sd10,sd11,sd12,sd13=safe2diff(path=ckpts[0],trans=trans,teco=teco,teen=teen,vae=False)
+			sd10,sd11,sd12,sd13,n1=safe2diff(path=ckpts[0],trans=trans,teco=teco,teen=teen,vae=False)
 		except:
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[0])+".")
@@ -40,7 +40,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
 			return
 	else:
 		try:
-			sd10,sd11,sd12,sd13=folder2diff(path=ckpts[0],trans=trans,teco=teco,teen=teen,vae=False)
+			sd10,sd11,sd12,sd13,n1=folder2diff(path=ckpts[0],trans=trans,teco=teco,teen=teen,vae=False)
 		except:
 			if win==None:
 				print("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
@@ -51,7 +51,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
 
 	if ckpts[1].endswith(".safetensors"):
 		try:
-			sd20,sd21,sd22,sd23=safe2diff(path=ckpts[1],trans=trans,teco=teco,teen=teen,vae=False)
+			sd20,sd21,sd22,sd23,n2=safe2diff(path=ckpts[1],trans=trans,teco=teco,teen=teen,vae=False)
 		except:
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[1])+".")
@@ -61,7 +61,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
 			return
 	else:
 		try:
-			sd20,sd21,sd22,sd23=folder2diff(path=ckpts[1],trans=trans,teco=teco,teen=teen,vae=False)
+			sd20,sd21,sd22,sd23,n2=folder2diff(path=ckpts[1],trans=trans,teco=teco,teen=teen,vae=False)
 		except:
 			if win==None:
 				print("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
@@ -69,6 +69,14 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
 			return
+	if n1!=n2:
+		if win==None:
+			print("The ckpts are models of different types.")
+		else:
+			win["RUN"].Update(disabled=False)
+			win["info"].update("The ckpts are models of different types.")
+		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+		return
 
 	keys0=list(sd10)
 	keys1=list(sd11)
