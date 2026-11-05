@@ -66,6 +66,7 @@ setup(
 		"FreeSimpleGUI",
 		"pyperclip",
 		"torchao==0.13.0",
+		"requests==2.32.4",
 	],
 	extras_require={
 		"cuda":extras_need(w="cuda"),
