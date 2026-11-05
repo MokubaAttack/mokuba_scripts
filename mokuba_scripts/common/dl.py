@@ -67,7 +67,7 @@ def dlc(ver_id,path,token):
 def dlk(dataname,username,token,path):
 	url="https://www.kaggle.com/api/v1/datasets/download/"+username+"/"+dataname
 
-	res = requests.get(url,allow_redirects=True,stream=True,auth=requests.auth.HTTPBasicAuth(username,token))
+	res = requests.get(url,stream=True,auth=(username,token))
 
 	with open('pipecache/hogehoge.zip', 'wb') as f:
 		for chunk in res.iter_content(chunk_size=1024*1024):
