@@ -139,9 +139,9 @@ def makesafe(base_path,loras,ws,out_path,ff,win=None):
 	else:
 		print("output ckpt file")
 	if base_path.endswith(".safetensors"):
-		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd=safe2diff(path=base_path)
+		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,_=safe2diff(path=base_path)
 	else:
-		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd=folder2diff(path=base_path)
+		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,_=folder2diff(path=base_path)
 	keys=zip_ckpt(pipe.pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,ff)
 	save_safe(keys,out_path,os.getcwd()+"/pipecache/safe_temp")
 
