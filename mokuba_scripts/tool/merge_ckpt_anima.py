@@ -67,7 +67,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 		print("loading "+os.path.basename(ckpts[0]))
 	if ckpts[0].endswith(".safetensors"):
 		try:
-			sd10,sd11,sd12,sd13,_=safe2diff(path=ckpts[0],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
+			sd10,sd11,sd12,sd13,n1=safe2diff(path=ckpts[0],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
 		except:
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[0])+".")
@@ -78,7 +78,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			return
 	else:
 		try:
-			sd10,sd11,sd12,sd13,_=folder2diff(path=ckpts[0],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
+			sd10,sd11,sd12,sd13,n1=folder2diff(path=ckpts[0],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
 		except:
 			if win==None:
 				print("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
@@ -94,7 +94,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 		print("loading "+os.path.basename(ckpts[1]))
 	if ckpts[1].endswith(".safetensors"):
 		try:
-			sd20,sd21,sd22,sd23,_=safe2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
+			sd20,sd21,sd22,sd23,n2=safe2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
 		except:
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[1])+".")
@@ -105,7 +105,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			return
 	else:
 		try:
-			sd20,sd21,sd22,sd23,_=folder2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
+			sd20,sd21,sd22,sd23,n2=folder2diff(path=ckpts[1],trans=ff[0],teco=ff[1],teen=ff[2],vae=ff[3])
 		except:
 			if win==None:
 				print("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
@@ -114,8 +114,16 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win["info"].update("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
 			return
+	if n1!=n2:
+		if win==None:
+			print("The ckpts are models of different types.")
+		else:
+			win["RUN"].Update(disabled=False)
+			win["info"].update("The ckpts are models of different types.")
+		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+		return
 
-	keys0=list(set(list(sd10)+list(sd20)))
+	keys0=list(sd10)
 	keys1=list(sd11)
 	keys2=list(sd12)
 	keys3=list(sd13)
@@ -134,14 +142,8 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 
 		out_dict={}
 		try:
-			if k in sd10:
-				t1=sd10.pop(k).to(torch.float32)
-			else:
-				t1=torch.zeros_like(sd20[k]).to(torch.float32)
-			if k in sd20:
-				t2=sd20.pop(k).to(torch.float32)
-			else:
-				t2=torch.zeros_like(t1).to(torch.float32)
+			t1=sd10.pop(k).to(torch.float32)
+			t2=sd20.pop(k).to(torch.float32)
 		except:
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
