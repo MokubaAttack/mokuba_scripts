@@ -153,7 +153,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 						if int(block_index)>block_num:
 							block_num=int(block_index)
 						continue
-		minus_key.append("unknown."+k)
+		minus_key[4].append("unknown."+k)
 
 	if transformer_sd=={} and text_encoder_sd=={} and text_conditioner_sd=={} and vae_sd=={}:
 		raise RuntimeWarning(path+" isn't supported.")
