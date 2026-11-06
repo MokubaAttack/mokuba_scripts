@@ -1,6 +1,9 @@
 import torch
 import os
-from safetensors.torch import save_file
+from safetensors.torch import (
+	save_file,
+	load_file
+)
 import re
 
 from ..common.diff2 import diff2sdxl
@@ -8,6 +11,12 @@ from ..common.flush import flush
 from ..common.dl import dlc
 
 CLAMP_QUANTILE=0.99
+
+def subfunc(path):
+	box=diff2sdxl()
+	sd1=box.pipelora(path)
+	save_file(sd1,path.replace(".safetensors","_tmp.safetensors"))
+	return list(sd1),path.replace(".safetensors","_tmp.safetensors")
 
 def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 	if win!=None:
@@ -45,9 +54,8 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 				win["info"].update(os.path.basename(path)+" does not exist.")
 			return
 
-	box=diff2sdxl()
 	try:
-		sd1=box.pipelora(ckpts[0])
+		keys0,p0=subfunc(ckpts[0])
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[0])+" isn't supported.")
@@ -56,7 +64,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 			print(os.path.basename(ckpts[0])+" isn't supported.")
 		return
 	try:
-		sd2=box.pipelora(ckpts[1])
+		_,p1=subfunc(ckpts[1])
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[1])+" isn't supported.")
@@ -65,7 +73,8 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 			print(os.path.basename(ckpts[1])+" isn't supported.")
 		return
 		
-	keys0=list(sd1)
+	sd1=load_file(p0)
+	sd2=load_file(p1)
 	dict_sum=len(keys0)
 	key_count=0
 	out_dict={}
@@ -141,6 +150,8 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 		flush()
 	del sd1,sd2
 	save_file(out_dict,out_path)
+	os.remove(p1)
+	os.remove(p0)
 	if win==None:
 		print("")
 		print("fin")
