@@ -5,7 +5,8 @@ import re
 
 from ..anima.animackpt2 import (
 	safe2diff,
-	folder2diff
+	folder2diff,
+	check_anima_base1
 )
 from ..common.diff2 import diff2anima
 from ..common.flush import flush
@@ -53,6 +54,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 		win["info"].update("loading "+os.path.basename(ckpts[0]))
 	else:
 		print("loading "+os.path.basename(ckpts[0]))
+	check_anima_base1()
 	if ckpts[0].endswith(".safetensors"):
 		try:
 			sd10,sd11,sd12,sd13,n1=safe2diff(path=ckpts[0],trans=trans,teco=teco,teen=teen,vae=False)
