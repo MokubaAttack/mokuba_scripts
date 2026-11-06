@@ -104,9 +104,11 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
 			return
-			
+
 		mat=t2-t1
 
+		if torch.equal(t1,t2):
+			continue
 		if mat.dim()==1:
 			continue
 		if torch.any(torch.isnan(mat)):
@@ -178,6 +180,8 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
 			
 		mat=t2-t1
 
+		if torch.equal(t1,t2):
+			continue
 		if mat.dim()==1:
 			continue
 		if torch.any(torch.isnan(mat)):
@@ -251,6 +255,8 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
 			
 		mat=t2-t1
 
+		if torch.equal(t1,t2):
+			continue
 		if mat.dim()==1:
 			continue
 		if torch.any(torch.isnan(mat)):
