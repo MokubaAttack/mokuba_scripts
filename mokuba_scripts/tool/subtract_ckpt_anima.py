@@ -11,11 +11,26 @@ from ..common.flush import flush
 
 CLAMP_QUANTILE=0.99
 
-def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None):
+def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 	if win!=None:
 		win["RUN"].Update(disabled=True)
 
-	for path in ckpts:
+	safe_folder=out_path.removesuffix(os.path.basename(out_path))
+	for ind,path in enumerate(ckpts):
+		path=str(path)
+		m=re.match(r"[0-9]+$",path)
+		if m!=None:
+			ver_id=path
+			path=safe_folder+path+".safetensors"
+			ckpts[ind]=path
+			if token=="":
+				if win==None:
+					print("civitai token doesn't input.")
+				else:
+					win["info"].update("civitai token doesn't input.")
+					win['RUN'].Update(disabled=False)
+				return
+			dlc(ver_id,path,token)
 		if not(os.path.exists(path)):
 			if win==None:
 				print(path+" does not exist.")
@@ -323,6 +338,12 @@ def gui():
 	import pyperclip
 	import threading
 	import FreeSimpleGUI as sg
+	import json
+
+	from ..tool.civitai_dl import check
+
+	if check()==False:
+		return
 
 	keys=["ckpt1","ckpt2","out","dim"]
 
@@ -379,8 +400,15 @@ def gui():
 				trans_out=values["unet"]
 				teen_out=values["text1"]
 				teco_out=values["text2"]
+
+				try:
+					with open(os.getcwd()+"/pipecache/token.json","r") as f:
+						d = json.load(f)
+					token=d["civitai_token"]
+				except:
+					token=""
 				
-				thread1 = threading.Thread(target=subtractckpt,args=(paths,dim,trans_out,teco_out,teen_out,out_path,window))
+				thread1 = threading.Thread(target=subtractckpt,args=(paths,dim,trans_out,teco_out,teen_out,out_path,window,token))
 				thread1.start()
 		elif "-copy-" in event:
 			try:
