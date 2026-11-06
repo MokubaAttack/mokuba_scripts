@@ -15,6 +15,14 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 	if win!=None:
 		win["RUN"].Update(disabled=True)
 
+	if not(out_path.endswith(".safetensors")):
+		if win==None:
+			print("the output path is needed to be a safetensors file.")
+		else:
+			win["RUN"].Update(disabled=False)
+			win["info"].update("the output path is needed to be a safetensors file.")
+		return
+		
 	safe_folder=out_path.removesuffix(os.path.basename(out_path))
 	for ind,path in enumerate(ckpts):
 		path=str(path)
