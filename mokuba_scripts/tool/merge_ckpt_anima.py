@@ -629,7 +629,7 @@ def gui():
 					vae=0
 					
 				try:
-					with open(os.getcwd()+"/token.json","r") as f:
+					with open(os.getcwd()+"/pipecache/token.json","r") as f:
 						d = json.load(f)
 					token=d["civitai_token"]
 				except:
