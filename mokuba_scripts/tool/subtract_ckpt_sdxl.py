@@ -150,9 +150,9 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 		del t1,t2,mat,up_weight,down_weight,U,S,Vh,dist,hi_val,low_val,a
 		flush()
 	del sd1,sd2
-	save_file(out_dict,out_path)
 	os.remove(p1)
 	os.remove(p0)
+	save_file(out_dict,out_path)
 	if win==None:
 		print("")
 		print("fin")
