@@ -12,11 +12,12 @@ from ..common.dl import dlc
 
 CLAMP_QUANTILE=0.99
 
-def subfunc(path):
+def subfunc(path,i):
 	box=diff2sdxl()
 	sd1=box.pipelora(path)
-	save_file(sd1,path.replace(".safetensors","_tmp.safetensors"))
-	return list(sd1),path.replace(".safetensors","_tmp.safetensors")
+	out_path="pipecache/"+str(i)+".safetensors"
+	save_file(sd1,out_path)
+	return list(sd1),out_path
 
 def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 	if win!=None:
@@ -55,7 +56,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 			return
 
 	try:
-		keys0,p0=subfunc(ckpts[0])
+		keys0,p0=subfunc(ckpts[0],0)
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[0])+" isn't supported.")
@@ -64,7 +65,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 			print(os.path.basename(ckpts[0])+" isn't supported.")
 		return
 	try:
-		_,p1=subfunc(ckpts[1])
+		_,p1=subfunc(ckpts[1],1)
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[1])+" isn't supported.")
