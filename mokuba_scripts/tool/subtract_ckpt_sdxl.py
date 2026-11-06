@@ -5,6 +5,7 @@ import re
 
 from ..common.diff2 import diff2sdxl
 from ..common.flush import flush
+from ..common.dl import dlc
 
 CLAMP_QUANTILE=0.99
 
