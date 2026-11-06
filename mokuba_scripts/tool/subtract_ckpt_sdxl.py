@@ -1,6 +1,7 @@
 import torch
 import os
 from safetensors.torch import save_file
+import re
 
 from ..common.diff2 import diff2sdxl
 from ..common.flush import flush
