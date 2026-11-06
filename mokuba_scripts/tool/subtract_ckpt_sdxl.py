@@ -73,6 +73,8 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None):
 			
 		mat=t2-t1
 
+		if torch.equal(t1,t2):
+			continue
 		if mat.dim()==1:
 			continue
 		if torch.any(torch.isnan(mat)):
