@@ -296,6 +296,7 @@ def mokusdxl(
 
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
+	count=distributed_state.num_processes
 	distributed_state.wait_for_everyone()
 
 	pipe=mokusdxlpipe()
@@ -332,7 +333,7 @@ def mokusdxl(
 
 	imgs=[]
 	for i,s in enumerate(seed):
-		print(str(2*i+process_ind)+"_"+str(s))
+		print(str(count*i+process_ind)+"_"+str(s))
 		img,meta=pipe.txt2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -345,10 +346,10 @@ def mokusdxl(
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=ut+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -374,7 +375,7 @@ def mokusdxl(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(2*i+process_ind)+"_"+str(s))
+		print(str(count*i+process_ind)+"_"+str(s))
 		img,meta=pipe.img2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -388,10 +389,10 @@ def mokusdxl(
 		)
 		imgs[i]=img
 
-		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=ut+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -421,7 +422,7 @@ def mokusdxl(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(2*i+process_ind)+"_"+str(s))
+		print(str(count*i+process_ind)+"_"+str(s))
 		img,meta=pipe.tileup(
 			prompt=qprompt,
 			n_prompt=qn_prompt,
@@ -435,10 +436,10 @@ def mokusdxl(
 		)
 		imgs[i]=img
 	
-		meta["input"]=out_folder+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=ut+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			drop_path=ut+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -571,6 +572,7 @@ def mokusd(
 
 	dev=distributed_state.device
 	process_ind=distributed_state.process_index
+	count=distributed_state.num_processes
 	distributed_state.wait_for_everyone()
 
 	pipe=mokusdpipe()
@@ -607,7 +609,7 @@ def mokusd(
 
 	imgs=[]
 	for i,s in enumerate(seed):
-		print(str(2*i+process_ind)+"_"+str(s))
+		print(str(count*i+process_ind)+"_"+str(s))
 		img,meta=pipe.txt2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -620,10 +622,10 @@ def mokusd(
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=ut+"/0/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -649,7 +651,7 @@ def mokusd(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(2*i+process_ind)+"_"+str(s))
+		print(str(count*i+process_ind)+"_"+str(s))
 		img,meta=pipe.img2img(
 			prompt=prompt,
 			n_prompt=n_prompt,
@@ -663,10 +665,10 @@ def mokusd(
 		)
 		imgs[i]=img
 
-		meta["input"]=out_folder+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=ut+"/1/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
@@ -696,7 +698,7 @@ def mokusd(
 	pipe.delete_upscaler()
 
 	for i,s in enumerate(seed):
-		print(str(2*i+process_ind)+"_"+str(s))
+		print(str(count*i+process_ind)+"_"+str(s))
 		img,meta=pipe.tileup(
 			prompt=qprompt,
 			n_prompt=qn_prompt,
@@ -710,10 +712,10 @@ def mokusd(
 		)
 		imgs.append(img)
 
-		meta["input"]=out_folder+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+		meta["input"]=out_folder+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 		plus_meta(meta,img)
 		if url!=[]:
-			drop_path=ut+"/2/"+str(2*i+process_ind)+"_"+str(s)+".jpg"
+			drop_path=ut+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
 		flush()
 
