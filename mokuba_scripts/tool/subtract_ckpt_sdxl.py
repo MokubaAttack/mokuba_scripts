@@ -15,6 +15,8 @@ CLAMP_QUANTILE=0.99
 def subfunc(path,i):
 	box=diff2sdxl()
 	sd1=box.pipelora(path)
+	for k in sd1:
+		sd[k]=sd[k].to(torch.float16)
 	out_path="pipecache/"+str(i)+".safetensors"
 	save_file(sd1,out_path)
 	return list(sd1),out_path
