@@ -91,6 +91,11 @@ class animagui:
 		win["x"].update(str(x))
 		values["y"]=str(y)
 		win["y"].update(str(y))
+		
+		if "," in values["se"]:
+			seed=values["se"].split(",")
+		else:
+			seed=[values["se"]]
 
 		if values["ds"]=="" or values["hu"]=="" or values["hum"]=="" or values["hs"]=="":
 			mode=0
@@ -141,7 +146,7 @@ class animagui:
 		"step":step,
 		"sample":values["sa"],
 		"sgm":values["sc"],
-		"seed":values["se"],
+		"seed":seed,
 		"out_folder":values["out"],
 		"base_safe":values["input"],
 		"url":[],

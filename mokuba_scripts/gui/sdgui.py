@@ -119,6 +119,11 @@ class sdgui:
 		win["x"].update(str(x))
 		values["y"]=str(y)
 		win["y"].update(str(y))
+		
+		if "," in values["se"]:
+			seed=values["se"].split(",")
+		else:
+			seed=[values["se"]]
 
 		if values["ds"]!="" and values["hs"]!="" and values["hu"]!="" and values["tu"]!="" and values["ts"]!="" and values["ccs"]!="":
 			mode=2
@@ -225,7 +230,7 @@ class sdgui:
 		"step":step,
 		"sample":values["sa"],
 		"sgm":values["sc"],
-		"seed":values["se"],
+		"seed":seed,
 		"out_folder":values["out"],
 		"base_safe":values["input"],
 		"url":[],

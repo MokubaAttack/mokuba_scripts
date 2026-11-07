@@ -56,6 +56,11 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 				win["RUN"].Update(disabled=False)
 				win["info"].update(os.path.basename(path)+" does not exist.")
 			return
+	
+	if win!=None:
+		win["info"].update("loading "+os.path.basename(ckpts[0]))
+	else:
+		print("loading "+os.path.basename(ckpts[0]))
 
 	try:
 		keys0,p0=subfunc(ckpts[0],0)
@@ -66,6 +71,12 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 		else:
 			print(os.path.basename(ckpts[0])+" isn't supported.")
 		return
+		
+	if win!=None:
+		win["info"].update("loading "+os.path.basename(ckpts[1]))
+	else:
+		print("loading "+os.path.basename(ckpts[1]))
+		
 	try:
 		_,p1=subfunc(ckpts[1],1)
 	except:

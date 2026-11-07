@@ -434,7 +434,7 @@ class diff2sdxl:
 						is_linear = child_module.__class__.__name__ == "Linear"
 						is_conv2d = child_module.__class__.__name__ == "Conv2d"
 						if is_linear or is_conv2d:
-							lora_name = "lora_te1" + "." + name + "." + child_name
+							lora_name = "lora_te1_text_model" + "." + name + "." + child_name
 							lora_name = lora_name.replace(".", "_")
 							out_sd[lora_name]=child_module.weight.contiguous()
 		if teen2:

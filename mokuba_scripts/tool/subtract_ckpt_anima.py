@@ -75,6 +75,11 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
 			return
+			
+	if win!=None:
+		win["info"].update("loading "+os.path.basename(ckpts[1]))
+	else:
+		print("loading "+os.path.basename(ckpts[1]))
 
 	if ckpts[1].endswith(".safetensors"):
 		try:
