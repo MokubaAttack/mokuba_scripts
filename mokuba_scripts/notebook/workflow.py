@@ -1,0 +1,744 @@
+import torch
+import os
+import math
+from diffusers.utils import make_image_grid
+from PIL import Image
+import shutil
+import re
+from accelerate import PartialState
+
+from ..anima.mokuanipipe import mokuanipipe
+from ..sd.mokusdxlpipe import (
+	mokusdxlpipe,
+	check_control_sdxl
+)
+from ..sd.mokusdpipe import (
+	mokusdpipe,
+	check_control_sd
+)
+from ..common.discord import up_drop
+from ..common.flush import flush
+from ..common.metadata import plus_meta
+from ..common.seed import make_seed
+from ..common.dl import dlc
+
+def mokuani(
+	loras=[],
+	lora_weights=[],
+	prompt = "",
+	n_prompt = "",
+	pic_number=10,
+	gs=7,
+	step=30,
+	sample="",
+	sgm="",
+	seed=0,
+	out_folder="data",
+	base_safe="base.safetensors",
+	url="",
+	dtype="f32",
+	x=1024,
+	y=1024,
+	mode=0,
+	up=1.5,
+	Interpolation="BILINEAR",
+	step2=15,
+	ss=0.5,
+	token="",
+):
+	if not(isinstance(url, list)):
+		url=[]
+	if len(url)!=3:
+		url=[]
+
+	if dtype=="bf16":
+		dtype=torch.bfloat16
+	elif dtype=="f16":
+		dtype=torch.float16
+	else:
+		dtype=torch.float32
+
+	distributed_state = PartialState()
+	seed,pic_number=make_seed(seed,pic_number,distributed_state)
+	
+	safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
+	base_safe=str(base_safe)
+	m=re.match(r"[0-9]+$",base_safe)
+	if m!=None:
+		ver_id=base_safe
+		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
+		if not(os.path.exists(base_safe)) and distributed_state.is_main_process:
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"ckpt")):
+				os.makedirs(safe_folder+"ckpt")
+			dlc(ver_id,base_safe,token)
+
+	if len(loras)!=len(lora_weights):
+		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
+	for i,line in enumerate(loras):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"lora/"+line+".safetensors"
+			loras[i]=line
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"lora")):
+					os.makedirs(safe_folder+"lora")
+				dlc(ver_id,line,token)
+
+	dev=distributed_state.device
+	process_ind=distributed_state.process_index
+	count=distributed_state.num_processes
+
+	pipe=mokuanipipe()
+	if base_safe.endswith(".safetensors"):
+		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=distributed_state)
+	else:
+		pipe.from_folder(path=base_safe,torch_dtype=dtype,device=distributed_state)
+
+	pipe.set_scheduler(sample,sgm)
+
+	for line,w in zip(loras,lora_weights):
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_lycoris(path=line,weight=w)
+
+	if not(os.path.exists(out_folder+"/0")) and distributed_state.is_main_process:
+		os.makedirs(out_folder+"/0")
+	ut=out_folder.replace("\\","/").split("/")[-1]
+
+	imgs=[]
+	for i,s in enumerate(seed):
+		print(str(count*i+process_ind)+"_"+str(s))
+		img,meta=pipe.txt2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step,
+			x=x,
+			y=y,
+			seed=s
+		)
+		imgs.append(img)
+
+		meta["input"]=out_folder+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()	
+	
+	if mode==0:
+		distributed_state.wait_for_everyone()
+		if url!=[] and distributed_state.is_main_process:
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=ut+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
+		return
+	
+	if not(os.path.exists(out_folder+"/1")) and distributed_state.is_main_process:
+		os.makedirs(out_folder+"/1")
+	
+	pipe.make_upscaler(Interpolation,dev)
+	x=round(x*up/8)*8
+	y=round(y*up/8)*8
+	for i,img in enumerate(imgs):
+		imgs[i]=pipe.upscale(img,x,y)
+	pipe.delete_upscaler()
+
+	for i,s in enumerate(seed):
+		print(str(count*i+process_ind)+"_"+str(s))
+		img,meta=pipe.img2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step2,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			hiresfix=True
+		)
+		imgs[i]=img
+
+		meta["input"]=out_folder+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
+
+	distributed_state.wait_for_everyone()
+	if url!=[] and distributed_state.is_main_process:
+		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+		drop_path=ut+".zip"
+		up_drop("archive_shutil.zip",drop_path,url)
+		os.remove("archive_shutil.zip")
+	distributed_state.wait_for_everyone()
+	distributed_state.destroy_process_group()
+		
+def mokusdxl(
+	loras=[],
+	lora_weights=[],
+	prompt = "",
+	n_prompt = "",
+	pic_number=10,
+	gs=7,
+	step=30,
+	sample="",
+	sgm="",
+	seed=0,
+	out_folder="data",
+	base_safe="base.safetensors",
+	url="",
+	dtype="f32",
+	x=1024,
+	y=1024,
+	mode=0,
+	up=1.5,
+	Interpolation="BILINEAR",
+	step2=15,
+	ss=0.5,
+	pos_emb=[],
+	neg_emb=[],
+	vae_safe="",
+	step3=20,
+	up2=1.5,
+	ccs=0,
+	gpulowmem=False,
+	freezeunet=False,
+	cs=2,
+	qprompt="masterpiece, best quality, ultra detailed",
+	qn_prompt="worst quality, low quality, normal quality",
+	token="",
+):
+	if not(isinstance(url, list)):
+		url=[]
+	if len(url)!=3:
+		url=[]
+
+	if dtype=="bf16":
+		dtype=torch.bfloat16
+	elif dtype=="f16":
+		dtype=torch.float16
+	else:
+		dtype=torch.float32
+
+	distributed_state = PartialState()
+	seed,pic_number=make_seed(seed,pic_number,distributed_state)
+	
+	safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
+	base_safe=str(base_safe)
+	m=re.match(r"[0-9]+$",base_safe)
+	if m!=None:
+		ver_id=base_safe
+		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
+		if not(os.path.exists(base_safe)) and distributed_state.is_main_process:
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"ckpt")):
+				os.makedirs(safe_folder+"ckpt")
+			dlc(ver_id,base_safe,token)
+
+	vae_safe=str(vae_safe)
+	m=re.match(r"[0-9]+$",vae_safe)
+	if m!=None:
+		ver_id=vae_safe
+		vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
+		if not(os.path.exists(vae_safe)) and distributed_state.is_main_process:
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"vae")):
+				os.makedirs(safe_folder+"vae")
+			dlc(ver_id,vae_safe,token)
+
+	if len(loras)!=len(lora_weights):
+		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
+	for i,line in enumerate(loras):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"lora/"+line+".safetensors"
+			loras[i]=line
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"lora")):
+					os.makedirs(safe_folder+"lora")
+				dlc(ver_id,line,token)
+
+	for i,line in enumerate(pos_emb):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"embed/"+line+".safetensors"
+			pos_emb[i]=line
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"embed")):
+					os.makedirs(safe_folder+"embed")
+				dlc(ver_id,line,token)
+
+	for i,line in enumerate(neg_emb):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"embed/"+line+".safetensors"
+			neg_emb[i]=line
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"embed")):
+					os.makedirs(safe_folder+"embed")
+				dlc(ver_id,line,token)
+				
+	if mode!=0 and mode!=1 and ccs!=0 and distributed_state.is_main_process:
+		check_control_sdxl()
+
+	dev=distributed_state.device
+	process_ind=distributed_state.process_index
+	count=distributed_state.num_processes
+	distributed_state.wait_for_everyone()
+
+	pipe=mokusdxlpipe()
+	if base_safe.endswith(".safetensors"):
+		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=distributed_state,vae_path=vae_safe)
+	else:
+		pipe.from_folder(path=base_safe,torch_dtype=dtype,device=distributed_state,vae_path=vae_safe)
+
+	pipe.set_scheduler(sample,sgm)
+
+	for line,w in zip(loras,lora_weights):
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_lycoris(path=line,weight=w)
+
+	for line in pos_emb:
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_pos_embed(line)
+
+	for line in neg_emb:
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_neg_embed(line)
+
+	if gpulowmem:
+		pipe.set_gpu_lowmem()
+	if freezeunet:
+		pipe.set_freeze_unet()
+
+	if not(os.path.exists(out_folder+"/0")) and distributed_state.is_main_process:
+		os.makedirs(out_folder+"/0")
+	ut=out_folder.replace("\\","/").split("/")[-1]
+
+	imgs=[]
+	for i,s in enumerate(seed):
+		print(str(count*i+process_ind)+"_"+str(s))
+		img,meta=pipe.txt2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step,
+			x=x,
+			y=y,
+			seed=s,
+			cs=cs
+		)
+		imgs.append(img)
+
+		meta["input"]=out_folder+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
+
+	if mode==0:
+		distributed_state.wait_for_everyone()
+		if url!=[] and distributed_state.is_main_process:
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=ut+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
+		return
+
+	if not(os.path.exists(out_folder+"/1")) and distributed_state.is_main_process:
+		os.makedirs(out_folder+"/1")
+
+	pipe.make_upscaler(Interpolation,dev)
+	x=round(x*up/8)*8
+	y=round(y*up/8)*8
+	for i,img in enumerate(imgs):
+		imgs[i]=pipe.upscale(img,x,y)
+	pipe.delete_upscaler()
+
+	for i,s in enumerate(seed):
+		print(str(count*i+process_ind)+"_"+str(s))
+		img,meta=pipe.img2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step2,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			cs=cs,
+			hiresfix=True
+		)
+		imgs[i]=img
+
+		meta["input"]=out_folder+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
+
+	if mode==1:
+		distributed_state.wait_for_everyone()
+		if url!=[] and distributed_state.is_main_process:
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=ut+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
+		return
+
+	if not(os.path.exists(out_folder+"/2")) and distributed_state.is_main_process:
+		os.makedirs(out_folder+"/2")
+
+	pipe.make_upscaler(Interpolation,dev)
+	if ccs==0:
+		x=round(x*up2/8)*8
+		y=round(y*up2/8)*8
+	else:
+		x=round(x*up2/64)*64
+		y=round(y*up2/64)*64
+	for i,img in enumerate(imgs):
+		imgs[i]=pipe.upscale(img,x,y)
+	pipe.delete_upscaler()
+
+	for i,s in enumerate(seed):
+		print(str(count*i+process_ind)+"_"+str(s))
+		img,meta=pipe.tileup(
+			prompt=qprompt,
+			n_prompt=qn_prompt,
+			gs=gs,
+			step=step3,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			ccs=ccs,
+			cs=cs
+		)
+		imgs[i]=img
+	
+		meta["input"]=out_folder+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=ut+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
+
+	distributed_state.wait_for_everyone()
+	if url!=[] and distributed_state.is_main_process:
+		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+		drop_path=ut+".zip"
+		up_drop("archive_shutil.zip",drop_path,url)
+		os.remove("archive_shutil.zip")
+	distributed_state.wait_for_everyone()
+	distributed_state.destroy_process_group()
+	
+def mokusd(
+	loras=[],
+	lora_weights=[],
+	prompt = "",
+	n_prompt = "",
+	pic_number=10,
+	gs=7,
+	step=30,
+	sample="",
+	sgm="",
+	seed=0,
+	out_folder="data",
+	base_safe="base.safetensors",
+	url="",
+	dtype="f32",
+	x=1024,
+	y=1024,
+	mode=0,
+	up=1.5,
+	Interpolation="BILINEAR",
+	step2=15,
+	ss=0.5,
+	pos_emb=[],
+	neg_emb=[],
+	vae_safe="",
+	step3=20,
+	up2=1.5,
+	ccs=0,
+	gpulowmem=False,
+	freezeunet=False,
+	cs=2,
+	qprompt="masterpiece, best quality, ultra detailed",
+	qn_prompt="worst quality, low quality, normal quality",
+	token="",
+):
+	if not(isinstance(url, list)):
+		url=[]
+	if len(url)!=3:
+		url=[]
+
+	if dtype=="bf16":
+		dtype=torch.bfloat16
+	elif dtype=="f16":
+		dtype=torch.float16
+	else:
+		dtype=torch.float32
+
+	distributed_state = PartialState()
+	seed,pic_number=make_seed(seed,pic_number,distributed_state)
+	
+	safe_folder=out_folder.removesuffix(os.path.basename(out_folder))
+	base_safe=str(base_safe)
+	m=re.match(r"[0-9]+$",base_safe)
+	if m!=None:
+		ver_id=base_safe
+		base_safe=safe_folder+"ckpt/"+base_safe+".safetensors"
+		if not(os.path.exists(base_safe)) and distributed_state.is_main_process:
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"ckpt")):
+				os.makedirs(safe_folder+"ckpt")
+			dlc(ver_id,base_safe,token)
+
+	vae_safe=str(vae_safe)
+	m=re.match(r"[0-9]+$",vae_safe)
+	if m!=None:
+		ver_id=vae_safe
+		vae_safe=safe_folder+"vae/"+vae_safe+".safetensors"
+		if not(os.path.exists(vae_safe)) and distributed_state.is_main_process:
+			if token=="":
+				raise RuntimeWarning("civitai token doesn't input.")
+			if not(os.path.exists(safe_folder+"vae")):
+				os.makedirs(safe_folder+"vae")
+			dlc(ver_id,vae_safe,token)
+	
+	if len(loras)!=len(lora_weights):
+		raise RuntimeWarning("the number of lora does not equal the number of lora weight.")
+	for i,line in enumerate(loras):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"lora/"+line+".safetensors"
+			loras[i]=line
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"lora")):
+					os.makedirs(safe_folder+"lora")
+				dlc(ver_id,line,token)
+
+	for i,line in enumerate(pos_emb):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"embed/"+line+".safetensors"
+			pos_emb[i]=line
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"embed")):
+					os.makedirs(safe_folder+"embed")
+				dlc(ver_id,line,token)
+
+	for i,line in enumerate(neg_emb):
+		line=str(line)
+		m=re.match(r"[0-9]+$",line)
+		if m!=None:
+			ver_id=line
+			line=safe_folder+"embed/"+line+".safetensors"
+			neg_emb[i]=line
+			if not(os.path.exists(line)) and distributed_state.is_main_process:
+				if token=="":
+					raise RuntimeWarning("civitai token doesn't input.")
+				if not(os.path.exists(safe_folder+"embed")):
+					os.makedirs(safe_folder+"embed")
+				dlc(ver_id,line,token)
+				
+	if mode!=0 and mode!=1 and ccs!=0 and distributed_state.is_main_process:
+		check_control_sd()
+
+	dev=distributed_state.device
+	process_ind=distributed_state.process_index
+	count=distributed_state.num_processes
+	distributed_state.wait_for_everyone()
+
+	pipe=mokusdpipe()
+	if base_safe.endswith(".safetensors"):
+		pipe.from_safe(path=base_safe,torch_dtype=dtype,device=distributed_state,vae_path=vae_safe)
+	else:
+		pipe.from_folder(path=base_safe,torch_dtype=dtype,device=distributed_state,vae_path=vae_safe)
+
+	pipe.set_scheduler(sample,sgm)
+
+	for line,w in zip(loras,lora_weights):
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_lycoris(path=line,weight=w)
+
+	for line in pos_emb:
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_pos_embed(line)
+
+	for line in neg_emb:
+		if not(line.endswith(".safetensors")):
+			line=line+".safetensors"
+		pipe.load_neg_embed(line)
+
+	if gpulowmem:
+		pipe.set_gpu_lowmem()
+	if freezeunet:
+		pipe.set_freeze_unet()
+
+	if not(os.path.exists(out_folder+"/0")) and distributed_state.is_main_process:
+		os.makedirs(out_folder+"/0")
+	ut=out_folder.replace("\\","/").split("/")[-1]
+
+	imgs=[]
+	for i,s in enumerate(seed):
+		print(str(count*i+process_ind)+"_"+str(s))
+		img,meta=pipe.txt2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step,
+			x=x,
+			y=y,
+			seed=s,
+			cs=cs
+		)
+		imgs.append(img)
+
+		meta["input"]=out_folder+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
+
+	if mode==0:
+		distributed_state.wait_for_everyone()
+		if url!=[] and distributed_state.is_main_process:
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=ut+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
+		return
+
+	if not(os.path.exists(out_folder+"/1")) and distributed_state.is_main_process:
+		os.makedirs(out_folder+"/1")
+
+	pipe.make_upscaler(Interpolation,dev)
+	x=round(x*up/8)*8
+	y=round(y*up/8)*8
+	for i,img in enumerate(imgs):
+		imgs[i]=pipe.upscale(img,x,y)
+	pipe.delete_upscaler()
+
+	for i,s in enumerate(seed):
+		print(str(count*i+process_ind)+"_"+str(s))
+		img,meta=pipe.img2img(
+			prompt=prompt,
+			n_prompt=n_prompt,
+			gs=gs,
+			step=step2,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			cs=cs,
+			hiresfix=True
+		)
+		imgs[i]=img
+
+		meta["input"]=out_folder+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
+
+	if mode==1:
+		distributed_state.wait_for_everyone()
+		if url!=[] and distributed_state.is_main_process:
+			shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+			drop_path=ut+".zip"
+			up_drop("archive_shutil.zip",drop_path,url)
+			os.remove("archive_shutil.zip")
+		distributed_state.wait_for_everyone()
+		distributed_state.destroy_process_group()
+		return
+
+	if not(os.path.exists(out_folder+"/2")) and distributed_state.is_main_process:
+		os.makedirs(out_folder+"/2")
+
+	pipe.make_upscaler(Interpolation,dev)
+	if ccs==0:
+		x=round(x*up2/8)*8
+		y=round(y*up2/8)*8
+	else:
+		x=round(x*up2/64)*64
+		y=round(y*up2/64)*64
+	for i,img in enumerate(imgs):
+		imgs[i]=pipe.upscale(img,x,y)
+	pipe.delete_upscaler()
+
+	for i,s in enumerate(seed):
+		print(str(count*i+process_ind)+"_"+str(s))
+		img,meta=pipe.tileup(
+			prompt=qprompt,
+			n_prompt=qn_prompt,
+			gs=gs,
+			step=step3,
+			img=imgs[i],
+			seed=s,
+			ss=ss,
+			ccs=ccs,
+			cs=cs
+		)
+		imgs.append(img)
+
+		meta["input"]=out_folder+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+		plus_meta(meta,img)
+		if url!=[]:
+			drop_path=ut+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
+			up_drop(meta["input"],drop_path,url)
+		flush()
+
+	distributed_state.wait_for_everyone()
+	if url!=[] and distributed_state.is_main_process:
+		shutil.make_archive('archive_shutil', format='zip', root_dir=out_folder)
+		drop_path=ut+".zip"
+		up_drop("archive_shutil.zip",drop_path,url)
+		os.remove("archive_shutil.zip")
+	distributed_state.wait_for_everyone()
+	distributed_state.destroy_process_group()
