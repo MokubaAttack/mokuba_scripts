@@ -53,7 +53,7 @@ setup(
 	install_requires=[
 		"compel>=2.4.0",
 		"diffusers==0.40.0",
-		"basicsr @ https://github.com/MokubaAttack/mokuba_scripts/raw/refs/heads/multi/basicsr-1.4.2.tar.gz",
+		"basicsr @ git+https://github.com/MokubaAttack/mokuba_scripts.git#subdirectory=basicsr_copy",
 		"realesrgan",
 		"lycoris-lora==4.0.0",
 		"piexif",
