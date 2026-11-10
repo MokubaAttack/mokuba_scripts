@@ -40,6 +40,8 @@ def extras_need(w):
 setup(
 	name='mokuba_scripts',
 	version='1.0.0',
+	author='mokuba_attack',
+	author_email='mokuatta@nigge.rs',
 	packages=find_packages(exclude=("BasicSR")),
 	include_package_data=True,
 	description='This is a script that I use when I create images by diffusers.',
