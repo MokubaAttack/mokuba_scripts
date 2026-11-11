@@ -12,6 +12,10 @@ from ..anima.animackpt2 import (
 from..common.diff2 import diff2anima
 from ..common.save_safe import save_safe
 from ..common.flush import flush
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 def zip_ckpt(pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,full_file):
 	box=diff2anima()
@@ -91,6 +95,7 @@ def zip_ckpt(pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,full
 
 def makesafe(base_path,loras,ws,out_path,ff,win=None):
 	if win!=None:
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=True)
 		
 	if win!=None:
@@ -106,6 +111,7 @@ def makesafe(base_path,loras,ws,out_path,ff,win=None):
 			pipe.from_folder(base_path)
 	except:
 		if win!=None:
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("Unsupported Anima checkpoint")
 		else:
@@ -123,6 +129,7 @@ def makesafe(base_path,loras,ws,out_path,ff,win=None):
 			pipe.load_lycoris(path=loras[i],weight=ws[i])
 		except:
 			if win!=None:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update(loras[i]+" isn't supported.")
 			else:
@@ -146,6 +153,7 @@ def makesafe(base_path,loras,ws,out_path,ff,win=None):
 	save_safe(keys,out_path,os.getcwd()+"/pipecache/safe_temp")
 
 	if win!=None:
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 		win["info"].update("fin")
 	else:
@@ -193,7 +201,7 @@ def gui():
 		[sg.Button('RUN'),sg.Button('EXIT')]
 	]
 
-	window = sg.Window('Make Safetensors Anima', layout)
+	window = sg.Window('Make Safetensors Anima', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()

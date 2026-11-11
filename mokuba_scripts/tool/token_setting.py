@@ -3,6 +3,7 @@ import pyperclip
 import FreeSimpleGUI as sg
 import os
 import tkinter as tk
+from ..common.icon import green_icon
 
 dv={
 	"civitai_token":"",
@@ -51,7 +52,7 @@ def gui():
 		[sg.Button('SAVE', key='SAVE'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Token Setting', layout)
+	window = sg.Window('Token Setting', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()

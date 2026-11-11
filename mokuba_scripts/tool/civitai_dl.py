@@ -6,6 +6,10 @@ import json
 import os
 
 from ..common.dl import dlc
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 def token_input():
 	keys=['token']
@@ -23,7 +27,7 @@ def token_input():
 		[sg.Button('SAVE', key='SAVE'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Input Civitai Token', layout)
+	window = sg.Window('Input Civitai Token', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()
@@ -89,6 +93,7 @@ def check():
 	return True
 
 def run(i,path,win):
+	win.set_icon(pngbase64=red_icon)
 	win["RUN"].Update(disabled=True)
 	win["info"].update("downloading")
 	try:
@@ -97,14 +102,17 @@ def run(i,path,win):
 		t=d["civitai_token"]
 	except:
 		win["info"].update("error")
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 		return
 	try:
 		dlc(i,path,t)
 		win["info"].update("fin")
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 	except:
 		win["info"].update("error")
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 		return
 
@@ -128,7 +136,7 @@ def gui():
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Civitai Download', layout,keep_on_top=True)
+	window = sg.Window('Civitai Download', layout,keep_on_top=True,icon=green_icon)
 
 	while True:
 		event, values = window.read()

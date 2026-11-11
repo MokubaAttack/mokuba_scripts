@@ -13,6 +13,10 @@ import time
 
 from ..tool.civitai_dl import check
 from ..common.yaml import mk_yaml
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 class sdxlgui:
 	default_values={
@@ -51,6 +55,7 @@ class sdxlgui:
 	def mokusdxl2(
 		self,values,win,
 	):
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=True)
 		start=time.time()
 		loras=[]
@@ -279,6 +284,7 @@ class sdxlgui:
 		process_min=int(round(end-start)/60)
 		process_sec=round(end-start)-60*process_min
 		print(str(process_min)+"min"+str(process_sec)+"sec")
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 
 	def setvalues(self):
@@ -453,7 +459,7 @@ class sdxlgui:
 			]
 		]
 
-		window = sg.Window('sdxl gui', layout)
+		window = sg.Window('sdxl gui', layout,icon=green_icon)
 
 		while True:
 			event, values = window.read()

@@ -3,9 +3,15 @@ from safetensors.torch import (
 	load_file,
 	save_file
 )
+
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 	
 def get_vae(path,dtype,win=None):
 	if win!=None:
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=True)
 	if path.endswith(".safetensors"):
 		if dtype=="bf16":
@@ -23,6 +29,7 @@ def get_vae(path,dtype,win=None):
 			if win==None:
 				print("load error")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["info"].update("load error")
 				win["RUN"].Update(disabled=False)
 			return
@@ -37,18 +44,21 @@ def get_vae(path,dtype,win=None):
 			if win==None:
 				print("save error")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["info"].update("save error")
 				win["RUN"].Update(disabled=False)
 			return
 		if win==None:
 			print("fin")
 		else:
+			win.set_icon(pngbase64=green_icon)
 			win["info"].update("fin")
 			win["RUN"].Update(disabled=False)
 	else:
 		if win==None:
 			print("support safetensors file only")
 		else:
+			win.set_icon(pngbase64=green_icon)
 			win["info"].update("support safetensors file only")
 			win["RUN"].Update(disabled=False)
 
@@ -81,7 +91,7 @@ def gui():
 		[sg.Button('RUN'),sg.Button('EXIT')]
 	]
 	
-	window = sg.Window('Get Vae', layout)
+	window = sg.Window('Get Vae', layout,icon=green_icon)
 	
 	while True:
 		event, values = window.read()

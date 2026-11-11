@@ -4,6 +4,10 @@ from safetensors.torch import (
 )
 import torch
 import safetensors
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 CLAMP_QUANTILE=0.99
 
@@ -25,6 +29,7 @@ def changedim(
 	win=None
 ):
 	if win!=None:
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].update(disabled=True)
 		win["info"].update("changing")
 	merge_dtype = str_to_dtype(precision)
@@ -41,6 +46,7 @@ def changedim(
 		s=load_file(path)
 	except:
 		if win!=None:
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].update(disabled=False)
 			win["info"].update("error : I couldn't load lora.")
 		else:
@@ -68,6 +74,7 @@ def changedim(
 			wb=s.pop(k.replace(".lora_down.weight",".lora_up.weight"))
 		except:
 			if win!=None:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].update(disabled=False)
 				win["info"].update("error : lora dosen't be supported.")
 			else:
@@ -142,6 +149,7 @@ def changedim(
 		merged_lora_sd[k.replace(".lora_down.weight",".alpha")]=a.to("cpu").contiguous()
 	
 	save_file(merged_lora_sd,save_to,metadata=meta_dict)
+	win.set_icon(pngbase64=green_icon)
 	win["RUN"].update(disabled=False)
 	win["info"].update("fin")
 
@@ -181,7 +189,7 @@ def gui():
 		[sg.Button('RUN'),sg.Button('EXIT')]
 	]
 	
-	window = sg.Window('Change Dim', layout)
+	window = sg.Window('Change Dim', layout,icon=green_icon)
 	
 	while True:
 		event, values = window.read()

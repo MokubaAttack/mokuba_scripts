@@ -12,15 +12,21 @@ from ..common.diff2 import diff2anima
 from ..common.flush import flush
 from ..common.save_safe import save_safe
 from ..common.dl import dlc
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 	if win!=None:
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=True)
 		
 	if not(out_path.endswith(".safetensors")):
 		if win==None:
 			print("the output path is needed to be a safetensors file.")
 		else:
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("the output path is needed to be a safetensors file.")
 		return
@@ -38,6 +44,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 					print("civitai token doesn't input.")
 				else:
 					win["info"].update("civitai token doesn't input.")
+					win.set_icon(pngbase64=green_icon)
 					win['RUN'].Update(disabled=False)
 				return
 			dlc(ver_id,path,token)
@@ -45,6 +52,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print(path+" does not exist.")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update(path+" does not exist.")
 			return
@@ -72,6 +80,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[0])+".")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+os.path.basename(ckpts[0])+".")
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -83,6 +92,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -99,6 +109,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[1])+".")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+os.path.basename(ckpts[1])+".")
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -110,6 +121,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -118,6 +130,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 		if win==None:
 			print("The ckpts are models of different types.")
 		else:
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("The ckpts are models of different types.")
 		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -148,6 +161,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -225,6 +239,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -297,6 +312,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -369,6 +385,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
 			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -449,6 +466,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 	if win==None:
 		print(out_path)
 	else:
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 		win["info"].update("fin")
 
@@ -542,7 +560,7 @@ def gui():
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Merge Ckpt Anima', lay)
+	window = sg.Window('Merge Ckpt Anima', lay,icon=green_icon)
 
 	def lay_che(b,win):
 		win["ckpt1"].hide_row()
