@@ -277,26 +277,20 @@ class mokusdxlpipe:
 		if unet_sd=={} and text_encoder_sd=={} and text_encoder_2_sd=={}:
 			raise RuntimeWarning(path+" isn't supported.")
 		if unet_sd!={} and unet:
-			for k in unet_sd:
-				unet_sd[k]=weight*unet_sd[k]
-			wrapper, _ = create_lycoris_from_weights(multiplier=weight,file="dummy.safetensors",module=self.pipe.unet, weights_sd=unet_sd)
-			wrapper.merge_to()
+			wrapper, _ = create_lycoris_from_weights(multiplier=1.0,file="dummy.safetensors",module=self.pipe.unet, weights_sd=unet_sd)
+			wrapper.merge_to(weight=weight)
 			del wrapper
 		del unet_sd
 		flush()
 		if text_encoder_sd!={} and teen1:
-			for k in text_encoder_sd:
-				text_encoder_sd[k]=weight*text_encoder_sd[k]
-			wrapper, _ = create_lycoris_from_weights(multiplier=weight,file="dummy.safetensors",module=self.pipe.text_encoder, weights_sd=text_encoder_sd)
-			wrapper.merge_to()
+			wrapper, _ = create_lycoris_from_weights(multiplier=1.0,file="dummy.safetensors",module=self.pipe.text_encoder, weights_sd=text_encoder_sd)
+			wrapper.merge_to(weight=weight)
 			del wrapper
 		del text_encoder_sd
 		flush()
 		if text_encoder_2_sd!={} and teen2:
-			for k in text_encoder_2_sd:
-				text_encoder_2_sd[k]=weight*text_encoder_2_sd[k]
-			wrapper, _ = create_lycoris_from_weights(multiplier=weight,file="dummy.safetensors",module=self.pipe.text_encoder_2, weights_sd=text_encoder_2_sd)
-			wrapper.merge_to()
+			wrapper, _ = create_lycoris_from_weights(multiplier=1.0,file="dummy.safetensors",module=self.pipe.text_encoder_2, weights_sd=text_encoder_2_sd)
+			wrapper.merge_to(weight=weight)
 			del wrapper
 		del text_encoder_2_sd
 		flush()
