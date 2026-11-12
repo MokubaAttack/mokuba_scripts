@@ -45,6 +45,7 @@ def mokuani(
 	step2=15,
 	ss=0.5,
 	token="",
+	shift=3.0,
 ):
 	if not(isinstance(url, list)):
 		url=[]
@@ -121,7 +122,8 @@ def mokuani(
 			step=step,
 			x=x,
 			y=y,
-			seed=s
+			seed=s,
+			shift=shift,
 		)
 		imgs.append(img)
 
@@ -163,7 +165,8 @@ def mokuani(
 			img=imgs[i],
 			seed=s,
 			ss=ss,
-			hiresfix=True
+			hiresfix=True,
+			shift=shift,
 		)
 		imgs[i]=img
 

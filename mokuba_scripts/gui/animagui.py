@@ -40,6 +40,7 @@ class animagui:
 		"input":"",
 		"out":"",
 		"dtype":"bf16",
+		"shift":"3.0",
 	}
 	default_json=os.getcwd()+"/pipecache/anima_default.json"
 
@@ -140,6 +141,13 @@ class animagui:
 			token=d["civitai_token"]
 		except:
 			token=""
+			
+		try:
+			shift=float(values["shift"]])
+		except:
+			shift=3.0
+		win["shift"].update(str(shift))
+		values["shift"]=str(shift)
 		
 		params={
 		"loras":loras,
@@ -164,6 +172,7 @@ class animagui:
 		"step2":step2,
 		"ss":ss,
 		"token":token,
+		"shift":shift
 		}
 		f=open("pipecache/params.json","w")
 		json.dump(params,f,indent=2)
@@ -236,7 +245,7 @@ class animagui:
 		iv,d=self.setvalues()
 		
 		keys=[
-			"input","pr","ne","st","cf","se","n","x","y","lora1","lora2","lora3","lora4","w1","w2","w3","w4","hu","hs","hum","ds","sa","sc","out","gpu_number"
+			"input","pr","ne","st","cf","se","n","x","y","lora1","lora2","lora3","lora4","w1","w2","w3","w4","hu","hs","hum","ds","sa","sc","out","gpu_number","shift"
 		]
 	
 		sa_list=["FlowMatch_Euler","FlowMatch_LCM"]
@@ -267,6 +276,7 @@ class animagui:
 			[sg.Text("Schedule type"), sg.Combo(default_value=iv["sc"],values=sc_list,key="sc")],
 			[sg.Text("CFG scale"), sg.Input(iv["cf"],key="cf",right_click_menu=grp_rclick_menu["cf"], size=(10, 1))],
 			[sg.Text("Seed"), sg.Input(iv["se"],key="se",right_click_menu=grp_rclick_menu["se"], size=(20, 1))],
+			[sg.Text("shift"), sg.Input(iv["shift"],key="shift",right_click_menu=grp_rclick_menu["shift"], size=(10, 1))]
 		]
 		col4=[
 			[sg.Text("width"), sg.Input(iv["x"],key="x",right_click_menu=grp_rclick_menu["x"], size=(10, 1))],

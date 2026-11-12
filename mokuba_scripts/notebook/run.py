@@ -34,6 +34,7 @@ def mokuani2(
 	ss=0.5,
 	token="",
 	gpu_num=1,
+	shift=3.0,
 ):
 	params={
 	"loras":loras,
@@ -58,6 +59,7 @@ def mokuani2(
 	"step2":step2,
 	"ss":ss,
 	"token":token,
+	"shift":shift,
 	}
 	f=open("pipecache/params.json","w")
 	json.dump(params,f,indent=2)
