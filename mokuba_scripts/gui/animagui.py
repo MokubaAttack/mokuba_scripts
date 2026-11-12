@@ -143,7 +143,7 @@ class animagui:
 			token=""
 			
 		try:
-			shift=float(values["shift"]])
+			shift=float(values["shift"])
 		except:
 			shift=3.0
 		win["shift"].update(str(shift))
