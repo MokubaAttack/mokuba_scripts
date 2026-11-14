@@ -37,6 +37,8 @@ from .tool import (
 	make_safetensors_sdxl,
 	merge_lora_anima,
 	merge_lora_sdxl,
+	merge_lora_anima2,
+	merge_lora_sdxl2,
 	subtract_ckpt_anima,
 	subtract_ckpt_sdxl,
 	change_dim,

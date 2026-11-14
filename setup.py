@@ -39,7 +39,7 @@ def extras_need(w):
 
 setup(
 	name='mokuba_scripts',
-	version='1.0.2',
+	version='1.1.0',
 	author='mokuba_attack',
 	author_email='mokuatta@nigge.rs',
 	packages=find_packages(exclude=("BasicSR")),
