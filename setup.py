@@ -40,7 +40,9 @@ def extras_need(w):
 setup(
 	name='mokuba_scripts',
 	version='1.0.0',
-	packages=find_packages(),
+	author='mokuba_attack',
+	author_email='mokuatta@nigge.rs',
+	packages=find_packages(exclude=("BasicSR")),
 	include_package_data=True,
 	description='This is a script that I use when I create images by diffusers.',
 	long_description=open('README.md').read(),
@@ -53,7 +55,7 @@ setup(
 	install_requires=[
 		"compel>=2.4.0",
 		"diffusers==0.40.0",
-		"basicsr @ https://github.com/MokubaAttack/mokuba_scripts/raw/refs/heads/multi/basicsr-1.4.2.tar.gz",
+		"basicsr @ git+https://github.com/MokubaAttack/mokuba_scripts.git#subdirectory=BasicSR",
 		"realesrgan",
 		"lycoris-lora==4.0.0",
 		"piexif",
