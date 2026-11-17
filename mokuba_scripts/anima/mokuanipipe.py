@@ -20,9 +20,9 @@ from ..common.flush import flush
 from ..common.upscaler import mokuup
 from ..common.lyco2 import lyco2anima
 
-txt2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa"]
-img2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds"]
-hiresfix_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds","up","hu","hum","hs"]
+txt2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","shift","cl"]
+img2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds","shift","cl"]
+hiresfix_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds","up","hu","hum","hs","shift","cl"]
 
 init_components=[
 "text_encoder",
@@ -244,15 +244,18 @@ class mokuanipipe:
 		y,
 		seed,
 		shift,
+		clip_skip,
 		):
 		self.pipe.guider.register_to_config(guidance_scale=gs)
 		self.pipe.scheduler.set_shift(shift)
+		self.pipe._blocks.sub_blocks["text_encoder"].set_clip_skip(clip_skip)
 		self.moku_meta["st"]=str(step)
 		self.moku_meta["cf"]=str(gs)
 		self.moku_meta["pr"]=prompt
 		self.moku_meta["ne"]=n_prompt
 		self.moku_meta["se"]=str(seed)
 		self.moku_meta["shift"]=str(shift)
+		self.moku_meta["cl"]=str(clip_skip)
 		self.pipe.vae.enable_tiling()
 
 		out_img = self.pipe(
@@ -280,10 +283,12 @@ class mokuanipipe:
 		img,
 		seed,
 		shift,
+		clip_skip,
 		hiresfix=False
 		):
 		self.pipe.guider.register_to_config(guidance_scale=gs)
 		self.pipe.scheduler.set_shift(shift)
+		self.pipe._blocks.sub_blocks["text_encoder"].set_clip_skip(clip_skip)
 		if hiresfix and "st" in self.moku_meta:
 			self.moku_meta["hs"]=str(step)
 		else:
@@ -294,6 +299,7 @@ class mokuanipipe:
 		self.moku_meta["ne"]=n_prompt
 		self.moku_meta["se"]=str(seed)
 		self.moku_meta["shift"]=str(shift)
+		self.moku_meta["cl"]=str(clip_skip)
 		self.pipe.vae.enable_tiling()
 
 		out_img = self.pipe(

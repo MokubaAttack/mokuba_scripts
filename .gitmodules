@@ -1,3 +1,6 @@
 [submodule "BasicSR"]
 	path = BasicSR
 	url = https://github.com/MokubaAttack/BasicSR.git
+[submodule "diffusers"]
+	path = diffusers
+	url = https://github.com/MokubaAttack/diffusers.git

@@ -76,6 +76,8 @@ pip install "mokuba_scripts[cpu] @ git+https://github.com/MokubaAttack/mokuba_sc
 	#number of using gpus
 	shift = 3.0,
 	#shift ( a parameter of scheduler )
+	clip_skip = 1,
+	#clip_skip ( a parameter of StableDiffusion )
   )
   ```
 - ### mokusdxl  

@@ -41,6 +41,7 @@ class animagui:
 		"out":"",
 		"dtype":"bf16",
 		"shift":"3.0",
+		"clip_skip":"1",
 	}
 	default_json=os.getcwd()+"/pipecache/anima_default.json"
 
@@ -149,6 +150,13 @@ class animagui:
 		win["shift"].update(str(shift))
 		values["shift"]=str(shift)
 		
+		try:
+			clip_skip=int(values["clip_skip"])
+		except:
+			clip_skip=1
+		win["clip_skip"].update(str(clip_skip))
+		values["clip_skip"]=str(clip_skip)
+		
 		params={
 		"loras":loras,
 		"lora_weights":lora_weights,
@@ -172,7 +180,8 @@ class animagui:
 		"step2":step2,
 		"ss":ss,
 		"token":token,
-		"shift":shift
+		"shift":shift,
+		"clip_skip":clip_skip,
 		}
 		f=open("pipecache/params.json","w")
 		json.dump(params,f,indent=2)
@@ -245,7 +254,7 @@ class animagui:
 		iv,d=self.setvalues()
 		
 		keys=[
-			"input","pr","ne","st","cf","se","n","x","y","lora1","lora2","lora3","lora4","w1","w2","w3","w4","hu","hs","hum","ds","sa","sc","out","gpu_number","shift"
+			"input","pr","ne","st","cf","se","n","x","y","lora1","lora2","lora3","lora4","w1","w2","w3","w4","hu","hs","hum","ds","sa","sc","out","gpu_number","shift","clip_skip"
 		]
 	
 		sa_list=["FlowMatch_Euler","FlowMatch_LCM"]
@@ -279,6 +288,7 @@ class animagui:
 			[sg.Text("shift"), sg.Input(iv["shift"],key="shift",right_click_menu=grp_rclick_menu["shift"], size=(10, 1))]
 		]
 		col4=[
+			[sg.Text("clip_skip"), sg.Input(iv["clip_skip"],key="clip_skip",right_click_menu=grp_rclick_menu["clip_skip"], size=(10, 1))],
 			[sg.Text("width"), sg.Input(iv["x"],key="x",right_click_menu=grp_rclick_menu["x"], size=(10, 1))],
 			[sg.Text("height"), sg.Input(iv["y"],key="y",right_click_menu=grp_rclick_menu["y"], size=(10, 1))],
 			[sg.Text("Denoising strength"), sg.Input(iv["ds"],key="ds",right_click_menu=grp_rclick_menu["ds"], size=(10, 1))],

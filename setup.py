@@ -1,7 +1,4 @@
-from setuptools import (
-	setup,
-	find_packages
-)
+from setuptools import setup
 import sys
 
 def extras_need(w):
@@ -39,10 +36,19 @@ def extras_need(w):
 
 setup(
 	name='mokuba_scripts',
-	version='1.1.0',
+	version='1.2.0',
 	author='mokuba_attack',
 	author_email='mokuatta@nigge.rs',
-	packages=find_packages(exclude=("BasicSR")),
+	packages=[
+		"mokuba_scripts",
+		"mokuba_scripts/anima",
+		"mokuba_scripts/common",
+		"mokuba_scripts/gui",
+		"mokuba_scripts/notebook",
+		"mokuba_scripts/run",
+		"mokuba_scripts/sd",
+		"mokuba_scripts/tool",
+	],
 	include_package_data=True,
 	description='This is a script that I use when I create images by diffusers.',
 	long_description=open('README.md').read(),
@@ -53,9 +59,8 @@ setup(
 		'Programming Language :: Python :: 3.12',
 	],
 	install_requires=[
-		"compel>=2.4.0",
-		"diffusers==0.40.0",
-		"basicsr @ git+https://github.com/MokubaAttack/mokuba_scripts.git#subdirectory=BasicSR",
+		"diffusers @ git+https://github.com/MokubaAttack/diffusers.git",
+		"basicsr @ git+https://github.com/MokubaAttack/BasicSR.git",
 		"realesrgan",
 		"lycoris-lora==4.0.0",
 		"piexif",

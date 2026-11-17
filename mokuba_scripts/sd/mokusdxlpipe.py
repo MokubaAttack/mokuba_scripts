@@ -22,7 +22,6 @@ import torch
 import os
 from lycoris import create_lycoris_from_weights
 from safetensors.torch import load_file
-from compel import CompelForSDXL
 import numpy
 from optimum.quanto import (
 	freeze,
@@ -60,6 +59,64 @@ def check_control_sdxl():
 		os.mkdir("OzzyGT")
 		os.mkdir("OzzyGT/SDXL_Controlnet_Tile_Realistic")
 		snapshot_download(repo_id="OzzyGT/SDXL_Controlnet_Tile_Realistic", local_dir=os.getcwd()+"/OzzyGT/SDXL_Controlnet_Tile_Realistic")
+		
+def token_auto_concat_embeds(pipe, positive, negative,device,clip_skip):
+	max_length = pipe.tokenizer.model_max_length
+	positive_length = pipe.tokenizer(positive, return_tensors="pt").input_ids.shape[-1]
+	negative_length = pipe.tokenizer(negative, return_tensors="pt").input_ids.shape[-1]
+	
+	if max_length < positive_length or max_length < negative_length:
+		if positive_length > negative_length:
+			positive_ids = pipe.tokenizer(positive, return_tensors="pt").input_ids.to(device)
+			negative_ids = pipe.tokenizer(negative, truncation=False, padding="max_length", max_length=positive_ids.shape[-1], return_tensors="pt").input_ids.to(device)
+			positive_ids_2 = pipe.tokenizer_2(positive, return_tensors="pt").input_ids.to(device)
+			negative_ids_2 = pipe.tokenizer_2(negative, truncation=False, padding="max_length", max_length=positive_ids_2.shape[-1], return_tensors="pt").input_ids.to(device)
+		else:
+			negative_ids = pipe.tokenizer(negative, return_tensors="pt").input_ids.to(device)  
+			positive_ids = pipe.tokenizer(positive, truncation=False, padding="max_length", max_length=negative_ids.shape[-1],  return_tensors="pt").input_ids.to(device)
+			negative_ids_2 = pipe.tokenizer_2(negative, return_tensors="pt").input_ids.to(device)  
+			positive_ids_2 = pipe.tokenizer_2(positive, truncation=False, padding="max_length", max_length=negative_ids_2.shape[-1],  return_tensors="pt").input_ids.to(device)
+	else:
+		positive_ids = pipe.tokenizer(positive, truncation=False, padding="max_length", max_length=max_length,  return_tensors="pt").input_ids.to(device)
+		negative_ids = pipe.tokenizer(negative, truncation=False, padding="max_length", max_length=max_length, return_tensors="pt").input_ids.to(device)
+		positive_ids_2 = pipe.tokenizer_2(positive, truncation=False, padding="max_length", max_length=max_length,  return_tensors="pt").input_ids.to(device)
+		negative_ids_2 = pipe.tokenizer_2(negative, truncation=False, padding="max_length", max_length=max_length, return_tensors="pt").input_ids.to(device)
+	
+	positive_concat_embeds = []
+	negative_concat_embeds = []
+	positive_concat_embeds_2 = []
+	negative_concat_embeds_2 = []
+
+	for i in range(0, positive_ids.shape[-1], max_length):
+		if clip_skip<=1:
+			p1=pipe.text_encoder(positive_ids[:, i: i + max_length],output_hidden_states=True).hidden_states[-1]
+			p2=pipe.text_encoder_2(positive_ids_2[:, i: i + max_length],output_hidden_states=True)
+			positive_concat_embeds_2.append(p2[0])
+			positive_concat_embeds.append(torch.concat([p1,p2.hidden_states[-1]], dim=-1))
+			
+			n1=pipe.text_encoder(negative_ids[:, i: i + max_length],output_hidden_states=True).hidden_states[-1]
+			n2=pipe.text_encoder_2(negative_ids_2[:, i: i + max_length],output_hidden_states=True)
+			negative_concat_embeds_2.append(n2[0])
+			negative_concat_embeds.append(torch.concat([n1,n2.hidden_states[-1]], dim=-1))
+		else:
+			p1=pipe.text_encoder(positive_ids[:, i: i + max_length],output_hidden_states=True).hidden_states[-clip_skip]
+			p2=pipe.text_encoder_2(positive_ids_2[:, i: i + max_length],output_hidden_states=True)
+			positive_concat_embeds_2.append(p2[0])
+			positive_concat_embeds.append(torch.concat([p1,p2.hidden_states[-clip_skip]], dim=-1))
+			
+			n1=pipe.text_encoder(negative_ids[:, i: i + max_length],output_hidden_states=True).hidden_states[-clip_skip]
+			n2=pipe.text_encoder_2(negative_ids_2[:, i: i + max_length],output_hidden_states=True)
+			negative_concat_embeds_2.append(n2[0])
+			negative_concat_embeds.append(torch.concat([n1,n2.hidden_states[-clip_skip]], dim=-1))
+	
+	positive_prompt_embeds = torch.cat(positive_concat_embeds, dim=1)
+	negative_prompt_embeds = torch.cat(negative_concat_embeds, dim=1)
+	p1=torch.zeros_like(positive_concat_embeds_2[0])
+	n1=torch.zeros_like(negative_concat_embeds_2[0])
+	for i in range(len(positive_concat_embeds_2)):
+		p1=p1+positive_concat_embeds_2[i]
+		n1=n1+negative_concat_embeds_2[i]
+	return [positive_prompt_embeds,p1,negative_prompt_embeds,n1]
 	
 class mokusdxlpipe:
 	def __init__(self):
@@ -373,9 +430,13 @@ class mokusdxlpipe:
 		self.moku_meta["cl"]=str(cs)
 		self.pipe.vae.enable_tiling()
 
-		compel = CompelForSDXL(self.pipe)
-		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
-		prompts=[conditioning.embeds,conditioning.pooled_embeds,conditioning.negative_embeds,conditioning.negative_pooled_embeds]
+		prompts=token_auto_concat_embeds(
+			pipe=self.pipe,
+			positive=prompt+self.prompt_plus, 
+			negative=n_prompt+self.n_prompt_plus,
+			device=self.dev,
+			clip_skip=cs,
+		)
 
 		out_img = self.pipe(
 			eta=1.0,
@@ -424,9 +485,13 @@ class mokusdxlpipe:
 		self.moku_meta["cl"]=str(cs)
 		self.pipe.vae.enable_tiling()
 
-		compel = CompelForSDXL(self.pipe)
-		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
-		prompts=[conditioning.embeds,conditioning.pooled_embeds,conditioning.negative_embeds,conditioning.negative_pooled_embeds]
+		prompts=token_auto_concat_embeds(
+			pipe=self.pipe,
+			positive=prompt+self.prompt_plus, 
+			negative=n_prompt+self.n_prompt_plus,
+			device=self.dev,
+			clip_skip=cs,
+		)
 
 		out_img = self.pipe(
 			eta=1.0,
@@ -487,9 +552,13 @@ class mokusdxlpipe:
 		self.moku_meta["cl"]=str(cs)
 		self.pipe.vae.enable_tiling()
 
-		compel = CompelForSDXL(self.pipe)
-		conditioning = compel(prompt+self.prompt_plus, negative_prompt=n_prompt+self.n_prompt_plus)
-		prompts=[conditioning.embeds,conditioning.pooled_embeds,conditioning.negative_embeds,conditioning.negative_pooled_embeds]
+		prompts=token_auto_concat_embeds(
+			pipe=self.pipe,
+			positive=prompt+self.prompt_plus, 
+			negative=n_prompt+self.n_prompt_plus,
+			device=self.dev,
+			clip_skip=cs,
+		)
 
 		x=img.width
 		y=img.height
