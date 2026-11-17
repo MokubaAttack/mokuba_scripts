@@ -74,6 +74,8 @@ pip install "mokuba_scripts[cpu] @ git+https://github.com/MokubaAttack/mokuba_sc
 	#civitai token
 	gpu_num = 1,
 	#number of using gpus
+	shift = 3.0,
+	#shift ( a parameter of scheduler )
   )
   ```
 - ### mokusdxl  

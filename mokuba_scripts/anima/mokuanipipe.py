@@ -242,14 +242,17 @@ class mokuanipipe:
 		step,
 		x,
 		y,
-		seed
+		seed,
+		shift,
 		):
 		self.pipe.guider.register_to_config(guidance_scale=gs)
+		self.pipe.scheduler.set_shift(shift)
 		self.moku_meta["st"]=str(step)
 		self.moku_meta["cf"]=str(gs)
 		self.moku_meta["pr"]=prompt
 		self.moku_meta["ne"]=n_prompt
 		self.moku_meta["se"]=str(seed)
+		self.moku_meta["shift"]=str(shift)
 		self.pipe.vae.enable_tiling()
 
 		out_img = self.pipe(
@@ -276,9 +279,11 @@ class mokuanipipe:
 		ss,
 		img,
 		seed,
+		shift,
 		hiresfix=False
 		):
 		self.pipe.guider.register_to_config(guidance_scale=gs)
+		self.pipe.scheduler.set_shift(shift)
 		if hiresfix and "st" in self.moku_meta:
 			self.moku_meta["hs"]=str(step)
 		else:
@@ -288,6 +293,7 @@ class mokuanipipe:
 		self.moku_meta["pr"]=prompt
 		self.moku_meta["ne"]=n_prompt
 		self.moku_meta["se"]=str(seed)
+		self.moku_meta["shift"]=str(shift)
 		self.pipe.vae.enable_tiling()
 
 		out_img = self.pipe(

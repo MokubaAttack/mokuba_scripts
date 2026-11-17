@@ -30,7 +30,8 @@ default_sd={
 	"embed":[],
 	"vae":"",
 	"up":"",
-	"cont":""
+	"cont":"",
+	"shift":"",
 }
 default_json=os.getcwd()+"/pipecache/metadata_default.json"
 
@@ -100,7 +101,7 @@ def gui():
 	ivs,e=setvalues()
 	
 	keys=[
-		"input","pr","ne","st","sa1","cf","se","cl","ckpt","lora1","lora2","lora3","lora4","embed1","embed2","embed3","embed4","w1","w2","w3","w4","vae","hu","hs","hum","ds","sa2","tu","tum","up","cont","ccs"
+		"input","pr","ne","st","sa1","cf","se","cl","ckpt","lora1","lora2","lora3","lora4","embed1","embed2","embed3","embed4","w1","w2","w3","w4","vae","hu","hs","hum","ds","sa2","tu","tum","up","cont","ccs","shift"
 	]
 	
 	sa_list=[
@@ -151,6 +152,7 @@ def gui():
 		[sg.Text("CFG scale"), sg.Input(ivs["cf"],key="cf",right_click_menu=grp_rclick_menu["cf"], size=(10, 1))],
 		[sg.Text("Seed"), sg.Input(ivs["se"],key="se",right_click_menu=grp_rclick_menu["se"], size=(20, 1))],
 		[sg.Text("Clip skip"), sg.Input(ivs["cl"],key="cl",right_click_menu=grp_rclick_menu["cl"], size=(10, 1))],
+		[sg.Text("shift"), sg.Input(ivs["shift"],key="shift",right_click_menu=grp_rclick_menu["shift"], size=(10, 1))],
 	]
 	col4=[
 		[sg.Text("Denoising strength"), sg.Input(ivs["ds"],key="ds",right_click_menu=grp_rclick_menu["ds"], size=(10, 1))],
@@ -269,7 +271,7 @@ def gui():
 				try:
 					image = Image.open(values["input"])
 					sd=read_meta(image)
-					for key in ["pr","ne","st","sa1","cf","se","cl","ckpt","lora1","lora2","lora3","lora4","embed1","embed2","embed3","embed4","w1","w2","w3","w4","vae","hu","hs","hum","ds","sa2","tu","tum","up","cont","ccs"]:
+					for key in ["pr","ne","st","sa1","cf","se","cl","ckpt","lora1","lora2","lora3","lora4","embed1","embed2","embed3","embed4","w1","w2","w3","w4","vae","hu","hs","hum","ds","sa2","tu","tum","up","cont","ccs","shift"]:
 						if key in sd:
 							window[key].update(sd[key])
 						else:

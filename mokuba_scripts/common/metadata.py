@@ -52,6 +52,9 @@ def plus_meta(vs,img):
 	if "ccs" in vs:
 		if vs["ccs"]!="":
 			metadata=metadata+"controlnet_conditioning_scale: "+vs["ccs"]+", "
+	if "shift" in vs:
+		if vs["shift"]!="":
+			metadata=metadata+"shift: "+vs["shift"]+", "
 
 	metadata=metadata+'Civitai resources: ['
 	if "ckpt" in vs:
@@ -208,7 +211,8 @@ def read_meta(path):
 		"Hires upscaler:":"hum",
 		"Tile upscale:":"tu",
 		"Tile upscaler:":"tum",
-		"controlnet_conditioning_scale:":"ccs"
+		"controlnet_conditioning_scale:":"ccs",
+		"shift":"shift"
 	}
 	ss=["karras","beta","exponential","sgm_uniform","simple","uniform","normal"]
 	exif_data=exif_data2.replace(r"\x00","").removesuffix("'").removeprefix("b'").split(", ")
