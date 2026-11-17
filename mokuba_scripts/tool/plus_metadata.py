@@ -6,6 +6,7 @@ from ..common.metadata import (
 	plus_meta,
 	read_meta
 )
+from ..common.icon import green_icon
 
 default_sd={
 	"pr":"",
@@ -182,7 +183,7 @@ def gui():
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Plus Metadata', layout)
+	window = sg.Window('Plus Metadata', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()

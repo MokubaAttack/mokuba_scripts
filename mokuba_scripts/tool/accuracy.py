@@ -3,6 +3,7 @@ from safetensors.torch import (
 	load_file,
 	save_file
 )
+from ..common.icon import green_icon
 
 fp16_type = torch.float16
 bf16_type = torch.bfloat16
@@ -71,7 +72,7 @@ def gui():
 		[sg.Button('RUN'),sg.Button('EXIT')]
 	]
 	
-	window = sg.Window('Accuracy', layout)
+	window = sg.Window('Accuracy', layout,icon=green_icon)
 	
 	while True:
 		event, values = window.read()

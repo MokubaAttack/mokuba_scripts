@@ -5,6 +5,10 @@ import re
 
 from ..common.diff2 import diff2sdxl
 from ..common.dl import dlc
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 CLAMP_QUANTILE=0.99
 
@@ -31,12 +35,14 @@ def mergelora(
 	token="",
 ):
 	if win!=None:
+		win.set_icon(pngbase64=red_icon)
 		win['RUN'].Update(disabled=True)
 	if len(loras) != len(weights):
 		if win==None:
 			print("number of models must be equal to number of ratios.")
 		else:
 			win["info"].update("number of models must be equal to number of ratios.")
+			win.set_icon(pngbase64=green_icon)
 			win['RUN'].Update(disabled=False)
 		return
 
@@ -60,6 +66,7 @@ def mergelora(
 					print("civitai token doesn't input.")
 				else:
 					win["info"].update("civitai token doesn't input.")
+					win.set_icon(pngbase64=green_icon)
 					win['RUN'].Update(disabled=False)
 				return
 			dlc(ver_id,lora,token)
@@ -69,6 +76,7 @@ def mergelora(
 				print(os.path.basename(lora)+" isn't supported.")
 			else:
 				win["info"].update(os.path.basename(lora)+" isn't supported.")
+				win.set_icon(pngbase64=green_icon)
 				win['RUN'].Update(disabled=False)
 			return
 		sds.append(sd)
@@ -102,6 +110,7 @@ def mergelora(
 					print(os.path.basename(loras[i])+" has nan.")
 				else:
 					win["info"].update(os.path.basename(loras[i])+" has nan.")
+					win.set_icon(pngbase64=green_icon)
 					win['RUN'].Update(disabled=False)
 				return
 
@@ -195,6 +204,7 @@ def mergelora(
 		print("fin")
 	else:
 		win["info"].update("fin")
+		win.set_icon(pngbase64=green_icon)
 		win['RUN'].Update(disabled=False)
 
 def gui():
@@ -235,7 +245,7 @@ def gui():
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Merge Lora Sdxl', layout,keep_on_top=True)
+	window = sg.Window('Merge Lora Sdxl', layout,keep_on_top=True,icon=green_icon)
 
 	while True:
 		event, values = window.read()

@@ -13,6 +13,10 @@ import time
 
 from ..tool.civitai_dl import check
 from ..common.yaml import mk_yaml
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 class animagui:
 	default_values={
@@ -42,6 +46,7 @@ class animagui:
 	def mokuani2(
 		self,values,win,
 	):
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=True)
 		start=time.time()
 		loras=[]
@@ -184,6 +189,7 @@ class animagui:
 		process_min=int(round(end-start)/60)
 		process_sec=round(end-start)-60*process_min
 		print(str(process_min)+"min"+str(process_sec)+"sec")
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 
 	def setvalues(self):
@@ -316,7 +322,7 @@ class animagui:
 			[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 		]
 	
-		window = sg.Window('anima gui', layout)
+		window = sg.Window('anima gui', layout,icon=green_icon)
 	
 		while True:
 			event, values = window.read()

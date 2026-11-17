@@ -6,6 +6,7 @@ from PIL import Image
 import torch
 
 from ..common.upscaler import mokuup
+from ..common.icon import green_icon
 
 def up_func(path,up_path,win=None):
 	if win!=None:
@@ -62,7 +63,7 @@ def gui():
 		[sg.Text("information",key="info")],
 		[sg.Button('RUN'),sg.Button('EXIT')]
 	]
-	window = sg.Window('imgup', layout)
+	window = sg.Window('imgup', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()

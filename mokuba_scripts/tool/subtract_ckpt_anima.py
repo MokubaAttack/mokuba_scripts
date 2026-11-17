@@ -11,17 +11,23 @@ from ..anima.animackpt2 import (
 from ..common.diff2 import diff2anima
 from ..common.flush import flush
 from ..common.dl import dlc
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 CLAMP_QUANTILE=0.99
 
 def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 	if win!=None:
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=True)
 
 	if not(out_path.endswith(".safetensors")):
 		if win==None:
 			print("the output path is needed to be a safetensors file.")
 		else:
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("the output path is needed to be a safetensors file.")
 		return
@@ -39,6 +45,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 					print("civitai token doesn't input.")
 				else:
 					win["info"].update("civitai token doesn't input.")
+					win.set_icon(pngbase64=green_icon)
 					win['RUN'].Update(disabled=False)
 				return
 			dlc(ver_id,path,token)
@@ -46,6 +53,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			if win==None:
 				print(path+" does not exist.")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update(path+" does not exist.")
 			return
@@ -62,6 +70,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[0])+".")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+os.path.basename(ckpts[0])+".")
 			return
@@ -72,6 +81,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			if win==None:
 				print("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
 			return
@@ -88,6 +98,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			if win==None:
 				print("I couldn't load "+os.path.basename(ckpts[1])+".")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+os.path.basename(ckpts[1])+".")
 			return
@@ -98,6 +109,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			if win==None:
 				print("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
 			return
@@ -105,6 +117,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 		if win==None:
 			print("The ckpts are models of different types.")
 		else:
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("The ckpts are models of different types.")
 		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
@@ -133,6 +146,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
 			return
@@ -206,6 +220,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
 			return
@@ -281,6 +296,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			if win==None:
 				print("Unsupported Anima checkpoint key: "+k)
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
 			return
@@ -347,6 +363,7 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 		print("")
 		print("fin")
 	else:
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 		win["info"].update("fin")
 	
@@ -391,7 +408,7 @@ def gui():
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Subtract Ckpt Anima', layout)
+	window = sg.Window('Subtract Ckpt Anima', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()

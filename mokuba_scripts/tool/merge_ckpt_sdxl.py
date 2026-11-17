@@ -13,15 +13,21 @@ from ..common.sdxldata import sdxl_data
 from ..common.flush import flush
 from ..common.save_safe import save_safe
 from ..common.dl import dlc
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=""):
 	if win!=None:
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=True)
 
 	if not(out_path.endswith(".safetensors")):
 		if win==None:
 			print("the output path is needed to be a safetensors file.")
 		else:
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("the output path is needed to be a safetensors file.")
 		return
@@ -39,6 +45,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 					print("civitai token doesn't input.")
 				else:
 					win["info"].update("civitai token doesn't input.")
+					win.set_icon(pngbase64=green_icon)
 					win['RUN'].Update(disabled=False)
 				return
 			dlc(ver_id,path,token)
@@ -46,6 +53,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			if win==None:
 				print(path+" does not exist.")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update(os.path.basename(path)+" does not exist.")
 			return
@@ -55,6 +63,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			if win==None:
 				print("0 < Dropout probability <= 0.5")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("0 < Dropout probability <= 0.5")
 			return
@@ -63,6 +72,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			if win==None:
 				print("You must choose one of normal or dare or mokuba or tensor1 or tensor2.")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("You must choose one of normal or dare or mokuba or tensor1 or tensor2.")
 			return
@@ -72,6 +82,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[0])+" isn't supported.")
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 		else:
 			print(os.path.basename(ckpts[0])+" isn't supported.")
@@ -81,6 +92,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[1])+" isn't supported.")
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 		else:
 			print(os.path.basename(ckpts[1])+" isn't supported.")
@@ -241,6 +253,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 				if win==None:
 					print(os.path.basename(v)+" does not exist.")
 				else:
+					win.set_icon(pngbase64=green_icon)
 					win["RUN"].Update(disabled=False)
 					win["info"].update(os.path.basename(v)+" does not exist.")
 				if os.path.exists(os.getcwd()+"/pipecache/safe_temp"):
@@ -257,6 +270,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 			if win==None:
 				print(os.path.basename(v)+" does not exist.")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update(os.path.basename(v)+" does not exist.")
 			if os.path.exists(os.getcwd()+"/pipecache/safe_temp"):
@@ -289,6 +303,7 @@ def mergeckpt(ckpts,weights,v,out_path,mode="normal",dp=0,seed=0,win=None,token=
 	if win==None:
 		print(out_path)
 	else:
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 		win["info"].update("fin")
 
@@ -398,7 +413,7 @@ def gui():
 		win["info"].unhide_row()
 		win["RUN"].unhide_row()
 
-	window = sg.Window('Merge Ckpt SDXL', layout)
+	window = sg.Window('Merge Ckpt SDXL', layout,icon=green_icon)
 
 	event, values = window.read(timeout=0)
 	lay_che(False,False,False,window)

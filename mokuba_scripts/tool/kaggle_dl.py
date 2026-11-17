@@ -6,6 +6,10 @@ import json
 import os
 
 from ..common.dl import dlk
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 def token_input():
 	keys=['token',"Username"]
@@ -24,7 +28,7 @@ def token_input():
 		[sg.Button('SAVE', key='SAVE'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Input Civitai Token', layout)
+	window = sg.Window('Input Civitai Token', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()
@@ -94,6 +98,7 @@ def check():
 	return True
 
 def run(i,path,win):
+	win.set_icon(pngbase64=red_icon)
 	win["RUN"].Update(disabled=True)
 	win["info"].update("downloading")
 	try:
@@ -103,14 +108,17 @@ def run(i,path,win):
 		username=d["kaggle_username"]
 	except:
 		win["info"].update("error")
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=False)
 		return
 	try:
 		dlk(i,username,t,path)
 		win["info"].update("fin")
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=False)
 	except:
 		win["info"].update("error")
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=False)
 		return
 
@@ -134,7 +142,7 @@ def gui():
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Kaggle Download', layout,keep_on_top=True)
+	window = sg.Window('Kaggle Download', layout,keep_on_top=True,icon=green_icon)
 
 	while True:
 		event, values = window.read()

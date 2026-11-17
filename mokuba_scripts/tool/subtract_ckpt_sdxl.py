@@ -9,6 +9,10 @@ import re
 from ..common.diff2 import diff2sdxl
 from ..common.flush import flush
 from ..common.dl import dlc
+from ..common.icon import (
+	green_icon,
+	red_icon
+)
 
 CLAMP_QUANTILE=0.99
 
@@ -23,12 +27,14 @@ def subfunc(path,i):
 
 def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 	if win!=None:
+		win.set_icon(pngbase64=red_icon)
 		win["RUN"].Update(disabled=True)
 
 	if not(out_path.endswith(".safetensors")):
 		if win==None:
 			print("the output path is needed to be a safetensors file.")
 		else:
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("the output path is needed to be a safetensors file.")
 		return
@@ -46,6 +52,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 					print("civitai token doesn't input.")
 				else:
 					win["info"].update("civitai token doesn't input.")
+					win.set_icon(pngbase64=green_icon)
 					win['RUN'].Update(disabled=False)
 				return
 			dlc(ver_id,path,token)
@@ -53,6 +60,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 			if win==None:
 				print(path+" does not exist.")
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update(os.path.basename(path)+" does not exist.")
 			return
@@ -67,6 +75,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[0])+" isn't supported.")
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 		else:
 			print(os.path.basename(ckpts[0])+" isn't supported.")
@@ -82,6 +91,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[1])+" isn't supported.")
+			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 		else:
 			print(os.path.basename(ckpts[1])+" isn't supported.")
@@ -107,6 +117,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 			if win==None:
 				print("Unsupported Sdxl checkpoint key: "+k)
 			else:
+				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Sdxl checkpoint key: "+k)
 			return
@@ -170,6 +181,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 		print("")
 		print("fin")
 	else:
+		win.set_icon(pngbase64=green_icon)
 		win["RUN"].Update(disabled=False)
 		win["info"].update("fin")
 	
@@ -212,7 +224,7 @@ def gui():
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]
 
-	window = sg.Window('Subtract Ckpt Sdxl', layout)
+	window = sg.Window('Subtract Ckpt Sdxl', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()

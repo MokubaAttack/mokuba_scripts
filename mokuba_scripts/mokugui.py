@@ -1,4 +1,5 @@
 import FreeSimpleGUI as sg
+from .common.icon import green_icon
 
 tools=[
 	"mokuanima",
@@ -28,7 +29,7 @@ def main():
 		[sg.Push(),sg.Combo(default_value="mokuanima",values=tools,key="tool"),sg.Push()],
 		[sg.Push(),sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT'),sg.Push()],
 	]
-	window = sg.Window('mokugui', layout,size=(250, 120))
+	window = sg.Window('mokugui', layout,size=(250, 120),icon=green_icon)
 
 	while True:
 		event, values = window.read()
