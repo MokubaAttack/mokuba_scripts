@@ -277,20 +277,20 @@ class mokusdxlpipe:
 		if unet_sd=={} and text_encoder_sd=={} and text_encoder_2_sd=={}:
 			raise RuntimeWarning(path+" isn't supported.")
 		if unet_sd!={} and unet:
-			wrapper, _ = create_lycoris_from_weights(multiplier=weight,file="dummy.safetensors",module=self.pipe.unet, weights_sd=unet_sd)
-			wrapper.merge_to()
+			wrapper, _ = create_lycoris_from_weights(multiplier=1.0,file="dummy.safetensors",module=self.pipe.unet, weights_sd=unet_sd)
+			wrapper.merge_to(weight=weight)
 			del wrapper
 		del unet_sd
 		flush()
 		if text_encoder_sd!={} and teen1:
-			wrapper, _ = create_lycoris_from_weights(multiplier=weight,file="dummy.safetensors",module=self.pipe.text_encoder, weights_sd=text_encoder_sd)
-			wrapper.merge_to()
+			wrapper, _ = create_lycoris_from_weights(multiplier=1.0,file="dummy.safetensors",module=self.pipe.text_encoder, weights_sd=text_encoder_sd)
+			wrapper.merge_to(weight=weight)
 			del wrapper
 		del text_encoder_sd
 		flush()
 		if text_encoder_2_sd!={} and teen2:
-			wrapper, _ = create_lycoris_from_weights(multiplier=weight,file="dummy.safetensors",module=self.pipe.text_encoder_2, weights_sd=text_encoder_2_sd)
-			wrapper.merge_to()
+			wrapper, _ = create_lycoris_from_weights(multiplier=1.0,file="dummy.safetensors",module=self.pipe.text_encoder_2, weights_sd=text_encoder_2_sd)
+			wrapper.merge_to(weight=weight)
 			del wrapper
 		del text_encoder_2_sd
 		flush()
