@@ -1,4 +1,7 @@
-from setuptools import setup
+from setuptools import (
+	setup,
+	find_packages
+)
 import sys
 
 def extras_need(w):
@@ -39,16 +42,8 @@ setup(
 	version='1.2.0',
 	author='mokuba_attack',
 	author_email='mokuatta@nigge.rs',
-	packages=[
-		"mokuba_scripts",
-		"mokuba_scripts/anima",
-		"mokuba_scripts/common",
-		"mokuba_scripts/gui",
-		"mokuba_scripts/notebook",
-		"mokuba_scripts/run",
-		"mokuba_scripts/sd",
-		"mokuba_scripts/tool",
-	],
+	package_dir={"": "src"},
+	packages=find_packages("src"),
 	include_package_data=True,
 	description='This is a script that I use when I create images by diffusers.',
 	long_description=open('README.md').read(),

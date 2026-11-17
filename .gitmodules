@@ -1,6 +1,6 @@
-[submodule "BasicSR"]
-	path = BasicSR
+[submodule "submodules/BasicSR"]
+	path = submodules/BasicSR
 	url = https://github.com/MokubaAttack/BasicSR.git
-[submodule "diffusers"]
-	path = diffusers
+[submodule "submodules/diffusers"]
+	path = submodules/diffusers
 	url = https://github.com/MokubaAttack/diffusers.git
