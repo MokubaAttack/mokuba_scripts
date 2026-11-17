@@ -10,7 +10,9 @@ tools=[
 	"make_safetensors_anima",
 	"make_safetensors_sdxl",
 	"merge_lora_anima",
+	"merge_lora_anima2",
 	"merge_lora_sdxl",
+	"merge_lora_sdxl2",
 	"subtract_ckpt_anima",
 	"subtract_ckpt_sdxl",
 	"change_dim",
@@ -102,6 +104,12 @@ def main():
 		elif name=="token_setting":
 			from .tool import token_setting
 			token_setting.gui()
+		elif name=="merge_lora_anima2":
+			from .tool import merge_lora_anima2
+			merge_lora_anima2.gui()
+		elif name=="merge_lora_sdxl2":
+			from .tool import merge_lora_sdxl2
+			merge_lora_sdxl2.gui()
 		else:
 			from .tool import imgup
 			imgup.gui()

@@ -372,6 +372,48 @@ pip install "mokuba_scripts[cpu] @ git+https://github.com/MokubaAttack/mokuba_sc
 	#When you choose True, input lora files are deleted.
   )
   ```
+- ### merge_lora2
+  It is a script that merge lora by addition.
+  ```
+  merge_lora_anima2.mergelora(
+	loras=[],
+	#list of lora file path
+	weights=[],
+	#list of lora weight
+	precision="float",
+	#calculation accuracy
+	save_precision="fp16",
+	#output accuracy
+	device=None,
+	#calculation device
+	save_to=None,
+	#output file path
+	meta_dict=None,
+	#metadata dictionary
+	dof=False,
+	#When you choose True, input lora files are deleted.
+  )
+  ```
+  ```
+  merge_lora_sdxl2.mergelora(
+	loras=[],
+	#list of lora file path
+	weights=[],
+	#list of lora weight
+	precision="float",
+	#calculation accuracy
+	save_precision="fp16",
+	#output accuracy
+	device=None,
+	#calculation device
+	save_to=None,
+	#output file path
+	meta_dict=None,
+	#metadata dictionary
+	dof=False,
+	#When you choose True, input lora files are deleted.
+  )
+  ```
 - ### subtract_ckpt
   It is a script that make difference of checkpoints into lora. This script is based on extract_lora_from_models.py of kohya-ss/sd-scripts.
   ```
