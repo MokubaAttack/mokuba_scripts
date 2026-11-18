@@ -9,37 +9,34 @@ def extras_need(w):
 	p=sys.platform
 	if p.startswith("linux"):
 		p="manylinux_2_28_x86_64"
-		tri="triton @ https://download-r2.pytorch.org/whl/triton-3.6.0-cp3"+v+"-cp3"+v+"-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
+		tri="triton @ https://download-r2.pytorch.org/whl/triton-3.8.0-cp3"+v+"-cp3"+v+"-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
 	else:
 		p="win_amd64"
-		tri="triton-windows==3.6.0.post26"
+		tri="triton-windows==3.8.0.post28"
 
 	if w=="cuda":
 		need=[
-			"torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"torchaudio @ https://download-r2.pytorch.org/whl/cu128/torchaudio-2.11.0%2Bcu128-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torch @ https://download-r2.pytorch.org/whl/cu130/torch-2.14.0%2Bcu130-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/cu130/torchvision-0.29.0%2Bcu130-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			tri,
 		]
 	elif w=="xpu":
 		need=[
-			"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.26.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"torchaudio @ https://download-r2.pytorch.org/whl/xpu/torchaudio-2.11.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.7.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torch @ https://download-r2.pytorch.org/whl/xpu/torch-2.14.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/xpu/torchvision-0.29.0%2Bxpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"triton-xpu @ https://download-r2.pytorch.org/whl/triton_xpu-3.8.0-cp3"+v+"-cp3"+v+"-"+p+".whl",
 		]
 	else:
 		need=[
-			"torch @ https://download-r2.pytorch.org/whl/cpu/torch-2.11.0%2Bcpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"torchvision @ https://download-r2.pytorch.org/whl/cpu/torchvision-0.26.0%2Bcpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
-			"torchaudio @ https://download-r2.pytorch.org/whl/cpu/torchaudio-2.11.0%2Bcpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torch @ https://download-r2.pytorch.org/whl/cpu/torch-2.14.0%2Bcpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
+			"torchvision @ https://download-r2.pytorch.org/whl/cpu/torchvision-0.29.0%2Bcpu-cp3"+v+"-cp3"+v+"-"+p+".whl",
 			tri,
 		]
 	return need
 
 setup(
 	name='mokuba_scripts',
-	version='1.2.0',
+	version='1.2.1',
 	author='mokuba_attack',
 	author_email='mokuatta@nigge.rs',
 	package_dir={"": "src"},
@@ -59,7 +56,7 @@ setup(
 		"realesrgan",
 		"lycoris-lora==4.0.0",
 		"piexif",
-		"transformers==5.14.1",
+		"transformers==5.22.1",
 		"optimum-quanto",
 		"accelerate",
 		"PEFT",
@@ -67,8 +64,7 @@ setup(
 		"ipython",
 		"FreeSimpleGUI",
 		"pyperclip",
-		"torchao==0.13.0",
-		"requests==2.32.4",
+		"requests==2.33.1",
 	],
 	extras_require={
 		"cuda":extras_need(w="cuda"),
