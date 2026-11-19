@@ -1,2 +1,34 @@
 include LICENSE.txt
 include README.md
+include src/submodules/BasicSR/basicsr/ops/dcn/src/*.cu src/submodules/BasicSR/basicsr/ops/dcn/src/*.cpp
+include src/submodules/BasicSR/basicsr/ops/fused_act/src/*.cu src/submodules/BasicSR/basicsr/ops/fused_act/src/*.cpp
+include src/submodules/BasicSR/basicsr/ops/upfirdn2d/src/*.cu src/submodules/BasicSR/basicsr/ops/upfirdn2d/src/*.cpp
+include src/submodules/BasicSR/basicsr/metrics/niqe_pris_params.npz
+include src/submodules/BasicSR/VERSION
+include src/submodules/BasicSR/LICENSE.txt
+include src/submodules/BasicSR/requirements.txt
+include src/submodules/BasicSR/setup.py
+include src/submodules/BasicSR/README.md
+include src/submodules/BasicSR/MANIFEST.in
+include src/submodules/Real-ESRGAN/assets/*
+include src/submodules/Real-ESRGAN/inputs/*
+include src/submodules/Real-ESRGAN/scripts/*.py
+include src/submodules/Real-ESRGAN/inference_realesrgan.py
+include src/submodules/Real-ESRGAN/VERSION
+include src/submodules/Real-ESRGAN/weights/README.md
+include src/submodules/Real-ESRGAN/LICENSE
+include src/submodules/Real-ESRGAN/requirements.txt
+include src/submodules/Real-ESRGAN/setup.py
+include src/submodules/Real-ESRGAN/README.md
+include src/submodules/Real-ESRGAN/MANIFEST.in
+include src/submodules/GFPGAN/assets/*
+include src/submodules/GFPGAN/inputs/*
+include src/submodules/GFPGAN/scripts/*.py
+include src/submodules/GFPGAN/inference_gfpgan.py
+include src/submodules/GFPGAN/VERSION
+include src/submodules/GFPGAN/gfpgan/weights/README.md
+include src/submodules/GFPGAN/LICENSE
+include src/submodules/GFPGAN/requirements.txt
+include src/submodules/GFPGAN/setup.py
+include src/submodules/GFPGAN/README.md
+include src/submodules/GFPGAN/MANIFEST.in

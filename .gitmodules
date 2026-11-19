@@ -1,6 +1,9 @@
-[submodule "submodules/BasicSR"]
-	path = submodules/BasicSR
-	url = https://github.com/MokubaAttack/BasicSR.git
-[submodule "submodules/diffusers"]
-	path = submodules/diffusers
-	url = https://github.com/MokubaAttack/diffusers.git
+[submodule "src/submodules/BasicSR"]
+	path = src/submodules/BasicSR
+	url = https://github.com/XPixelGroup/BasicSR.git
+[submodule "src/submodules/Real-ESRGAN"]
+	path = src/submodules/Real-ESRGAN
+	url = https://github.com/xinntao/Real-ESRGAN.git
+[submodule "src/submodules/GFPGAN"]
+	path = src/submodules/GFPGAN
+	url = https://github.com/TencentARC/GFPGAN.git

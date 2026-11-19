@@ -543,11 +543,15 @@ tool list
 - merge_ckpt_sdxl
 - merge_lora_anima
 - merge_lora_sdxl
+- merge_lora_anima2
+- merge_lora_sdxl2
 - plus_metadata
 - subtract_ckpt_anima
 - subtract_ckpt_sdxl
 
 I intended to make it easy to understand.
+## When you update diffusers module
+Please run mokupatch command.
 ## Credits
 - [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts)
 - [huggingface/diffusers](https://github.com/huggingface/diffusers/tree/main)
