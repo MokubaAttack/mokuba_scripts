@@ -280,6 +280,8 @@ class sdxlgui:
 			os.remove("pipecache/params.json")
 		if os.path.exists(path2):
 			os.remove(path2)
+		if os.path.exists("pipecache/stop_thread"):
+			os.remove("pipecache/stop_thread")
 		end=time.time()
 		process_min=int(round(end-start)/60)
 		process_sec=round(end-start)-60*process_min
@@ -322,7 +324,7 @@ class sdxlgui:
 			f=open(self.default_json,"w")
 		else:
 			f=open(path,"w")
-		json.dump(iv,f)
+		json.dump(iv,f,indent=2)
 		f.close()
 
 	def gui(self):
@@ -409,7 +411,8 @@ class sdxlgui:
 			[sg.Button("Save Params to",key="save2")],
 			[sg.Button("Load Params from",key="load2")],
 			[sg.Button('RUN', key='RUN')],
-			[sg.Button('EXIT', key='EXIT')]
+			[sg.Button('EXIT', key='EXIT')],
+			[sg.Button('STOP', key='STOP')]
 		]
 
 		layout=[
@@ -525,5 +528,15 @@ class sdxlgui:
 						self.loadvalues(window,value)
 				except:
 					pass
+			elif event=="STOP":
+				f=open("pipecache/stop_thread","w")
+				f.close()
 
 		window.close()
+		try:
+			if thread1.is_alive():
+				f=open("pipecache/stop_thread","w")
+				f.close()
+				thread1.join()
+		except:
+			pass

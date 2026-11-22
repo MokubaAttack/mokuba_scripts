@@ -203,6 +203,8 @@ class animagui:
 			os.remove("pipecache/params.json")
 		if os.path.exists(path2):
 			os.remove(path2)
+		if os.path.exists("pipecache/stop_thread"):
+			os.remove("pipecache/stop_thread")
 		end=time.time()
 		process_min=int(round(end-start)/60)
 		process_sec=round(end-start)-60*process_min
@@ -245,7 +247,7 @@ class animagui:
 			f=open(self.default_json,"w")
 		else:
 			f=open(path,"w")
-		json.dump(iv,f)
+		json.dump(iv,f,indent=2)
 		f.close()
 
 	def gui(self):
@@ -339,16 +341,14 @@ class animagui:
 				sg.Input(iv["out"],key="out",right_click_menu=grp_rclick_menu["out"]),sg.FolderBrowse()
 			],
 			[sg.Button("Save Params",key="save"),sg.Button("Load Params",key="load",disabled=d),sg.Button("Save Params to",key="save2"),sg.Button("Load Params from",key="load2")],
-			[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
+			[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT'),sg.Button('STOP', key='STOP')]
 		]
 	
 		window = sg.Window('anima gui', layout,icon=green_icon)
 	
 		while True:
 			event, values = window.read()
-			if event == sg.WINDOW_CLOSED:
-				break
-			elif event=="EXIT":
+			if event == sg.WINDOW_CLOSED or event=="EXIT":
 				break
 			elif event=="RUN":
 				if values["input"]!="" and values["out"]!="":
@@ -412,6 +412,15 @@ class animagui:
 				window["input"].update(values["folder_browse"])
 			elif event=="file_browse":
 				window["input"].update(values["file_browse"])
+			elif event=="STOP":
+				f=open("pipecache/stop_thread","w")
+				f.close()
 	
 		window.close()
-		
+		try:
+			if thread1.is_alive():
+				f=open("pipecache/stop_thread","w")
+				f.close()
+				thread1.join()
+		except:
+			pass

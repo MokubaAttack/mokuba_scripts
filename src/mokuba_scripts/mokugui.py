@@ -1,4 +1,5 @@
 import FreeSimpleGUI as sg
+import webbrowser
 from .common.icon import green_icon
 
 tools=[
@@ -30,8 +31,9 @@ def main():
 		[sg.Text("Tool Name")],
 		[sg.Push(),sg.Combo(default_value="mokuanima",values=tools,key="tool"),sg.Push()],
 		[sg.Push(),sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT'),sg.Push()],
+		[sg.Text("https://github.com/MokubaAttack/mokuba_scripts", enable_events=True, key="URL",text_color="#000080",font=('Comic Sans MS',12,'underline'))],
 	]
-	window = sg.Window('mokugui', layout,size=(250, 120),icon=green_icon)
+	window = sg.Window('mokugui', layout,icon=green_icon)
 
 	while True:
 		event, values = window.read()
@@ -44,6 +46,8 @@ def main():
 		elif event=="RUN":
 			name=values["tool"]
 			break
+		elif event=="URL":
+			webbrowser.open("https://github.com/MokubaAttack/mokuba_scripts")
 	window.close()
 
 	if name!=None:
