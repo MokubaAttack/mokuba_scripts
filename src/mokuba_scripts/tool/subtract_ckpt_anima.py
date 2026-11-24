@@ -15,6 +15,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 CLAMP_QUANTILE=0.99
 
@@ -120,7 +124,6 @@ def subtractckpt(ckpts,dim,trans,teco,teen,out_path,win=None,token=""):
 			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("The ckpts are models of different types.")
-		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
 		return
 
 	keys0=list(sd10)
@@ -436,7 +439,7 @@ def gui():
 				teco_out=values["text2"]
 
 				try:
-					with open(os.getcwd()+"/pipecache/token.json","r") as f:
+					with open(home_dir+"/token.json","r") as f:
 						d = json.load(f)
 					token=d["civitai_token"]
 				except:

@@ -10,6 +10,11 @@ from accelerate.utils import (
 	is_xpu_available,
 )
 
+from .. import (
+	home_dir,
+	cache_dir
+)
+
 def mk_yaml(n=0):
 	sd={
 		"compute_environment": "LOCAL_MACHINE",
@@ -71,7 +76,7 @@ def mk_yaml(n=0):
 		sd["use_cpu"] = False
 		sd["num_processes"] = 2
 
-	f=open("pipecache/process_params.yaml","w")
+	f=open(cache_dir+"/process_params.yaml","w")
 	json.dump(sd,f,indent=2)
 	f.close()
-	return "pipecache/process_params.yaml"
+	return cache_dir+"/process_params.yaml"

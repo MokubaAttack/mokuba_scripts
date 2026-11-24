@@ -16,6 +16,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 def zip_ckpt(pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,full_file):
 	box=diff2anima()
@@ -33,7 +37,7 @@ def zip_ckpt(pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,full
 
 		osd={}
 		osd[k]=t.to(torch.bfloat16)
-		save_file(osd,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+		save_file(osd,cache_dir+"/safe_temp/"+k+".safetensors")
 		keys.append(k)
 	del transformer_sd
 
@@ -50,7 +54,7 @@ def zip_ckpt(pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,full
 
 		osd={}
 		osd[k]=t.to(torch.bfloat16)
-		save_file(osd,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+		save_file(osd,cache_dir+"/safe_temp/"+k+".safetensors")
 		keys.append(k)
 	del text_conditioner_sd
 
@@ -68,7 +72,7 @@ def zip_ckpt(pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,full
 
 			osd={}
 			osd[k]=t.to(torch.bfloat16)
-			save_file(osd,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+			save_file(osd,cache_dir+"/safe_temp/"+k+".safetensors")
 			keys.append(k)
 		del vae_sd
 			
@@ -85,7 +89,7 @@ def zip_ckpt(pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,full
 
 			osd={}
 			osd[k]=t.to(torch.bfloat16)
-			save_file(osd,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+			save_file(osd,cache_dir+"/safe_temp/"+k+".safetensors")
 			keys.append(k)
 		del text_encoder_sd
 	else:
@@ -137,9 +141,9 @@ def makesafe(base_path,loras,ws,out_path,ff,win=None):
 			return
 	flush()
 
-	if os.path.exists(os.getcwd()+"/pipecache/safe_temp"):
-		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
-	os.mkdir(os.getcwd()+"/pipecache/safe_temp")
+	if os.path.exists(cache_dir+"/safe_temp/"):
+		shutil.rmtree(cache_dir+"/safe_temp/")
+	os.mkdir(cache_dir+"/safe_temp/")
 
 	if win!=None:
 		win["info"].update("output ckpt file")
@@ -150,7 +154,7 @@ def makesafe(base_path,loras,ws,out_path,ff,win=None):
 	else:
 		transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,_=folder2diff(path=base_path)
 	keys=zip_ckpt(pipe.pipe,transformer_sd,text_conditioner_sd,text_encoder_sd,vae_sd,ff)
-	save_safe(keys,out_path,os.getcwd()+"/pipecache/safe_temp")
+	save_safe(keys,out_path,cache_dir+"/safe_temp/")
 
 	if win!=None:
 		win.set_icon(pngbase64=green_icon)

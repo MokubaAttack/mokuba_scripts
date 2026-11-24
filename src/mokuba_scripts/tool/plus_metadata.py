@@ -7,6 +7,10 @@ from ..common.metadata import (
 	read_meta
 )
 from ..common.icon import green_icon
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 default_sd={
 	"pr":"",
@@ -33,7 +37,7 @@ default_sd={
 	"cont":"",
 	"shift":"",
 }
-default_json=os.getcwd()+"/pipecache/metadata_default.json"
+default_json=home_dir+"/metadata_default.json"
 
 def setvalues():
 	if os.path.exists(default_json):

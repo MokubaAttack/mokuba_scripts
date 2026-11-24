@@ -9,6 +9,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 CLAMP_QUANTILE=0.99
 
@@ -198,7 +202,9 @@ def mergelora(
 	if dof:
 		for lora in loras:
 			os.remove(lora)
-			os.remove(lora+".txt")
+			path=lora.replace("\\","/")
+			path=path.split("/")[-1]
+			os.remove(cache_dir+"/"+path+".txt")
 	if win==None:
 		print("")
 		print("fin")
@@ -298,7 +304,7 @@ def gui():
 				meta["weight"]=str(weights).replace("[","").replace("]","").replace(" ","")
 
 				try:
-					with open(os.getcwd()+"/pipecache/token.json","r") as f:
+					with open(home_dir+"/token.json","r") as f:
 						d = json.load(f)
 					token=d["civitai_token"]
 				except:

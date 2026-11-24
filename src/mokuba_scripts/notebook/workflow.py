@@ -21,6 +21,10 @@ from ..common.flush import flush
 from ..common.metadata import plus_meta
 from ..common.seed import make_seed
 from ..common.dl import dlc
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 def mokuani(
 	loras=[],
@@ -75,7 +79,7 @@ def mokuani(
 			if not(os.path.exists(safe_folder+"ckpt")):
 				os.makedirs(safe_folder+"ckpt")
 			dlc(ver_id,base_safe,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -95,7 +99,7 @@ def mokuani(
 				if not(os.path.exists(safe_folder+"lora")):
 					os.makedirs(safe_folder+"lora")
 				dlc(ver_id,line,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -121,7 +125,7 @@ def mokuani(
 		os.makedirs(out_folder+"/0")
 	ut=out_folder.replace("\\","/").split("/")[-1]
 	
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -147,7 +151,7 @@ def mokuani(
 		if url!=[]:
 			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -172,7 +176,7 @@ def mokuani(
 	y=round(y*up/8)*8
 	for i,img in enumerate(imgs):
 		imgs[i]=pipe.upscale(img,x,y)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -199,7 +203,7 @@ def mokuani(
 		if url!=[]:
 			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -276,7 +280,7 @@ def mokusdxl(
 			if not(os.path.exists(safe_folder+"ckpt")):
 				os.makedirs(safe_folder+"ckpt")
 			dlc(ver_id,base_safe,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -292,7 +296,7 @@ def mokusdxl(
 			if not(os.path.exists(safe_folder+"vae")):
 				os.makedirs(safe_folder+"vae")
 			dlc(ver_id,vae_safe,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -312,7 +316,7 @@ def mokusdxl(
 				if not(os.path.exists(safe_folder+"lora")):
 					os.makedirs(safe_folder+"lora")
 				dlc(ver_id,line,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -330,7 +334,7 @@ def mokusdxl(
 				if not(os.path.exists(safe_folder+"embed")):
 					os.makedirs(safe_folder+"embed")
 				dlc(ver_id,line,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -348,7 +352,7 @@ def mokusdxl(
 				if not(os.path.exists(safe_folder+"embed")):
 					os.makedirs(safe_folder+"embed")
 				dlc(ver_id,line,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -393,7 +397,7 @@ def mokusdxl(
 		os.makedirs(out_folder+"/0")
 	ut=out_folder.replace("\\","/").split("/")[-1]
 	
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -418,7 +422,7 @@ def mokusdxl(
 		if url!=[]:
 			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -443,7 +447,7 @@ def mokusdxl(
 	y=round(y*up/8)*8
 	for i,img in enumerate(imgs):
 		imgs[i]=pipe.upscale(img,x,y)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -469,7 +473,7 @@ def mokusdxl(
 		if url!=[]:
 			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -498,7 +502,7 @@ def mokusdxl(
 		y=round(y*up2/64)*64
 	for i,img in enumerate(imgs):
 		imgs[i]=pipe.upscale(img,x,y)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -524,7 +528,7 @@ def mokusdxl(
 		if url!=[]:
 			drop_path=ut+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -601,7 +605,7 @@ def mokusd(
 			if not(os.path.exists(safe_folder+"ckpt")):
 				os.makedirs(safe_folder+"ckpt")
 			dlc(ver_id,base_safe,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -617,7 +621,7 @@ def mokusd(
 			if not(os.path.exists(safe_folder+"vae")):
 				os.makedirs(safe_folder+"vae")
 			dlc(ver_id,vae_safe,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -651,7 +655,7 @@ def mokusd(
 				if not(os.path.exists(safe_folder+"embed")):
 					os.makedirs(safe_folder+"embed")
 				dlc(ver_id,line,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -669,7 +673,7 @@ def mokusd(
 				if not(os.path.exists(safe_folder+"embed")):
 					os.makedirs(safe_folder+"embed")
 				dlc(ver_id,line,token)
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -714,7 +718,7 @@ def mokusd(
 		os.makedirs(out_folder+"/0")
 	ut=out_folder.replace("\\","/").split("/")[-1]
 	
-	if os.path.exists("pipecache/stop_thread"):
+	if os.path.exists(cache_dir+"/stop_thread"):
 		distributed_state.wait_for_everyone()
 		distributed_state.destroy_process_group()
 		return
@@ -739,7 +743,7 @@ def mokusd(
 		if url!=[]:
 			drop_path=ut+"/0/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -764,7 +768,7 @@ def mokusd(
 	y=round(y*up/8)*8
 	for i,img in enumerate(imgs):
 		imgs[i]=pipe.upscale(img,x,y)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -790,7 +794,7 @@ def mokusd(
 		if url!=[]:
 			drop_path=ut+"/1/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -819,7 +823,7 @@ def mokusd(
 		y=round(y*up2/64)*64
 	for i,img in enumerate(imgs):
 		imgs[i]=pipe.upscale(img,x,y)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return
@@ -845,7 +849,7 @@ def mokusd(
 		if url!=[]:
 			drop_path=ut+"/2/"+str(count*i+process_ind)+"_"+str(s)+".jpg"
 			up_drop(meta["input"],drop_path,url)
-		if os.path.exists("pipecache/stop_thread"):
+		if os.path.exists(cache_dir+"/stop_thread"):
 			distributed_state.wait_for_everyone()
 			distributed_state.destroy_process_group()
 			return

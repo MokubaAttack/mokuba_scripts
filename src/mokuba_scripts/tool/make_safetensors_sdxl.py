@@ -15,6 +15,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 def zip_ckpt(sd1,sd2):
 	keys=list(sd1)
@@ -29,7 +33,7 @@ def zip_ckpt(sd1,sd2):
 
 		osd={}
 		osd[k]=t.to(torch.bfloat16)
-		save_file(osd,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+		save_file(osd,cache_dir+"/safe_temp/"+k+".safetensors")
 			
 	return keys
 
@@ -77,9 +81,9 @@ def makesafe(base_path,loras,ws,out_path,vae,win=None):
 			return
 	flush()
 
-	if os.path.exists(os.getcwd()+"/pipecache/safe_temp"):
-		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
-	os.mkdir(os.getcwd()+"/pipecache/safe_temp")
+	if os.path.exists(cache_dir+"/safe_temp/"):
+		shutil.rmtree(cache_dir+"/safe_temp/")
+	os.mkdir(cache_dir+"/safe_temp/")
 
 	if win!=None:
 		win["info"].update("output ckpt file")
@@ -94,7 +98,7 @@ def makesafe(base_path,loras,ws,out_path,vae,win=None):
 		sd2=box.folder(base_path)
 	flush()
 	keys=zip_ckpt(sd1,sd2)
-	save_safe(keys,out_path,os.getcwd()+"/pipecache/safe_temp")
+	save_safe(keys,out_path,cache_dir+"/safe_temp/")
 
 	if win!=None:
 		win.set_icon(pngbase64=green_icon)

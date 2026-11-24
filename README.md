@@ -552,6 +552,27 @@ tool list
 I intended to make it easy to understand.
 ## When you update diffusers module
 Please run mokupatch command.
+## About cache, config and required data
+config and required data are saved in following folder.
+```
+# windows
+c:/users/(user_name)/AppData/Local/mokuba_config
+# linux
+/Users/(user_name)/mokuba_config
+```
+cache are saved in following folder.
+```
+# windows
+c:/users/(user_name)/AppData/Local/Temp/mokuba_cache
+# linux
+/tmp/mokuba_cache
+```
+If they are not the above, you can confirm them with the next cord.
+```
+import mokuba_scripts
+print(mokuba_scripts.home_dir)
+print(mokuba_scripts.cache_dir)
+```
 ## Credits
 - [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts)
 - [huggingface/diffusers](https://github.com/huggingface/diffusers/tree/main)

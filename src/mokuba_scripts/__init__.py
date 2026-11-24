@@ -1,18 +1,25 @@
 import os
-os.environ["HF_HOME"]=os.getcwd()+"/pipecache"
-if not(os.path.exists(os.getcwd()+"/pipecache")):
-	os.mkdir(os.getcwd()+"/pipecache")
-	
-import FreeSimpleGUI as sg
-sg.theme('TealMono')
-
+import tempfile
 import json
-if os.path.exists(os.getcwd()+"/pipecache/token.json"):
-	f=open(os.getcwd()+"/pipecache/token.json","r")
+import FreeSimpleGUI as sg
+
+home_dir=os.environ.get('LOCALAPPDATA',os.path.expanduser("~"))+"/mokuba_config"
+cache_dir=tempfile.gettempdir()+"/mokuba_cache"
+
+os.environ["HF_HOME"]=cache_dir
+if not(os.path.exists(cache_dir)):
+	os.mkdir(cache_dir)
+	
+if not(os.path.exists(home_dir)):
+	os.mkdir(home_dir)
+if os.path.exists(home_dir+"/token.json"):
+	f=open(home_dir+"/token.json","r")
 	sd=json.load(f)
 	f.close()
 	if "huggingface_token" in sd:
 		os.environ["HF_TOKEN"]=sd["huggingface_token"]
+	
+sg.theme('TealMono')
 
 from .common.dl import (
 	dlc,

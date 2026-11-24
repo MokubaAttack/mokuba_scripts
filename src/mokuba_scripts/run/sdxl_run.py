@@ -1,8 +1,12 @@
 from mokuba_scripts.notebook.workflow import mokusdxl
 import json
+from mokuba_scripts import (
+	home_dir,
+	cache_dir
+)
 
 if __name__ == "__main__":
-    f=open("pipecache/params.json","r")
+    f=open(cache_dir+"/params.json","r")
     sd=json.load(f)
     f.close()
     

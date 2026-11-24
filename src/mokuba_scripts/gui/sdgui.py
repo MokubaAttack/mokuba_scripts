@@ -17,6 +17,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 class sdgui:
 	default_values={
@@ -50,7 +54,7 @@ class sdgui:
 		"ccs":"1.0",
 		"lowmem":True,
 	}
-	default_json=os.getcwd()+"/pipecache/sd_default.json"
+	default_json=home_dir+"/sd_default.json"
 
 	def mokusd2(
 		self,values,win,
@@ -219,7 +223,7 @@ class sdgui:
 			win["ccs"].update("")
 
 		try:
-			with open(os.getcwd()+"/pipecache/token.json","r") as f:
+			with open(home_dir+"/token.json","r") as f:
 				d = json.load(f)
 			token=d["civitai_token"]
 		except:
@@ -260,7 +264,7 @@ class sdgui:
 		"qprompt":"masterpiece, best quality, ultra detailed",
 		"qn_prompt":"worst quality, low quality, normal quality",
 		}
-		f=open("pipecache/params.json","w")
+		f=open(cache_dir+"/params.json","w")
 		json.dump(params,f,indent=2)
 		f.close()
 		self.savevalues(values,values["out"]+"_params.json")
@@ -276,12 +280,12 @@ class sdgui:
 		except Exception as e:
 			print(e)
 
-		if os.path.exists("pipecache/params.json"):
-			os.remove("pipecache/params.json")
+		if os.path.exists(cache_dir+"/params.json"):
+			os.remove(cache_dir+"/params.json")
 		if os.path.exists(path2):
 			os.remove(path2)
-		if os.path.exists("pipecache/stop_thread"):
-			os.remove("pipecache/stop_thread")
+		if os.path.exists(cache_dir+"/stop_thread"):
+			os.remove(cache_dir+"/stop_thread")
 		end=time.time()
 		process_min=int(round(end-start)/60)
 		process_sec=round(end-start)-60*process_min
@@ -529,13 +533,13 @@ class sdgui:
 				except:
 					pass
 			elif event=="STOP":
-				f=open("pipecache/stop_thread","w")
+				f=open(cache_dir+"/stop_thread","w")
 				f.close()
 
 		window.close()
 		try:
 			if thread1.is_alive():
-				f=open("pipecache/stop_thread","w")
+				f=open(cache_dir+"/stop_thread","w")
 				f.close()
 				thread1.join()
 		except:

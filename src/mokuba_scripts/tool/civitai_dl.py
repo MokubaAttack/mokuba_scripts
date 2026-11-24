@@ -10,6 +10,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 def token_input():
 	keys=['token']
@@ -68,23 +72,23 @@ def token_input():
 	window.close()
 
 	if values["token"]!="":
-		if not(os.path.exists(os.getcwd()+"/pipecache/token.json")):
+		if not(os.path.exists(home_dir+"/token.json")):
 			d={"civitai_token":values["token"]}
 		else:
-			with open(os.getcwd()+"/pipecache/token.json","r") as f:
+			with open(home_dir+"/token.json","r") as f:
 				d = json.load(f)
 			d["civitai_token"]=values["token"]
-		with open(os.getcwd()+"/pipecache/token.json", 'w') as f:
+		with open(home_dir+"/token.json", 'w') as f:
 			json.dump(d, f, indent=2)
 		return True
 	else:
 		return False
 
 def check():
-	if not(os.path.exists(os.getcwd()+"/pipecache/token.json")):
+	if not(os.path.exists(home_dir+"/token.json")):
 		return token_input()
 
-	with open(os.getcwd()+"/pipecache/token.json","r") as f:
+	with open(home_dir+"/token.json","r") as f:
 		d = json.load(f)
 
 	if not("civitai_token" in d):
@@ -97,7 +101,7 @@ def run(i,path,win):
 	win["RUN"].Update(disabled=True)
 	win["info"].update("downloading")
 	try:
-		with open(os.getcwd()+"/pipecache/token.json","r") as f:
+		with open(home_dir+"/token.json","r") as f:
 			d = json.load(f)
 		t=d["civitai_token"]
 	except:

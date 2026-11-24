@@ -10,6 +10,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 def token_input():
 	keys=['token',"Username"]
@@ -69,27 +73,27 @@ def token_input():
 	window.close()
 
 	if values["token"]!="" and values["Username"]!="":
-		if not(os.path.exists(os.getcwd()+"/pipecache/token.json")):
+		if not(os.path.exists(home_dir+"/token.json")):
 			d={
 				"kaggle_token":values["token"],
 				"kaggle_username":values["Username"],
 			}
 		else:
-			with open(os.getcwd()+"/pipecache/token.json","r") as f:
+			with open(home_dir+"/token.json","r") as f:
 				d = json.load(f)
 			d["kaggle_token"]=values["token"]
 			d["kaggle_username"]=values["Username"]
-		with open(os.getcwd()+"/pipecache/token.json", 'w') as f:
+		with open(home_dir+"/token.json", 'w') as f:
 			json.dump(d, f, indent=2)
 		return True
 	else:
 		return False
 
 def check():
-	if not(os.path.exists(os.getcwd()+"/pipecache/token.json")):
+	if not(os.path.exists(home_dir+"/token.json")):
 		return token_input()
 
-	with open(os.getcwd()+"/pipecache/token.json","r") as f:
+	with open(home_dir+"/token.json","r") as f:
 		d = json.load(f)
 
 	if not("kaggle_token" in d) or not("kaggle_username" in d):
@@ -102,7 +106,7 @@ def run(i,path,win):
 	win["RUN"].Update(disabled=True)
 	win["info"].update("downloading")
 	try:
-		with open(os.getcwd()+"/pipecache/token.json","r") as f:
+		with open(home_dir+"/token.json","r") as f:
 			d = json.load(f)
 		t=d["kaggle_token"]
 		username=d["kaggle_username"]

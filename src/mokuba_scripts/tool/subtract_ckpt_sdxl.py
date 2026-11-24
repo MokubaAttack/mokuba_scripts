@@ -13,6 +13,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 CLAMP_QUANTILE=0.99
 
@@ -21,7 +25,7 @@ def subfunc(path,i):
 	sd1=box.pipelora(path)
 	for k in sd1:
 		sd1[k]=sd1[k].to(torch.float16)
-	out_path="pipecache/"+str(i)+".safetensors"
+	out_path=cache_dir+"/"+str(i)+".safetensors"
 	save_file(sd1,out_path)
 	return list(sd1),out_path
 
@@ -87,7 +91,7 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 		print("loading "+os.path.basename(ckpts[1]))
 		
 	try:
-		_,p1=subfunc(ckpts[1],1)
+		keys1,p1=subfunc(ckpts[1],1)
 	except:
 		if win!=None:
 			win["info"].update(os.path.basename(ckpts[1])+" isn't supported.")
@@ -96,6 +100,8 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 		else:
 			print(os.path.basename(ckpts[1])+" isn't supported.")
 		return
+		
+	keys0=list(set(keys0+keys1))
 		
 	sd1=load_file(p0)
 	sd2=load_file(p1)
@@ -120,6 +126,8 @@ def subtractckpt(ckpts,dim,trans,teen1,teen2,out_path,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Sdxl checkpoint key: "+k)
+			os.remove(p1)
+			os.remove(p0)
 			return
 			
 		mat=t2-t1
@@ -252,7 +260,7 @@ def gui():
 				teen2_out=values["text2"]
 
 				try:
-					with open(os.getcwd()+"/pipecache/token.json","r") as f:
+					with open(home_dir+"/token.json","r") as f:
 						d = json.load(f)
 					token=d["civitai_token"]
 				except:

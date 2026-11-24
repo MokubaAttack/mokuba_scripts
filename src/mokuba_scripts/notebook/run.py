@@ -7,6 +7,10 @@ from accelerate.commands.launch import (
 )
 
 from ..common.yaml import mk_yaml
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 path=__file__.replace("\\","/")
 
@@ -63,7 +67,7 @@ def mokuani2(
 	"shift":shift,
 	"clip_skip":clip_skip
 	}
-	f=open("pipecache/params.json","w")
+	f=open(cache_dir+"/params.json","w")
 	json.dump(params,f,indent=2)
 	f.close()
 	
@@ -73,8 +77,8 @@ def mokuani2(
 	args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 	launch_command(args)
 
-	if os.path.exists("pipecache/params.json"):
-		os.remove("pipecache/params.json")
+	if os.path.exists(cache_dir+"/params.json"):
+		os.remove(cache_dir+"/params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
 
@@ -152,7 +156,7 @@ def mokusdxl2(
 	"qprompt":qprompt,
 	"qn_prompt":qn_prompt,
 	}
-	f=open("pipecache/params.json","w")
+	f=open(cache_dir+"/params.json","w")
 	json.dump(params,f,indent=2)
 	f.close()
 	
@@ -162,8 +166,8 @@ def mokusdxl2(
 	args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 	launch_command(args)
 
-	if os.path.exists("pipecache/params.json"):
-		os.remove("pipecache/params.json")
+	if os.path.exists(cache_dir+"/params.json"):
+		os.remove(cache_dir+"/params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
 
@@ -241,7 +245,7 @@ def mokusd2(
 	"qprompt":qprompt,
 	"qn_prompt":qn_prompt,
 	}
-	f=open("pipecache/params.json","w")
+	f=open(cache_dir+"/params.json","w")
 	json.dump(params,f,indent=2)
 	f.close()
 	
@@ -251,8 +255,8 @@ def mokusd2(
 	args = parser.parse_args(["--config_file",path2,"--main_process_port","0",path1])
 	launch_command(args)
 
-	if os.path.exists("pipecache/params.json"):
-		os.remove("pipecache/params.json")
+	if os.path.exists(cache_dir+"/params.json"):
+		os.remove(cache_dir+"/params.json")
 	if os.path.exists(path2):
 		os.remove(path2)
 

@@ -19,6 +19,10 @@ from ..common.metadata import get_id
 from ..common.flush import flush
 from ..common.upscaler import mokuup
 from ..common.lyco2 import lyco2anima
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 txt2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","shift","cl"]
 img2img_params=["st","cf","pr","ne","se","ckpt","lora","w","sa","ds","shift","cl"]
@@ -67,18 +71,18 @@ class mokuanipipe:
 		else:
 			check_anima_base2(n=block_num)
 
-		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
+		self.pipe=AnimaModularPipeline.from_pretrained(home_dir+"/AnimaBaseV1")
 		self.pipe.load_components(names=init_components)
 		self.pipe.to(dev).to(torch_dtype)
 		
 		if block_num==28:
 			self.pipe.transformer=CosmosTransformer3DModel.from_pretrained(
-				os.getcwd()+"/AnimaBaseV1/transformer",
+				home_dir+"/AnimaBaseV1/transformer",
 				torch_dtype=torch.bfloat16
 			)
 		else:
 			self.pipe.transformer=CosmosTransformer3DModel.from_pretrained(
-				os.getcwd()+"/AnimaBaseV1/transformer"+str(block_num),
+				home_dir+"/AnimaBaseV1/transformer"+str(block_num),
 				torch_dtype=torch.bfloat16
 			)
 		if transformer_sd!={}:
@@ -123,18 +127,18 @@ class mokuanipipe:
 		else:
 			check_anima_base2(n=block_num)
 
-		self.pipe=AnimaModularPipeline.from_pretrained(os.getcwd()+"/AnimaBaseV1")
+		self.pipe=AnimaModularPipeline.from_pretrained(home_dir+"/AnimaBaseV1")
 		self.pipe.load_components(names=init_components)
 		self.pipe.to(dev).to(torch_dtype)
 		
 		if block_num==28:
 			self.pipe.transformer=CosmosTransformer3DModel.from_pretrained(
-				os.getcwd()+"/AnimaBaseV1/transformer",
+				home_dir+"/AnimaBaseV1/transformer",
 				torch_dtype=torch.bfloat16
 			)
 		else:
 			self.pipe.transformer=CosmosTransformer3DModel.from_pretrained(
-				os.getcwd()+"/AnimaBaseV1/transformer"+str(block_num),
+				home_dir+"/AnimaBaseV1/transformer"+str(block_num),
 				torch_dtype=torch.bfloat16
 			)
 		if transformer_sd!={}:

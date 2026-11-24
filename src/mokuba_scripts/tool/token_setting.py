@@ -4,6 +4,10 @@ import FreeSimpleGUI as sg
 import os
 import tkinter as tk
 from ..common.icon import green_icon
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 dv={
 	"civitai_token":"",
@@ -16,13 +20,13 @@ def save_token(vs):
 	for key in dv:
 		if vs[key]!="":
 			out_sd[key]=vs[key]
-	f=open("pipecache/token.json","w")
+	f=open(home_dir+"/token.json","w")
 	json.dump(out_sd,f,indent=2)
 	f.close()
 	
 def load_token():
-	if os.path.exists("pipecache/token.json"):
-		f=open("pipecache/token.json","r")
+	if os.path.exists(home_dir+"/token.json"):
+		f=open(home_dir+"/token.json","r")
 		sd=json.load(f)
 		f.close()
 	else:

@@ -16,6 +16,10 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 	if win!=None:
@@ -60,9 +64,9 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 	if not(mode in ["normal","tensor1","tensor2"]):
 		mode="normal"
 
-	if os.path.exists(os.getcwd()+"/pipecache/safe_temp"):
-		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
-	os.mkdir(os.getcwd()+"/pipecache/safe_temp")
+	if os.path.exists(cache_dir+"/safe_temp"):
+		shutil.rmtree(cache_dir+"/safe_temp")
+	os.mkdir(cache_dir+"/safe_temp")
 
 	if ff:
 		ff=(True,True,True,True)
@@ -83,7 +87,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+os.path.basename(ckpts[0])+".")
-			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+			shutil.rmtree(cache_dir+"/safe_temp")
 			return
 	else:
 		try:
@@ -95,7 +99,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+ckpts[0].replace("\\","/").split("/")[-1]+".")
-			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+			shutil.rmtree(cache_dir+"/safe_temp")
 			return
 
 	if win!=None:
@@ -112,7 +116,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+os.path.basename(ckpts[1])+".")
-			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+			shutil.rmtree(cache_dir+"/safe_temp")
 			return
 	else:
 		try:
@@ -124,7 +128,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("I couldn't load "+ckpts[1].replace("\\","/").split("/")[-1]+".")
-			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+			shutil.rmtree(cache_dir+"/safe_temp")
 			return
 	if n1!=n2:
 		if win==None:
@@ -133,7 +137,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			win.set_icon(pngbase64=green_icon)
 			win["RUN"].Update(disabled=False)
 			win["info"].update("The ckpts are models of different types.")
-		shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+		shutil.rmtree(cache_dir+"/safe_temp")
 		return
 
 	keys0=list(sd10)
@@ -164,7 +168,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
-			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+			shutil.rmtree(cache_dir+"/safe_temp")
 			return
 
 		k=box.trans(k)
@@ -185,12 +189,12 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			w2=round(t1.size()[0]*(w1+w2))
 			if w1==0:
 				out_dict[k]=t2.to(torch.bfloat16)
-				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+				save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 				del w,out_dict,t1,t2,w1,w1
 				continue
 			elif w2==0:
 				out_dict[k]=t1.to(torch.bfloat16)
-				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+				save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 				del w,out_dict,t1,t2,w1,w1
 				continue
 			if mode=="tensor1":
@@ -218,7 +222,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			out_dict[k]=t1.to(torch.bfloat16)
 			del w1,w2
 
-		save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+		save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 		data_dict.append(k)
 		del w,out_dict,t1,t2
 	del sd10,sd20
@@ -242,7 +246,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
-			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+			shutil.rmtree(cache_dir+"/safe_temp")
 			return
 
 		k=box.teco(k)
@@ -258,12 +262,12 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			w2=round(t1.size()[0]*(w1+w2))
 			if w1==0:
 				out_dict[k]=t2.to(torch.bfloat16)
-				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+				save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 				del w,out_dict,t1,t2,w1,w1
 				continue
 			elif w2==0:
 				out_dict[k]=t1.to(torch.bfloat16)
-				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+				save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 				del w,out_dict,t1,t2,w1,w1
 				continue
 			if mode=="tensor1":
@@ -291,7 +295,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			out_dict[k]=t1.to(torch.bfloat16)
 			del w1,w2
 
-		save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+		save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 		data_dict.append(k)
 		del w,out_dict,t1,t2
 	del sd11,sd21
@@ -315,7 +319,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
-			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+			shutil.rmtree(cache_dir+"/safe_temp")
 			return
 
 		k=box.teen(k)
@@ -331,12 +335,12 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			w2=round(t1.size()[0]*(w1+w2))
 			if w1==0:
 				out_dict[k]=t2.to(torch.bfloat16)
-				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+				save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 				del w,out_dict,t1,t2,w1,w1
 				continue
 			elif w2==0:
 				out_dict[k]=t1.to(torch.bfloat16)
-				save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+				save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 				del w,out_dict,t1,t2,w1,w1
 				continue
 			if mode=="tensor1":
@@ -364,7 +368,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 			out_dict[k]=t1.to(torch.bfloat16)
 			del w1,w2
 
-		save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+		save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 		data_dict.append(k)
 		del w,out_dict,t1,t2
 	del sd12,sd22
@@ -388,7 +392,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				win.set_icon(pngbase64=green_icon)
 				win["RUN"].Update(disabled=False)
 				win["info"].update("Unsupported Anima checkpoint key: "+k)
-			shutil.rmtree(os.getcwd()+"/pipecache/safe_temp")
+			shutil.rmtree(cache_dir+"/safe_temp")
 			return
 
 		k=box.vae(k)
@@ -409,12 +413,12 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 				w2=round(t1.size()[0]*(w1+w2))
 				if w1==0:
 					out_dict[k]=t2.to(torch.bfloat16)
-					save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+					save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 					del w,out_dict,t1,t2,w1,w1
 					continue
 				elif w2==0:
 					out_dict[k]=t1.to(torch.bfloat16)
-					save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+					save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 					del w,out_dict,t1,t2,w1,w1
 					continue
 				if mode=="tensor1":
@@ -441,7 +445,7 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 						t1[:,w1:w2,:,:,:]=t2[:,w1:w2,:,:,:]
 				out_dict[k]=t1.to(torch.bfloat16)
 				del w1,w2
-		save_file(out_dict,os.getcwd()+"/pipecache/safe_temp/"+k+".safetensors")
+		save_file(out_dict,cache_dir+"/safe_temp/"+k+".safetensors")
 		data_dict.append(k)
 		del w,out_dict,t1,t2
 	del sd13,sd23
@@ -455,9 +459,11 @@ def mergeckpt(ckpts,ws,out_path,mode="normal",ff=True,v=0,win=None,token=""):
 	else:
 		win["info"].update("making output")
 
-	save_safe(data_dict,out_path,os.getcwd()+"/pipecache/safe_temp")
+	save_safe(data_dict,out_path,cache_dir+"/safe_temp")
 		
-	f=open(out_path.replace(".safetensors",".txt"),"w")
+	path=out_path.replace("\\","/")
+	path=path.split("/")[-1]
+	f=open(cache_dir+"/"+path+".txt","w")
 	for i in range(len(ckpts)):
 		f.write("ckpt"+str(i+1)+" : "+ckpts[i]+"\n")
 	f.write("weight : "+str(ws)+"\n")
@@ -647,7 +653,7 @@ def gui():
 					vae=0
 					
 				try:
-					with open(os.getcwd()+"/pipecache/token.json","r") as f:
+					with open(home_dir+"/token.json","r") as f:
 						d = json.load(f)
 					token=d["civitai_token"]
 				except:

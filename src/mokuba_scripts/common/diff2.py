@@ -8,6 +8,10 @@ from .keys import (
 	anima,
 	sdxl
 )
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 class diff2anima:
 	def trans(self,key):
@@ -108,7 +112,9 @@ class diff2anima:
 						k=".lora_B.weight"
 					sd_out[mappings[key]+k]=w
 
-		f=open(path+".txt","w")
+		path=path.replace("\\","/")
+		path=path.split("/")[-1]
+		f=open(cache_dir+"/"+path+".txt","w")
 		for k in sd:
 			f.write(k+"\n")
 		f.close()
@@ -328,7 +334,9 @@ class diff2sdxl:
 		sd=load_file(path)
 
 		out_sd={}
-		f=open(path+".txt","w")
+		path=path.replace("\\","/")
+		path=path.split("/")[-1]
+		f=open(cache_dir+"/"+path+".txt","w")
 		for key,p in sd.items():
 			if not(key.endswith((".lora_A.weight",".lora_down.weight"))):
 				continue

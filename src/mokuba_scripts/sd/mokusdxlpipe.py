@@ -37,6 +37,10 @@ from ..common.metadata import get_id
 from ..common.flush import flush
 from ..common.upscaler import mokuup
 from ..common.lyco2 import lyco2sdxl
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 sgm_use=[
 	"Euler","Euler a","DPM++ 2M","DPM++ 2M SDE","DPM++ SDE","DPM++","DPM2","DPM2 a","Heun","LMS","UniPC","DPM++ 3M SDE"
@@ -55,10 +59,10 @@ def create_gaussian_weight(w,h, sigma=0.3):
 	return gaussian_weight
 	
 def check_control_sdxl():
-	if not(os.path.exists(os.getcwd()+"/OzzyGT")):
-		os.mkdir("OzzyGT")
-		os.mkdir("OzzyGT/SDXL_Controlnet_Tile_Realistic")
-		snapshot_download(repo_id="OzzyGT/SDXL_Controlnet_Tile_Realistic", local_dir=os.getcwd()+"/OzzyGT/SDXL_Controlnet_Tile_Realistic")
+	if not(os.path.exists(home_dir+"/OzzyGT")):
+		os.mkdir(home_dir+"/OzzyGT")
+		os.mkdir(home_dir+"/OzzyGT/SDXL_Controlnet_Tile_Realistic")
+		snapshot_download(repo_id="OzzyGT/SDXL_Controlnet_Tile_Realistic", local_dir=home_dir+"/OzzyGT/SDXL_Controlnet_Tile_Realistic")
 		
 def token_auto_concat_embeds(pipe, positive, negative,device,clip_skip):
 	max_length = pipe.tokenizer.model_max_length
@@ -537,7 +541,7 @@ class mokusdxlpipe:
 			self.moku_meta["ccs"]=""
 			self.moku_meta["cont"]=""
 		else:
-			controlnet = ControlNetModel.from_pretrained("OzzyGT/SDXL_Controlnet_Tile_Realistic",torch_dtype=self.dtype,variant="fp16")
+			controlnet = ControlNetModel.from_pretrained(home_dir+"/OzzyGT/SDXL_Controlnet_Tile_Realistic",torch_dtype=self.dtype,variant="fp16")
 			self.pipe=StableDiffusionXLControlNetImg2ImgPipeline.from_pipe(self.pipe,torch_dtype=self.dtype,controlnet=controlnet)
 			self.pipe.to(self.dev)
 			self.moku_meta["ccs"]=str(ccs)

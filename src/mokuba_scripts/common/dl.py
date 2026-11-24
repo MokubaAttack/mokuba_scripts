@@ -5,6 +5,11 @@ from safetensors.torch import save_file
 import torch
 import zipfile
 
+from .. import (
+	home_dir,
+	cache_dir
+)
+
 def dlc(ver_id,path,token):
 	url = "https://civitai.com/api/download/models/"+str(ver_id)+"?token="+str(token)
 	data = requests.get(url,stream=True)
@@ -69,10 +74,10 @@ def dlk(dataname,username,token,path):
 
 	res = requests.get(url,stream=True,auth=(username,token))
 
-	with open('pipecache/hogehoge.zip', 'wb') as f:
+	with open(cache_dir+'/hogehoge.zip', 'wb') as f:
 		for chunk in res.iter_content(chunk_size=1024*1024):
 			f.write(chunk)
 
-	with zipfile.ZipFile('pipecache/hogehoge.zip') as myzip:
+	with zipfile.ZipFile(cache_dir+'/hogehoge.zip') as myzip:
 		myzip.extractall(path)
-	os.remove('pipecache/hogehoge.zip')
+	os.remove(cache_dir+'/hogehoge.zip')

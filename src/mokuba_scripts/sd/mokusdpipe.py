@@ -37,6 +37,10 @@ from ..common.metadata import get_id
 from ..common.flush import flush
 from ..common.upscaler import mokuup
 from ..common.lyco2 import lyco2sd
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 sgm_use=[
 	"Euler","Euler a","DPM++ 2M","DPM++ 2M SDE","DPM++ SDE","DPM++","DPM2","DPM2 a","Heun","LMS","UniPC","DPM++ 3M SDE"
@@ -55,10 +59,10 @@ def create_gaussian_weight(w,h, sigma=0.3):
 	return gaussian_weight
 	
 def check_control_sd():
-	if not(os.path.exists(os.getcwd()+"/lllyasviel")):
-		os.mkdir("lllyasviel")
-		os.mkdir('lllyasviel/control_v11f1e_sd15_tile')
-		snapshot_download(repo_id='lllyasviel/control_v11f1e_sd15_tile', local_dir=os.getcwd()+'/lllyasviel/control_v11f1e_sd15_tile')
+	if not(os.path.exists(home_dir+"/lllyasviel")):
+		os.mkdir(home_dir+"/lllyasviel")
+		os.mkdir(home_dir+'/lllyasviel/control_v11f1e_sd15_tile')
+		snapshot_download(repo_id='lllyasviel/control_v11f1e_sd15_tile', local_dir=home_dir+'/lllyasviel/control_v11f1e_sd15_tile')
 		
 def token_auto_concat_embeds(pipe, positive, negative,device,clip_skip):
 	max_length = pipe.tokenizer.model_max_length
@@ -496,7 +500,7 @@ class mokusdpipe:
 			self.moku_meta["ccs"]=""
 			self.moku_meta["cont"]=""
 		else:
-			controlnet = ControlNetModel.from_pretrained('lllyasviel/control_v11f1e_sd15_tile',torch_dtype=self.dtype)
+			controlnet = ControlNetModel.from_pretrained(home_dir+'/lllyasviel/control_v11f1e_sd15_tile',torch_dtype=self.dtype)
 			self.pipe=StableDiffusionControlNetImg2ImgPipeline.from_pipe(self.pipe,torch_dtype=self.dtype,controlnet=controlnet)
 			self.moku_meta["ccs"]=str(ccs)
 			self.moku_meta["cont"]=str(67566)

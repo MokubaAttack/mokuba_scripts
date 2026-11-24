@@ -9,6 +9,10 @@ from safetensors.torch import (
 import torch
 
 from ..common.keys import anima
+from .. import (
+	home_dir,
+	cache_dir
+)
 
 root_map=anima.root_map
 block_maps=anima.block_maps
@@ -17,44 +21,44 @@ vae_keys2=anima.vae_keys2
 vae_keys3=anima.vae_keys3
 
 def check_anima_base1():
-	if not(os.path.exists(os.getcwd()+"/AnimaBaseV1")):
-		snapshot_download(repo_id="circlestone-labs/Anima-Base-v1.0-Diffusers", local_dir=os.getcwd()+"/AnimaBaseV1")
+	if not(os.path.exists(home_dir+"/AnimaBaseV1")):
+		snapshot_download(repo_id="circlestone-labs/Anima-Base-v1.0-Diffusers", local_dir=home_dir+"/AnimaBaseV1")
 
-		json_path=os.getcwd()+"/AnimaBaseV1/modular_model_index.json"
+		json_path=home_dir+"/AnimaBaseV1/modular_model_index.json"
 		f=open(json_path,"r")
 		json_sd=json.load(f)
 		f.close()
 
-		json_sd["scheduler"][-1]["pretrained_model_name_or_path"]=os.getcwd()+"/AnimaBaseV1"
-		json_sd["tokenizer"][-1]["pretrained_model_name_or_path"]=os.getcwd()+"/AnimaBaseV1"
-		json_sd["t5_tokenizer"][-1]["pretrained_model_name_or_path"]=os.getcwd()+"/AnimaBaseV1"
-		json_sd["text_conditioner"][-1]["pretrained_model_name_or_path"]=os.getcwd()+"/AnimaBaseV1"
-		json_sd["text_encoder"][-1]["pretrained_model_name_or_path"]=os.getcwd()+"/AnimaBaseV1"
-		json_sd["transformer"][-1]["pretrained_model_name_or_path"]=os.getcwd()+"/AnimaBaseV1"
-		json_sd["vae"][-1]["pretrained_model_name_or_path"]=os.getcwd()+"/AnimaBaseV1"
+		json_sd["scheduler"][-1]["pretrained_model_name_or_path"]=home_dir+"/AnimaBaseV1"
+		json_sd["tokenizer"][-1]["pretrained_model_name_or_path"]=home_dir+"/AnimaBaseV1"
+		json_sd["t5_tokenizer"][-1]["pretrained_model_name_or_path"]=home_dir+"/AnimaBaseV1"
+		json_sd["text_conditioner"][-1]["pretrained_model_name_or_path"]=home_dir+"/AnimaBaseV1"
+		json_sd["text_encoder"][-1]["pretrained_model_name_or_path"]=home_dir+"/AnimaBaseV1"
+		json_sd["transformer"][-1]["pretrained_model_name_or_path"]=home_dir+"/AnimaBaseV1"
+		json_sd["vae"][-1]["pretrained_model_name_or_path"]=home_dir+"/AnimaBaseV1"
 
 		f=open(json_path,"w")
 		json.dump(json_sd, f, indent=2)
 		f.close()
 
-		f=open(os.getcwd()+"/AnimaBaseV1/id.txt","w")
+		f=open(home_dir+"/AnimaBaseV1/id.txt","w")
 		f.write("2945208")
 		f.close()
 		
 def check_anima_base2(n):
-	if not(os.path.exists(os.getcwd()+"/AnimaBaseV1/transformer"+str(n))) and n!=28:
-		os.mkdir(os.getcwd()+"/AnimaBaseV1/transformer"+str(n))
-		f=open(os.getcwd()+"/AnimaBaseV1/transformer/config.json","r")
+	if not(os.path.exists(home_dir+"/AnimaBaseV1/transformer"+str(n))) and n!=28:
+		os.mkdir(home_dir+"/AnimaBaseV1/transformer"+str(n))
+		f=open(home_dir+"/AnimaBaseV1/transformer/config.json","r")
 		json_sd=json.load(f)
 		f.close()
 		
 		json_sd["num_layers"]=n
 		
-		f=open(os.getcwd()+"/AnimaBaseV1/transformer"+str(n)+"/config.json","w")
+		f=open(home_dir+"/AnimaBaseV1/transformer"+str(n)+"/config.json","w")
 		json.dump(json_sd, f, indent=2)
 		f.close()
 		
-		sd=load_file(os.getcwd()+"/AnimaBaseV1/transformer/diffusion_pytorch_model.safetensors")
+		sd=load_file(home_dir+"/AnimaBaseV1/transformer/diffusion_pytorch_model.safetensors")
 		temp_sd={}
 		for k in sd:
 			if k.startswith("transformer_blocks.0"):
@@ -65,7 +69,7 @@ def check_anima_base2(n):
 				key="transformer_blocks."+str(i)+k
 				if not(key in sd):
 					sd[key]=torch.zeros_like(temp_sd[k])
-		save_file(sd,os.getcwd()+"/AnimaBaseV1/transformer"+str(n)+"/diffusion_pytorch_model.safetensors")
+		save_file(sd,home_dir+"/AnimaBaseV1/transformer"+str(n)+"/diffusion_pytorch_model.safetensors")
 
 def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 	sd=load_file(path)
@@ -161,7 +165,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 	block_num=block_num+1
 
 	if teco:
-		sd2=load_file(os.getcwd()+"/AnimaBaseV1/text_conditioner/diffusion_pytorch_model.safetensors")
+		sd2=load_file(home_dir+"/AnimaBaseV1/text_conditioner/diffusion_pytorch_model.safetensors")
 		for k in sd2:
 			if not(k in text_conditioner_sd):
 				text_conditioner_sd[k]=sd2[k]
@@ -174,7 +178,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 		del sd2
 
 	if trans:
-		sd2=load_file(os.getcwd()+"/AnimaBaseV1/transformer/diffusion_pytorch_model.safetensors")
+		sd2=load_file(home_dir+"/AnimaBaseV1/transformer/diffusion_pytorch_model.safetensors")
 		for k in sd2:
 			if not(k in transformer_sd):
 				transformer_sd[k]=sd2[k]
@@ -187,7 +191,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 		del sd2
 
 	if vae:
-		sd2=load_file(os.getcwd()+"/AnimaBaseV1/vae/diffusion_pytorch_model.safetensors")
+		sd2=load_file(home_dir+"/AnimaBaseV1/vae/diffusion_pytorch_model.safetensors")
 		for k in sd2:
 			if not(k in vae_sd):
 				vae_sd[k]=sd2[k]
@@ -200,7 +204,7 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 		del sd2
 
 	if teen:
-		sd2=load_file(os.getcwd()+"/AnimaBaseV1/text_encoder/model.safetensors")
+		sd2=load_file(home_dir+"/AnimaBaseV1/text_encoder/model.safetensors")
 		for k in sd2:
 			if not(k in text_encoder_sd):
 				text_encoder_sd[k]=sd2[k]
@@ -212,7 +216,9 @@ def safe2diff(path,trans=True,teco=True,teen=True,vae=True):
 				minus_key[2].append("text_encoder."+k)
 		del sd2
 	
-	f=open(path+".txt","w")
+	path=path.replace("\\","/")
+	path=path.split("/")[-1]
+	f=open(cache_dir+"/"+path+".txt","w")
 	f.write("minus\n")
 	for ks in minus_key:
 		for k in ks:
@@ -245,7 +251,7 @@ def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 		if not(os.path.exists(transformer_path)):
 			raise RuntimeWarning("transformer file does not exist.")
 		sd1=load_file(transformer_path)
-		sd22=load_file(os.getcwd()+"/AnimaBaseV1/transformer/diffusion_pytorch_model.safetensors")
+		sd22=load_file(home_dir+"/AnimaBaseV1/transformer/diffusion_pytorch_model.safetensors")
 		for k in sd22:
 			if not(k in sd1):
 				sd1[k]=sd22[k]
@@ -268,7 +274,7 @@ def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 		if not(os.path.exists(text_conditioner_path)):
 			raise RuntimeWarning("text_conditioner file does not exist.")
 		sd2=load_file(text_conditioner_path)
-		sd22=load_file(os.getcwd()+"/AnimaBaseV1/text_conditioner/diffusion_pytorch_model.safetensors")
+		sd22=load_file(home_dir+"/AnimaBaseV1/text_conditioner/diffusion_pytorch_model.safetensors")
 		for k in sd22:
 			if not(k in sd2):
 				sd2[k]=sd22[k]
@@ -285,7 +291,7 @@ def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 		if not(os.path.exists(text_encoder_path)):
 			raise RuntimeWarning("text_encoder file does not exist.")
 		sd3=load_file(text_encoder_path)
-		sd22=load_file(os.getcwd()+"/AnimaBaseV1/text_encoder/model.safetensors")
+		sd22=load_file(home_dir+"/AnimaBaseV1/text_encoder/model.safetensors")
 		for k in sd22:
 			if not(k in sd3):
 				sd3[k]=sd22[k]
@@ -302,7 +308,7 @@ def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 		if not(os.path.exists(vae_path)):
 			raise RuntimeWarning("vae file does not exist.")
 		sd4=load_file(vae_path)
-		sd22=load_file(os.getcwd()+"/AnimaBaseV1/vae/diffusion_pytorch_model.safetensors")
+		sd22=load_file(home_dir+"/AnimaBaseV1/vae/diffusion_pytorch_model.safetensors")
 		for k in sd22:
 			if not(k in sd4):
 				sd4[k]=sd22[k]
@@ -315,7 +321,9 @@ def folder2diff(path,trans=True,teco=True,teen=True,vae=True):
 	else:
 		sd4={}
 		
-	f=open(path+".txt","w")
+	path=path.replace("\\","/")
+	path=path.split("/")[-1]
+	f=open(cache_dir+"/"+path+".txt","w")
 	f.write("minus\n")
 	for ks in minus_key:
 		for k in ks:
