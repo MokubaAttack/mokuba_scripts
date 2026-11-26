@@ -7,6 +7,7 @@ import torch
 
 from ..common.upscaler import mokuup
 from ..common.icon import green_icon
+from .. import home_dir
 
 def up_func(path,up_path,win=None):
 	if win!=None:
@@ -57,7 +58,7 @@ def gui():
 	
 	layout =[
 		[sg.Text("input file")],
-		[sg.InputText(key='input_pic',right_click_menu=grp_rclick_menu["input_pic"]),sg.FileBrowse('input file', file_types=(('input file', '.jpg'),('input file', '.png'),))],
+		[sg.InputText(key='input_pic',right_click_menu=grp_rclick_menu["input_pic"]),sg.FileBrowse('input file', file_types=(('input file', '.jpg'),('input file', '.png'),),initial_folder=home_dir)],
 		[sg.Text("upscaler")],
 		[sg.Combo(default_value="NEAREST",key="up",values=inters,enable_events = True)],
 		[sg.Text("information",key="info")],
@@ -77,7 +78,7 @@ def gui():
 
 		elif event=="up":
 			if values["up"]=="select file":
-				path = sg.popup_get_file('upscaler file',title="select upscaler file",file_types=(('upscaler file', '.pth'),))
+				path = sg.popup_get_file('upscaler file',title="select upscaler file",file_types=(('upscaler file', '.pth'),),initial_folder=home_dir)
 				if path!=None:
 					window["up"].update(path)
 				else:

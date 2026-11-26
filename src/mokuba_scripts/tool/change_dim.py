@@ -8,6 +8,7 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import home_dir
 
 CLAMP_QUANTILE=0.99
 
@@ -177,7 +178,7 @@ def gui():
 		[
 			sg.Text("lora"),
 			sg.InputText(key='ckpt',right_click_menu=grp_rclick_menu["ckpt"]),
-			sg.FileBrowse('select file', file_types=(('safetensors file', '.safetensors'),),key="file_browse", enable_events=True),
+			sg.FileBrowse('select file', file_types=(('safetensors file', '.safetensors'),),key="file_browse", enable_events=True,initial_folder=home_dir),
 		],
 		[
 				sg.Text("dim"), sg.InputText(key='dim',right_click_menu=grp_rclick_menu["dim"]),

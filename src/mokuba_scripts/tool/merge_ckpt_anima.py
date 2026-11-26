@@ -506,15 +506,15 @@ def gui():
 			sg.Text("ckpt1"), sg.Input(key="ckpt1",right_click_menu=grp_rclick_menu["ckpt1"]),sg.Radio("vae",key="v1",group_id='destination'),
 		],
 		[
-			sg.FileBrowse("FileBrowse",key="file_browse1", enable_events=True, file_types=(('ckpt file', '.safetensors'),)),
-			sg.FolderBrowse("FolderBrowse",key="folder_browse1", enable_events=True)
+			sg.FileBrowse("FileBrowse",key="file_browse1", enable_events=True, file_types=(('ckpt file', '.safetensors'),),initial_folder=home_dir),
+			sg.FolderBrowse("FolderBrowse",key="folder_browse1", enable_events=True,initial_folder=home_dir)
 		],
 		[
 			sg.Text("ckpt2"), sg.Input(key="ckpt2",right_click_menu=grp_rclick_menu["ckpt2"]),sg.Radio("vae",key="v2",group_id='destination'),
 		],
 		[
-			sg.FileBrowse("FileBrowse",key="file_browse2", enable_events=True, file_types=(('ckpt file', '.safetensors'),)),
-			sg.FolderBrowse("FolderBrowse",key="folder_browse2", enable_events=True)
+			sg.FileBrowse("FileBrowse",key="file_browse2", enable_events=True, file_types=(('ckpt file', '.safetensors'),),initial_folder=home_dir),
+			sg.FolderBrowse("FolderBrowse",key="folder_browse2", enable_events=True,initial_folder=home_dir)
 		],
 		[sg.Checkbox('BLOCK', key='block',default=False,enable_events=True)],
 		[sg.Text("weight of ckpt2",key="w_text")],
@@ -561,7 +561,7 @@ def gui():
 			sg.Radio('TENSOR2', key='tensor2',default=False,group_id='destination')
 		],
 		[sg.Checkbox('full file', key='ff')],
-		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('ckpt file', '.safetensors'),))],
+		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('ckpt file', '.safetensors'),),initial_folder=home_dir)],
 		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]
 	]

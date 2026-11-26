@@ -134,7 +134,7 @@ def gui():
 		]
 
 	layout=[
-		[sg.Text("output"), sg.Input(key="output",right_click_menu=grp_rclick_menu["output"]),sg.FileSaveAs(file_types=(('model file', '.safetensors'),))],
+		[sg.Text("output"), sg.Input(key="output",right_click_menu=grp_rclick_menu["output"]),sg.FileSaveAs(file_types=(('model file', '.safetensors'),),initial_folder=home_dir)],
 		[sg.Text("version id"), sg.Input(key="id",right_click_menu=grp_rclick_menu["id"])],
 		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]

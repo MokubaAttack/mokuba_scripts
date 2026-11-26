@@ -171,7 +171,7 @@ def gui():
 	layout=[
 		[
 			sg.Text("input"),
-			sg.Input(key="input",right_click_menu=grp_rclick_menu["input"]),sg.FileBrowse(file_types=(('image file', '.png'),('image file', '.jpg'))),
+			sg.Input(key="input",right_click_menu=grp_rclick_menu["input"]),sg.FileBrowse(file_types=(('image file', '.png'),('image file', '.jpg')),initial_folder=home_dir),
 			sg.Button('READ', key='READ'),
 		],
 		[sg.Column(col1),sg.Column(col2)],
@@ -285,14 +285,14 @@ def gui():
 					window["info"].update("error")
 		elif "hum" in event:
 			if values["hum"]=="select file":
-				value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),))
+				value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),),initial_folder=home_dir)
 				if value!=None:
 					window["hum"].update(os.path.basename(value))
 				else:
 					window["hum"].update("NEAREST")
 		elif "tum" in event:
 			if values["tum"]=="select file":
-				value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),))
+				value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),),initial_folder=home_dir)
 				if value!=None:
 					window["tum"].update(os.path.basename(value))
 				else:

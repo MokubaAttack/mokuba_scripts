@@ -6,11 +6,11 @@ from mokuba_scripts import (
 )
 
 if __name__ == "__main__":
-    f=open(cache_dir+"/params.json","r")
-    sd=json.load(f)
-    f.close()
-    
-    pipe=mokusdxl(
+	f=open(cache_dir+"/params.json","r")
+	sd=json.load(f)
+	f.close()
+	
+	pipe=mokusdxl(
 		base_safe=sd["base_safe"],
 		loras=sd["loras"],
 		lora_weights=sd["lora_weights"],
@@ -44,4 +44,4 @@ if __name__ == "__main__":
 		cs=sd["cs"],
 		qprompt=sd["qprompt"],
 		qn_prompt=sd["qn_prompt"],
-    )
+	)

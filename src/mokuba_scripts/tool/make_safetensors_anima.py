@@ -186,21 +186,21 @@ def gui():
 			sg.InputText(key='ckpt',right_click_menu=grp_rclick_menu["ckpt"]),
 		],
 		[
-			sg.FileBrowse('select ckpt file', file_types=(('ckpt file', '.safetensors'),),key="file_browse", enable_events=True),
-			sg.FolderBrowse("select ckpt folder",key="folder_browse", enable_events=True)
+			sg.FileBrowse('select ckpt file', file_types=(('ckpt file', '.safetensors'),),key="file_browse", enable_events=True,initial_folder=home_dir),
+			sg.FolderBrowse("select ckpt folder",key="folder_browse", enable_events=True,initial_folder=home_dir)
 		],
 		[sg.Text("lora1 file")],
-		[sg.InputText(key='lora1',right_click_menu=grp_rclick_menu["lora1"]),sg.FileBrowse('select lora', file_types=(('lora file', '.safetensors'),))],
+		[sg.InputText(key='lora1',right_click_menu=grp_rclick_menu["lora1"]),sg.FileBrowse('select lora', file_types=(('lora file', '.safetensors'),),initial_folder=home_dir)],
 		[sg.Text("weight"),sg.InputText("1.0",key='w1',right_click_menu=grp_rclick_menu["w1"])],
 		[sg.Text("lora2 file")],
-		[sg.InputText(key='lora2',right_click_menu=grp_rclick_menu["lora2"]),sg.FileBrowse('select lora', file_types=(('lora file', '.safetensors'),))],
+		[sg.InputText(key='lora2',right_click_menu=grp_rclick_menu["lora2"]),sg.FileBrowse('select lora', file_types=(('lora file', '.safetensors'),),initial_folder=home_dir)],
 		[sg.Text("weight"),sg.InputText("1.0",key='w2',right_click_menu=grp_rclick_menu["w2"])],
 		[sg.Text("lora3 file")],
-		[sg.InputText(key='lora3',right_click_menu=grp_rclick_menu["lora3"]),sg.FileBrowse('select lora', file_types=(('lora file', '.safetensors'),))],
+		[sg.InputText(key='lora3',right_click_menu=grp_rclick_menu["lora3"]),sg.FileBrowse('select lora', file_types=(('lora file', '.safetensors'),),initial_folder=home_dir)],
 		[sg.Text("weight"),sg.InputText("1.0",key='w3',right_click_menu=grp_rclick_menu["w3"])],
 		[sg.Checkbox('full file', key='ff')],
 		[sg.Text("out file")],
-		[sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('ckpt file', '.safetensors'),))],
+		[sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('ckpt file', '.safetensors'),),initial_folder=home_dir)],
 		[sg.Text("information",key="info")],
 		[sg.Button('RUN'),sg.Button('EXIT')]
 	]

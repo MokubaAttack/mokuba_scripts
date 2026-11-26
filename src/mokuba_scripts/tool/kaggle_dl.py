@@ -140,7 +140,7 @@ def gui():
 		]
 
 	layout=[
-		[sg.Text("output"), sg.Input(key="output",right_click_menu=grp_rclick_menu["output"]),sg.FolderBrowse()],
+		[sg.Text("output"), sg.Input(key="output",right_click_menu=grp_rclick_menu["output"]),sg.FolderBrowse(initial_folder=home_dir)],
 		[sg.Text("dataset title"), sg.Input(key="id",right_click_menu=grp_rclick_menu["id"])],
 		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]

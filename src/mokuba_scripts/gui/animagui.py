@@ -307,30 +307,30 @@ class animagui:
 			[
 				sg.Text("ckpt"),
 				sg.Input(iv["input"],key="input",right_click_menu=grp_rclick_menu["input"]),
-				sg.FileBrowse("File Browse",file_types=(('ckpt file', '.safetensors'),),key="file_browse", enable_events=True),
-				sg.FolderBrowse("Folder Browse",key="folder_browse", enable_events=True)
+				sg.FileBrowse("File Browse",file_types=(('ckpt file', '.safetensors'),),key="file_browse", enable_events=True,initial_folder=home_dir),
+				sg.FolderBrowse("Folder Browse",key="folder_browse", enable_events=True,initial_folder=home_dir)
 			],
 			[
 				sg.Text("lora1"),
-				sg.Input(iv["lora1"],key="lora1",right_click_menu=grp_rclick_menu["lora1"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),)),
+				sg.Input(iv["lora1"],key="lora1",right_click_menu=grp_rclick_menu["lora1"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir),
 				sg.Text("weight"),
 				sg.Input(iv["w1"],key="w1",right_click_menu=grp_rclick_menu["w1"], size=(10, 1))
 			],
 			[
 				sg.Text("lora2"),
-				sg.Input(iv["lora2"],key="lora2",right_click_menu=grp_rclick_menu["lora2"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),)),
+				sg.Input(iv["lora2"],key="lora2",right_click_menu=grp_rclick_menu["lora2"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir),
 				sg.Text("weight"),
 				sg.Input(iv["w2"],key="w2",right_click_menu=grp_rclick_menu["w2"], size=(10, 1))
 			],
 			[
 				sg.Text("lora3"),
-				sg.Input(iv["lora3"],key="lora3",right_click_menu=grp_rclick_menu["lora3"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),)),
+				sg.Input(iv["lora3"],key="lora3",right_click_menu=grp_rclick_menu["lora3"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir),
 				sg.Text("weight"),
 				sg.Input(iv["w3"],key="w3",right_click_menu=grp_rclick_menu["w3"], size=(10, 1))
 			],
 			[
 				sg.Text("lora4"),
-				sg.Input(iv["lora4"],key="lora4",right_click_menu=grp_rclick_menu["lora4"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),)),
+				sg.Input(iv["lora4"],key="lora4",right_click_menu=grp_rclick_menu["lora4"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir),
 				sg.Text("weight"),
 				sg.Input(iv["w4"],key="w4",right_click_menu=grp_rclick_menu["w4"], size=(10, 1))
 			],
@@ -342,7 +342,7 @@ class animagui:
 			],
 			[
 				sg.Text("output folder"),
-				sg.Input(iv["out"],key="out",right_click_menu=grp_rclick_menu["out"]),sg.FolderBrowse()
+				sg.Input(iv["out"],key="out",right_click_menu=grp_rclick_menu["out"]),sg.FolderBrowse(initial_folder=home_dir)
 			],
 			[sg.Button("Save Params",key="save"),sg.Button("Load Params",key="load",disabled=d),sg.Button("Save Params to",key="save2"),sg.Button("Load Params from",key="load2")],
 			[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT'),sg.Button('STOP', key='STOP')]
@@ -384,9 +384,11 @@ class animagui:
 					pass
 			elif "hum" in event:
 				if values["hum"]=="select file":
-					value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),))
+					value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),),initial_folder=home_dir)
 					if value!=None:
 						window["hum"].update(value)
+					else:
+						window["hum"].update("NEAREST")
 			elif event=="save":
 				try:
 					self.savevalues(values)
@@ -400,14 +402,14 @@ class animagui:
 					pass
 			elif event=="save2":
 				try:
-					value = sg.popup_get_file('save file',file_types=(('json File', '.json'),),save_as=True)
+					value = sg.popup_get_file('save file',file_types=(('json File', '.json'),),save_as=True,initial_folder=home_dir)
 					if value!=None:
 						self.savevalues(values,value)
 				except:
 					pass
 			elif event=="load2":
 				try:
-					value = sg.popup_get_file('load file',file_types=(('json File', '.json'),))
+					value = sg.popup_get_file('load file',file_types=(('json File', '.json'),),initial_folder=home_dir)
 					if value!=None:
 						self.loadvalues(window,value)
 				except:

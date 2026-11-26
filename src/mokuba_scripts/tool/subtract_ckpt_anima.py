@@ -396,16 +396,16 @@ def gui():
 	layout=[
 		[
 			sg.Text("model_org"), sg.Input(key="ckpt1",right_click_menu=grp_rclick_menu["ckpt1"]),
-			sg.FileBrowse('select ckpt file', file_types=(('ckpt file', '.safetensors'),),key="file_browse1", enable_events=True),
-			sg.FolderBrowse("select ckpt folder",key="folder_browse1", enable_events=True)
+			sg.FileBrowse('select ckpt file', file_types=(('ckpt file', '.safetensors'),),key="file_browse1", enable_events=True,initial_folder=home_dir),
+			sg.FolderBrowse("select ckpt folder",key="folder_browse1", enable_events=True,initial_folder=home_dir)
 		],
 		[
 			sg.Text("model_tuned"), sg.Input(key="ckpt2",right_click_menu=grp_rclick_menu["ckpt2"]),
-			sg.FileBrowse('select ckpt file', file_types=(('ckpt file', '.safetensors'),),key="file_browse2", enable_events=True),
-			sg.FolderBrowse("select ckpt folder",key="folder_browse2", enable_events=True)
+			sg.FileBrowse('select ckpt file', file_types=(('ckpt file', '.safetensors'),),key="file_browse2", enable_events=True,initial_folder=home_dir),
+			sg.FolderBrowse("select ckpt folder",key="folder_browse2", enable_events=True,initial_folder=home_dir)
 		],
 		[sg.Text("dim"), sg.Input(key="dim",right_click_menu=grp_rclick_menu["dim"])],
-		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('lora file', '.safetensors'),))],
+		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir)],
 		[sg.Checkbox('transformer', default=True, key='unet'),sg.Checkbox('text_conditioner', default=True, key='text2'),sg.Checkbox('text_encoder', default=True, key='text1')],
 		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]

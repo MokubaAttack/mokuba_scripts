@@ -339,8 +339,8 @@ def gui():
 
 
 	layout=[
-		[sg.Text("ckpt1"), sg.Input(key="ckpt1",right_click_menu=grp_rclick_menu["ckpt1"]),sg.FileBrowse( file_types=(('ckpt file', '.safetensors'),)),sg.Text("vae"),sg.Radio("",key="v1",group_id='destination')],
-		[sg.Text("ckpt2"), sg.Input(key="ckpt2",right_click_menu=grp_rclick_menu["ckpt2"]),sg.FileBrowse( file_types=(('ckpt file', '.safetensors'),)),sg.Text("vae"),sg.Radio("",key="v2",group_id='destination')],
+		[sg.Text("ckpt1"), sg.Input(key="ckpt1",right_click_menu=grp_rclick_menu["ckpt1"]),sg.FileBrowse( file_types=(('ckpt file', '.safetensors'),),initial_folder=home_dir),sg.Text("vae"),sg.Radio("",key="v1",group_id='destination')],
+		[sg.Text("ckpt2"), sg.Input(key="ckpt2",right_click_menu=grp_rclick_menu["ckpt2"]),sg.FileBrowse( file_types=(('ckpt file', '.safetensors'),),initial_folder=home_dir),sg.Text("vae"),sg.Radio("",key="v2",group_id='destination')],
 		[sg.Checkbox('BLOCK', key='block',default=False,enable_events=True)],
 		[sg.Text("weight of ckpt2",key="www")],
 		[sg.Input(key="w0",right_click_menu=grp_rclick_menu["w0"])],
@@ -379,8 +379,8 @@ def gui():
 			sg.Text("seed"), sg.Input(key="seed",right_click_menu=grp_rclick_menu["seed"])
 		],
 		[sg.Checkbox('bake vae', key='bakevae',default=False,enable_events=True)],
-		[sg.Text("vae path"), sg.Input(key="vaefile",right_click_menu=grp_rclick_menu["vaefile"]),sg.FileBrowse( file_types=(('vae file', '.safetensors'),))],
-		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('ckpt file', '.safetensors'),))],
+		[sg.Text("vae path"), sg.Input(key="vaefile",right_click_menu=grp_rclick_menu["vaefile"]),sg.FileBrowse( file_types=(('vae file', '.safetensors'),),initial_folder=home_dir)],
+		[sg.Text("output path"), sg.Input(key="out",right_click_menu=grp_rclick_menu["out"]),sg.FileSaveAs(file_types=(('ckpt file', '.safetensors'),),initial_folder=home_dir)],
 		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('Cancel Vae', key='cancel'),sg.Button('EXIT', key='EXIT')]
 	]

@@ -399,15 +399,15 @@ class sdxlgui:
 		]
 		col5=[
 			[sg.Text("positive embedding")],
-			[sg.Input(iv["p1"],key="p1",right_click_menu=grp_rclick_menu["p1"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),))],
-			[sg.Input(iv["p2"],key="p2",right_click_menu=grp_rclick_menu["p2"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),))],
-			[sg.Input(iv["p3"],key="p3",right_click_menu=grp_rclick_menu["p3"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),))],
+			[sg.Input(iv["p1"],key="p1",right_click_menu=grp_rclick_menu["p1"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),),initial_folder=home_dir)],
+			[sg.Input(iv["p2"],key="p2",right_click_menu=grp_rclick_menu["p2"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),),initial_folder=home_dir)],
+			[sg.Input(iv["p3"],key="p3",right_click_menu=grp_rclick_menu["p3"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),),initial_folder=home_dir)],
 		]
 		col6=[
 			[sg.Text("negative embedding")],
-			[sg.Input(iv["n1"],key="n1",right_click_menu=grp_rclick_menu["n1"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),))],
-			[sg.Input(iv["n2"],key="n2",right_click_menu=grp_rclick_menu["n2"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),))],
-			[sg.Input(iv["n3"],key="n3",right_click_menu=grp_rclick_menu["n3"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),))],
+			[sg.Input(iv["n1"],key="n1",right_click_menu=grp_rclick_menu["n1"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),),initial_folder=home_dir)],
+			[sg.Input(iv["n2"],key="n2",right_click_menu=grp_rclick_menu["n2"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),),initial_folder=home_dir)],
+			[sg.Input(iv["n3"],key="n3",right_click_menu=grp_rclick_menu["n3"]),sg.FilesBrowse(file_types=(('embedding file', '.safetensors'),),initial_folder=home_dir)],
 		]
 		col7=[
 			[sg.Button("Save Params",key="save")],
@@ -422,35 +422,35 @@ class sdxlgui:
 		layout=[
 			[
 				sg.Text("ckpt"),
-				sg.Input(iv["input"],key="input",right_click_menu=grp_rclick_menu["input"]),sg.FileBrowse(file_types=(('ckpt file', '.safetensors'),)),
+				sg.Input(iv["input"],key="input",right_click_menu=grp_rclick_menu["input"]),sg.FileBrowse(file_types=(('ckpt file', '.safetensors'),),initial_folder=home_dir),
 			],
 			[
 				sg.Text("lora1"),
-				sg.Input(iv["lora1"],key="lora1",right_click_menu=grp_rclick_menu["lora1"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),)),
+				sg.Input(iv["lora1"],key="lora1",right_click_menu=grp_rclick_menu["lora1"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir),
 				sg.Text("weight"),
 				sg.Input(iv["w1"],key="w1",right_click_menu=grp_rclick_menu["w1"], size=(10, 1))
 			],
 			[
 				sg.Text("lora2"),
-				sg.Input(iv["lora2"],key="lora2",right_click_menu=grp_rclick_menu["lora2"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),)),
+				sg.Input(iv["lora2"],key="lora2",right_click_menu=grp_rclick_menu["lora2"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir),
 				sg.Text("weight"),
 				sg.Input(iv["w2"],key="w2",right_click_menu=grp_rclick_menu["w2"], size=(10, 1))
 			],
 			[
 				sg.Text("lora3"),
-				sg.Input(iv["lora3"],key="lora3",right_click_menu=grp_rclick_menu["lora3"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),)),
+				sg.Input(iv["lora3"],key="lora3",right_click_menu=grp_rclick_menu["lora3"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir),
 				sg.Text("weight"),
 				sg.Input(iv["w3"],key="w3",right_click_menu=grp_rclick_menu["w3"], size=(10, 1))
 			],
 			[
 				sg.Text("lora4"),
-				sg.Input(iv["lora4"],key="lora4",right_click_menu=grp_rclick_menu["lora4"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),)),
+				sg.Input(iv["lora4"],key="lora4",right_click_menu=grp_rclick_menu["lora4"]),sg.FileBrowse(file_types=(('lora file', '.safetensors'),),initial_folder=home_dir),
 				sg.Text("weight"),
 				sg.Input(iv["w4"],key="w4",right_click_menu=grp_rclick_menu["w4"], size=(10, 1))
 			],
 			[
 				sg.Text("vae"),
-				sg.Input(iv["vae"],key="vae",right_click_menu=grp_rclick_menu["vae"]),sg.FileBrowse(file_types=(('vae file', '.safetensors'),)),
+				sg.Input(iv["vae"],key="vae",right_click_menu=grp_rclick_menu["vae"]),sg.FileBrowse(file_types=(('vae file', '.safetensors'),),initial_folder=home_dir),
 			],
 			[sg.Column(col5),sg.Column(col6)],
 			[sg.Column(col1),sg.Column(col2)],
@@ -462,7 +462,7 @@ class sdxlgui:
 			],
 			[
 				sg.Text("output folder"),
-				sg.Input(iv["out"],key="out",right_click_menu=grp_rclick_menu["out"]),sg.FolderBrowse()
+				sg.Input(iv["out"],key="out",right_click_menu=grp_rclick_menu["out"]),sg.FolderBrowse(initial_folder=home_dir)
 			]
 		]
 
@@ -504,9 +504,11 @@ class sdxlgui:
 					pass
 			elif "hum" in event:
 				if values["hum"]=="select file":
-					value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),))
+					value = sg.popup_get_file('upscaler file',file_types=(('upscaler File', '.pth'),),initial_folder=home_dir)
 					if value!=None:
 						window["hum"].update(value)
+					else:
+						window["hum"].update("NEAREST")
 			elif event=="save":
 				try:
 					self.savevalues(values)
@@ -520,14 +522,14 @@ class sdxlgui:
 					pass
 			elif event=="save2":
 				try:
-					value = sg.popup_get_file('save file',file_types=(('json File', '.json'),),save_as=True)
+					value = sg.popup_get_file('save file',file_types=(('json File', '.json'),),save_as=True,initial_folder=home_dir)
 					if value!=None:
 						self.savevalues(values,value)
 				except:
 					pass
 			elif event=="load2":
 				try:
-					value = sg.popup_get_file('load file',file_types=(('json File', '.json'),))
+					value = sg.popup_get_file('load file',file_types=(('json File', '.json'),),initial_folder=home_dir)
 					if value!=None:
 						self.loadvalues(window,value)
 				except:

@@ -4,6 +4,7 @@ from safetensors.torch import (
 	save_file
 )
 from ..common.icon import green_icon
+from .. import home_dir
 
 fp16_type = torch.float16
 bf16_type = torch.bfloat16
@@ -63,7 +64,7 @@ def gui():
 	layout =[
 		[
 			sg.InputText(key='ckpt',right_click_menu=grp_rclick_menu["ckpt"]),
-			sg.FileBrowse('select file', file_types=(('safetensors file', '.safetensors'),),key="file_browse", enable_events=True),
+			sg.FileBrowse('select file', file_types=(('safetensors file', '.safetensors'),),key="file_browse", enable_events=True,initial_folder=home_dir),
 		],
 		[
 				sg.Text("dtype"), sg.Combo(default_value="fp16",values=choices,key="dtype"),

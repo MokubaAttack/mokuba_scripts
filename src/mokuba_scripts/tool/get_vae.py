@@ -8,6 +8,7 @@ from ..common.icon import (
 	green_icon,
 	red_icon
 )
+from .. import home_dir
 	
 def get_vae(path,dtype,win=None):
 	if win!=None:
@@ -82,7 +83,7 @@ def gui():
 		[sg.Text("checkpoint file")],
 		[
 			sg.InputText(key='ckpt',right_click_menu=grp_rclick_menu["ckpt"]),
-			sg.FileBrowse('select ckpt file', file_types=(('ckpt file', '.safetensors'),),key="file_browse", enable_events=True),
+			sg.FileBrowse('select ckpt file', file_types=(('ckpt file', '.safetensors'),),key="file_browse", enable_events=True,initial_folder=home_dir),
 		],
 		[
 				sg.Text("dtype"), sg.Combo(default_value="f16",values=["fp32","fp16","bf16"],key="dtype"),

@@ -6,10 +6,10 @@ from mokuba_scripts import (
 )
 
 if __name__ == "__main__":
-    f=open(cache_dir+"/params.json","r")
-    sd=json.load(f)
-    f.close()
-    
+	f=open(cache_dir+"/params.json","r")
+	sd=json.load(f)
+	f.close()
+	
 	pipe=mokusd(
 		base_safe=sd["base_safe"],
 		loras=sd["loras"],
@@ -44,4 +44,4 @@ if __name__ == "__main__":
 		cs=sd["cs"],
 		qprompt=sd["qprompt"],
 		qn_prompt=sd["qn_prompt"],
-    )
+	)
