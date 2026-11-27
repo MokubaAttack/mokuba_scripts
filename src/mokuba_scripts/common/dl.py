@@ -69,10 +69,13 @@ def dlc(ver_id,path,token):
 		path=path.replace(k,".safetensors")
 		save_file(model,path,metadata=meta_dict)
 
-def dlk(dataname,username,token,path):
-	url="https://www.kaggle.com/api/v1/datasets/download/"+username+"/"+dataname
+def dlk(ownername,dataname,username,token,path):
+	url="https://www.kaggle.com/api/v1/datasets/download/"+ownername+"/"+dataname
 
-	res = requests.get(url,stream=True,auth=(username,token))
+	if token.startswith("KGAT_"):
+		res = requests.get(url,stream=True,headers={'Authorization': 'Bearer '+token})
+	else:
+		res = requests.get(url,stream=True,auth=(username,token))
 
 	with open(cache_dir+'/hogehoge.zip', 'wb') as f:
 		for chunk in res.iter_content(chunk_size=1024*1024):

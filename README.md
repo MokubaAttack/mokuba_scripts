@@ -482,6 +482,8 @@ pip install "mokuba_scripts[cpu] @ git+https://github.com/MokubaAttack/mokuba_sc
   ```
   ```
   dlk(
+	ownername,
+	#owner name of dataset
 	dataname,
 	#dataset name
 	username,

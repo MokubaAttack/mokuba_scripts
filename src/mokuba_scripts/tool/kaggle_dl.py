@@ -129,7 +129,7 @@ def run(i,path,win):
 def gui():
 	if check()==False:
 		return
-	keys=['output','id']
+	keys=['output','id',"owner"]
 	grp_rclick_menu={}
 	for k in keys:
 		grp_rclick_menu[k]=[
@@ -138,9 +138,13 @@ def gui():
 				"-copy-::"+k,"-cut-::"+k,"-paste-::"+k
 			]
 		]
+		
+	with open(home_dir+"/token.json","r") as f:
+		d = json.load(f)
 
 	layout=[
 		[sg.Text("output"), sg.Input(key="output",right_click_menu=grp_rclick_menu["output"]),sg.FolderBrowse(initial_folder=home_dir)],
+		[sg.Text("owner name"), sg.Input(d["kaggle_username"],key="owner",right_click_menu=grp_rclick_menu["owner"])],
 		[sg.Text("dataset title"), sg.Input(key="id",right_click_menu=grp_rclick_menu["id"])],
 		[sg.Text("information",key="info")],
 		[sg.Button('RUN', key='RUN'),sg.Button('EXIT', key='EXIT')]

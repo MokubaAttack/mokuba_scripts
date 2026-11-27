@@ -37,7 +37,7 @@ def extras_need(w):
 if __name__=="__main__":
 	setup(
 		name='mokuba_scripts',
-		version='1.2.4',
+		version='1.2.5',
 		author='mokuba_attack',
 		author_email='mokuatta@nigge.rs',
 		package_dir={
